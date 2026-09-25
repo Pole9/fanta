@@ -85,15 +85,49 @@ export function calculateTedScore(player: Player, evalData: PlayerMatchdayEvalua
   else if (titolarita >= 40) score -= 5;
   else score -= 18; // Rischio s.v.
 
-  // 3. Difficoltà Match / Fattore Campo (Max +/- 15 punti)
+  // 3. Difficoltà Squadra Avversaria (1-5) e Fattore Campo (Casa/Fuori) (Fino a +/- 25 punti)
   if (evalData.match) {
-    const diff = evalData.match.difficulty;
+    const diff = evalData.match.difficulty; // 1 (facilissima) a 5 (proibitiva)
     const isHome = evalData.match.isHome;
-    if (diff === 1) score += 14;
-    else if (diff === 2) score += 9;
-    else if (diff === 3) score += (isHome ? 4 : 0);
-    else if (diff === 4) score -= 6;
-    else if (diff === 5) score -= 12;
+    const role = player.ruolo;
+
+    // A. Impatto Difficoltà Squadra Avversaria differenziata per ruolo
+    if (role === 'P') {
+      // Portiere: la forza dell'attacco avversario determina direttamente i gol subiti
+      if (diff === 1) score += 18; // Clean sheet molto probabile
+      else if (diff === 2) score += 10;
+      else if (diff === 3) score += (isHome ? 3 : -2);
+      else if (diff === 4) score -= 10; // Rischio elevato di 1-2 gol subiti
+      else if (diff === 5) score -= 18; // Rischio imbarcata contro big
+    } else if (role === 'D') {
+      // Difensore: contro avversari deboli meno cartellini e voto alto per modificatore
+      if (diff === 1) score += 16;
+      else if (diff === 2) score += 10;
+      else if (diff === 3) score += (isHome ? 3 : -2);
+      else if (diff === 4) score -= 8;
+      else if (diff === 5) score -= 15;
+    } else if (role === 'C') {
+      // Centrocampista: avversario debole = dominio palla e inserimenti
+      if (diff === 1) score += 18;
+      else if (diff === 2) score += 11;
+      else if (diff === 3) score += (isHome ? 4 : 0);
+      else if (diff === 4) score -= 6;
+      else if (diff === 5) score -= 11;
+    } else {
+      // Attaccante: contro difese deboli pioggia di occasioni
+      if (diff === 1) score += 20;
+      else if (diff === 2) score += 13;
+      else if (diff === 3) score += (isHome ? 5 : 1);
+      else if (diff === 4) score -= 4; // I bomber possono timbrare comunque
+      else if (diff === 5) score -= 9;
+    }
+
+    // B. Fattore Campo (Casa vs Fuori)
+    if (isHome) {
+      score += 5; // Spinta dello stadio di casa
+    } else {
+      score -= 4; // Penalità insidie da trasferta
+    }
   }
 
   // 4. Valutazione Redazione Fantagazzetta (Max +/- 15 punti)
@@ -128,13 +162,14 @@ export function calculateTedScore(player: Player, evalData: PlayerMatchdayEvalua
 export function generateTedLineup(
   players: Player[],
   formationId: string = '3-4-3',
-  syncedData?: SyncedOnlineData | null
+  syncedData?: SyncedOnlineData | null,
+  matchdayType: 'current' | 'next' = 'next'
 ): { starters: TedPlayerCard[]; bench: TedPlayerCard[]; formation: TedFormationConfig } {
   const formation = TED_FORMATIONS[formationId] || TED_FORMATIONS['3-4-3'];
 
-  // Calcola valutazione e Ted Score per tutti i giocatori della rosa
+  // Calcola valutazione e Ted Score per tutti i giocatori della rosa tarati sul matchday richiesto
   const evaluatedPlayers: TedPlayerCard[] = players.map(p => {
-    const evalData = getPlayerMatchdayEvaluation(p.nome, p.squadra, syncedData);
+    const evalData = getPlayerMatchdayEvaluation(p.nome, p.squadra, syncedData, matchdayType);
     const score = calculateTedScore(p, evalData);
     return {
       player: p,
@@ -222,7 +257,7 @@ function assignPitchCoordinates(starters: TedPlayerCard[], formation: TedFormati
   });
 }
 
-// Verdetto e citazione motivazionale di Ted Lasso per il giocatore
+// Verdetto e citazione motivazionale di Ted Lasso per il giocatore tarato su match, difficoltà e fattore campo
 export function getTedPlayerVerdict(player: Player, score: number, evalData: PlayerMatchdayEvaluation): {
   badge: 'Certezza Assoluta' | 'Scelta di Cuore' | 'Scommessa alla Richmond' | 'Panchina Tattica' | 'In Infermeria';
   quote: string;
@@ -236,11 +271,23 @@ export function getTedPlayerVerdict(player: Player, score: number, evalData: Pla
     };
   }
 
+  const match = evalData.match;
+  const oppText = match ? `${match.isHome ? 'IN CASA vs ' : 'in TRASFERTA @ '}${match.opponent}` : 'partita in calendario';
+  const diffLabel = match ? (
+    match.difficulty === 1 ? 'avversario molto abbordabile (Diff. 1/5)' :
+    match.difficulty === 2 ? 'match favorevole (Diff. 2/5)' :
+    match.difficulty === 3 ? 'gara equilibrata (Diff. 3/5)' :
+    match.difficulty === 4 ? 'gara insidiosa (Diff. 4/5)' :
+    'gara proibitiva (Diff. 5/5)'
+  ) : '';
+
   if (score >= 82) {
     return {
       badge: 'Certezza Assoluta',
-      quote: "Credere in te stesso è il primo segreto del successo! Questo ragazzo questa domenica ha gli occhi di tigre: da schierare a occhi chiusi.",
-      verdict: `Indice Ted ${score}/100. Titolarità al ${evalData.gazzetta.titolaritaPercent}%, Fantagazzetta ${evalData.fantagazzetta.stars} stelle e match favorevole (${evalData.match?.description || 'in programma'}).`
+      quote: match?.isHome 
+        ? `Quando giochi nel tuo stadio e hai il vento a favore, devi solo spiegare le vele e fare gol! Match ideale ${oppText}.` 
+        : `La classe pura non conosce confini di stadio: anche in trasferta questo ragazzo ha gli occhi di tigre!`,
+      verdict: `Indice Ted ${score}/100. ${oppText} [${diffLabel}]. Titolarità al ${evalData.gazzetta.titolaritaPercent}%, Fantagazzetta ${evalData.fantagazzetta.stars} stelle. Da schierare a occhi chiusi!`
     };
   }
 
@@ -248,7 +295,7 @@ export function getTedPlayerVerdict(player: Player, score: number, evalData: Pla
     return {
       badge: 'Scelta di Cuore',
       quote: "Non prometto che vinceremo, ma prometto che non ci tireremo mai indietro. Dagli fiducia da titolare e ti ripagherà con una prestazione generosa.",
-      verdict: `Indice Ted ${score}/100. Valida opzione per il bonus. ${evalData.gazzetta.noteGazzetta}`
+      verdict: `Indice Ted ${score}/100. ${oppText} [${diffLabel}]. Valida opzione per il bonus. ${evalData.gazzetta.noteGazzetta}`
     };
   }
 
@@ -256,14 +303,14 @@ export function getTedPlayerVerdict(player: Player, score: number, evalData: Pla
     return {
       badge: 'Scommessa alla Richmond',
       quote: "Essere un pesce fuor d'acqua non significa non saper nuotare, significa solo che devi muovere le pinne un po' più forte. Scommessa intrigante da 3° slot.",
-      verdict: `Indice Ted ${score}/100. Partita combattuta o ballottaggio (${evalData.gazzetta.ballottaggioCon || '50-50'}). Schieralo solo con copertura sicura in panchina.`
+      verdict: `Indice Ted ${score}/100. ${oppText} [${diffLabel}]. Partita combattuta o ballottaggio (${evalData.gazzetta.ballottaggioCon || '50-50'}). Schieralo con copertura in panchina.`
     };
   }
 
   return {
     badge: 'Panchina Tattica',
     quote: "A volte la mossa più coraggiosa è sedersi comodi, bere un sorso d'acqua e lasciare che sia qualcun altro a prendere i colpi sui parastinchi.",
-    verdict: `Indice Ted ${score}/100. Match complicato (${evalData.match?.opponent}) o minutaggio a forte rischio. Meglio farlo rifiatare in panchina.`
+    verdict: `Indice Ted ${score}/100. Match complicato (${oppText} - ${diffLabel}) o minutaggio a forte rischio. Meglio farlo rifiatare in panchina.`
   };
 }
 

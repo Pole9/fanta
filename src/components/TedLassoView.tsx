@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useAuction } from '../context/AuctionContext';
 import { Player, Role } from '../types';
 import { 
@@ -10,8 +10,12 @@ import {
   TED_LASSO_QUOTES 
 } from '../utils/tedLassoAdvisor';
 import { 
+  CURRENT_MATCHDAY_NUMBER,
   CURRENT_MATCHDAY_TITLE, 
-  CURRENT_SERIE_A_FIXTURES 
+  CURRENT_SERIE_A_FIXTURES,
+  NEXT_MATCHDAY_NUMBER,
+  NEXT_MATCHDAY_TITLE,
+  NEXT_SERIE_A_FIXTURES 
 } from '../data/matchdayData';
 import { 
   Sparkles, 
@@ -23,14 +27,18 @@ import {
   Flame, 
   Star, 
   X, 
-  Trophy, 
   Activity, 
   HelpCircle,
-  TrendingUp,
   Calendar,
   RefreshCw,
   Globe,
-  CheckCircle
+  CheckCircle,
+  Copy,
+  Save,
+  Check,
+  MapPin,
+  ChevronRight,
+  Info
 } from 'lucide-react';
 
 export const TedLassoView: React.FC = () => {
@@ -44,6 +52,9 @@ export const TedLassoView: React.FC = () => {
     syncOnlineData 
   } = useAuction();
 
+  // 1. SELEZIONE SEZIONE / TAB: 'next' (Schiera Prossima Gara) o 'current' (Partita in Corso)
+  const [activeTab, setActiveTab] = useState<'next' | 'current'>('next');
+
   // Squadra selezionata (default: Scarsenal / myTeamId)
   const [selectedTeamId, setSelectedTeamId] = useState<string>(myTeamId || 'team-1');
   const [selectedFormationId, setSelectedFormationId] = useState<string>('3-4-3');
@@ -52,6 +63,9 @@ export const TedLassoView: React.FC = () => {
   const [quoteIndex, setQuoteIndex] = useState<number>(0);
   const [lineupOverrides, setLineupOverrides] = useState<{ starters: number[]; bench: number[] } | null>(null);
   const [syncFeedback, setSyncFeedback] = useState<{ show: boolean; message: string; success: boolean } | null>(null);
+  const [copyFeedback, setCopyFeedback] = useState<boolean>(false);
+  const [saveFeedback, setSaveFeedback] = useState<boolean>(false);
+  const [showFixturesModal, setShowFixturesModal] = useState<boolean>(false);
 
   // Squadra corrente
   const activeTeam = teams.find(t => t.id === selectedTeamId) || teams[0];
@@ -64,15 +78,32 @@ export const TedLassoView: React.FC = () => {
       .filter((p): p is Player => p !== undefined);
   }, [activeTeam, players]);
 
-  // Calcolo Formazione Ted Lasso di base con dati sincronizzati online
+  // Calcolo Formazione Ted Lasso in funzione della giornata selezionata ('next' o 'current')
   const baseLineup = useMemo(() => {
-    return generateTedLineup(teamFullPlayers, selectedFormationId, syncedOnlineData);
-  }, [teamFullPlayers, selectedFormationId, syncedOnlineData]);
+    return generateTedLineup(teamFullPlayers, selectedFormationId, syncedOnlineData, activeTab);
+  }, [teamFullPlayers, selectedFormationId, syncedOnlineData, activeTab]);
+
+  // Carica eventuale formazione salvata per il tab corrente
+  useEffect(() => {
+    const saved = localStorage.getItem(`fanta_lineup_${activeTab}_${selectedTeamId}`);
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed.starters && parsed.bench && parsed.formationId) {
+          setSelectedFormationId(parsed.formationId);
+          setLineupOverrides({ starters: parsed.starters, bench: parsed.bench });
+        }
+      } catch (e) {
+        console.warn('Errore lettura formazione salvata', e);
+      }
+    } else {
+      setLineupOverrides(null);
+    }
+  }, [activeTab, selectedTeamId]);
 
   // Gestione Aggiornamento Dati Online
   const handleSyncOnline = async () => {
     const res = await syncOnlineData();
-    // Resetta eventuali swap manuali per applicare subito i dati freschi
     setLineupOverrides(null);
     setSwappingPlayerId(null);
     setSyncFeedback({
@@ -85,7 +116,7 @@ export const TedLassoView: React.FC = () => {
     }, 7000);
   };
 
-  // Gestione eventuali scambi manuali (Swap) tra titolari e panchina
+  // Gestione scambi manuali (Swap) tra titolari e panchina
   const { starters, bench, formation } = useMemo(() => {
     if (!lineupOverrides) return baseLineup;
 
@@ -123,12 +154,12 @@ export const TedLassoView: React.FC = () => {
     return evaluateDefenseModifier(starters);
   }, [starters]);
 
-  // Top 3 certezze e scommessa
+  // Top pick, scommessa e trappola
   const { topPick, scommessa, trappola } = useMemo(() => {
     const sorted = [...starters, ...bench].sort((a, b) => b.tedScore - a.tedScore);
     const top = sorted[0] || null;
     const scomm = sorted.find(c => c.evaluation.fantagazzetta.fascia === 'Scommessa' || c.tedScore >= 70 && c.player.ruolo === 'C') || sorted[1] || null;
-    const trap = sorted.find(c => c.evaluation.fantagazzetta.fascia === 'Trappola da Evitare' || (c.tedScore < 60 && c.player.status !== 'assigned')) || null;
+    const trap = sorted.find(c => c.evaluation.fantagazzetta.fascia === 'Trappola da Evitare' || (c.evaluation.match && c.evaluation.match.difficulty >= 4 && c.tedScore < 65)) || sorted[sorted.length - 1] || null;
     return { topPick: top, scommessa: scomm, trappola: trap };
   }, [starters, bench]);
 
@@ -137,6 +168,50 @@ export const TedLassoView: React.FC = () => {
     setLineupOverrides(null);
     setSwappingPlayerId(null);
     setQuoteIndex(prev => (prev + 1) % TED_LASSO_QUOTES.length);
+  };
+
+  // Salva Formazione
+  const handleSaveLineup = () => {
+    const key = `fanta_lineup_${activeTab}_${selectedTeamId}`;
+    const payload = {
+      starters: starters.map(s => s.player.id),
+      bench: bench.map(b => b.player.id),
+      formationId: selectedFormationId,
+      savedAt: new Date().toISOString()
+    };
+    localStorage.setItem(key, JSON.stringify(payload));
+    setSaveFeedback(true);
+    setTimeout(() => setSaveFeedback(false), 3000);
+  };
+
+  // Copia Formazione formattata per WhatsApp / Gruppo Fantacalcio
+  const handleCopyLineup = () => {
+    const title = activeTab === 'next' ? NEXT_MATCHDAY_TITLE : CURRENT_MATCHDAY_TITLE;
+    const p = starters.filter(s => s.player.ruolo === 'P').map(s => `${s.player.nome} (${s.evaluation.match ? (s.evaluation.match.isHome ? 'vs ' : '@ ') + s.evaluation.match.opponent : s.player.squadra})`).join(', ');
+    const d = starters.filter(s => s.player.ruolo === 'D').map(s => `${s.player.nome} (${s.evaluation.match ? (s.evaluation.match.isHome ? 'vs ' : '@ ') + s.evaluation.match.opponent : s.player.squadra})`).join(', ');
+    const c = starters.filter(s => s.player.ruolo === 'C').map(s => `${s.player.nome} (${s.evaluation.match ? (s.evaluation.match.isHome ? 'vs ' : '@ ') + s.evaluation.match.opponent : s.player.squadra})`).join(', ');
+    const a = starters.filter(s => s.player.ruolo === 'A').map(s => `${s.player.nome} (${s.evaluation.match ? (s.evaluation.match.isHome ? 'vs ' : '@ ') + s.evaluation.match.opponent : s.player.squadra})`).join(', ');
+    
+    const benchText = bench.slice(0, 7).map(b => `${b.benchOrder}° ${b.player.nome} [${b.player.ruolo}]`).join(', ');
+    
+    const text = `⚽ FORMAZIONE ${activeTeam.name.toUpperCase()} - ${title}
+Modulo: ${formation.id}
+
+TITOLARI:
+P: ${p}
+D: ${d}
+C: ${c}
+A: ${a}
+
+PANCHINA:
+${benchText}
+
+🛡️ Modificatore Difesa: ${defenseModifier.expectedBonus} (${defenseModifier.advice})
+👨🏻‍💼 Ted Lasso: "${TED_LASSO_QUOTES[quoteIndex]}"`;
+
+    navigator.clipboard.writeText(text);
+    setCopyFeedback(true);
+    setTimeout(() => setCopyFeedback(false), 3000);
   };
 
   // Esegui scambio tra due giocatori
@@ -176,6 +251,51 @@ export const TedLassoView: React.FC = () => {
     }
   };
 
+  // Helper badge difficoltà visiva (FDR - Fixture Difficulty Rating)
+  const getDifficultyBadge = (difficulty: number) => {
+    switch (difficulty) {
+      case 1:
+        return {
+          label: '1/5 Facile',
+          tag: 'FACILE',
+          color: 'text-emerald-300 bg-emerald-950/80 border-emerald-500/50',
+          dot: 'bg-emerald-400'
+        };
+      case 2:
+        return {
+          label: '2/5 Favorevole',
+          tag: 'FAVOREVOLE',
+          color: 'text-emerald-400 bg-emerald-950/60 border-emerald-500/40',
+          dot: 'bg-emerald-500'
+        };
+      case 3:
+        return {
+          label: '3/5 Media',
+          tag: 'MEDIA',
+          color: 'text-amber-300 bg-amber-950/70 border-amber-500/50',
+          dot: 'bg-amber-400'
+        };
+      case 4:
+        return {
+          label: '4/5 Tosta',
+          tag: 'DIFF.',
+          color: 'text-orange-400 bg-orange-950/70 border-orange-500/50',
+          dot: 'bg-orange-500'
+        };
+      case 5:
+      default:
+        return {
+          label: '5/5 Proibitiva',
+          tag: 'DURA',
+          color: 'text-rose-400 bg-rose-950/80 border-rose-500/60',
+          dot: 'bg-rose-500'
+        };
+    }
+  };
+
+  const currentFixtures = activeTab === 'next' ? NEXT_SERIE_A_FIXTURES : CURRENT_SERIE_A_FIXTURES;
+  const currentTitle = activeTab === 'next' ? NEXT_MATCHDAY_TITLE : CURRENT_MATCHDAY_TITLE;
+
   return (
     <div className="h-full w-full flex flex-col justify-between overflow-hidden select-none space-y-1 relative">
       
@@ -198,8 +318,8 @@ export const TedLassoView: React.FC = () => {
         </div>
       )}
 
-      {/* 1. TESTATA SUPERIORE DI TED LASSO */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 flex items-center justify-between gap-2 shadow-sm flex-shrink-0">
+      {/* 1. TESTATA SUPERIORE CON SELETTORE DELLE 2 SEZIONI: PROSSIMA GARA VS PARTITA IN CORSO */}
+      <div className="bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 flex items-center justify-between gap-2 shadow-sm flex-shrink-0 flex-wrap">
         
         {/* PARTE SINISTRA: LOGO BELIEVE & TITOLO */}
         <div className="flex items-center gap-2">
@@ -215,15 +335,62 @@ export const TedLassoView: React.FC = () => {
           <div>
             <h1 className="text-xs sm:text-sm font-black text-white tracking-wide uppercase flex items-center gap-1.5">
               <span>TED LASSO</span>
-              <span className="text-amber-400 text-[11px] font-bold">Assistente Domenicale</span>
+              <span className="text-amber-400 text-[11px] font-bold">Consigli Schieramento</span>
             </h1>
             <span className="text-[10px] text-slate-400 hidden sm:inline font-mono">
-              {CURRENT_MATCHDAY_TITLE}
+              {currentTitle}
             </span>
           </div>
         </div>
 
-        {/* PARTE CENTRALE: SELETTORI SQUADRA, MODULO E PULSANTI AZIONE */}
+        {/* 2 GRANDI TAB DI SELEZIONE: PROSSIMA GARA VS PARTITA IN CORSO */}
+        <div className="flex items-center bg-slate-950 p-0.5 rounded-lg border border-slate-800 shadow-inner">
+          {/* TAB 1: SCHIERA PROSSIMA GARA */}
+          <button
+            onClick={() => {
+              setActiveTab('next');
+              setSwappingPlayerId(null);
+            }}
+            className={`px-3 py-1 rounded-md text-xs font-black flex items-center gap-1.5 transition-all select-none ${
+              activeTab === 'next'
+                ? 'bg-amber-400 text-slate-950 shadow-md ring-1 ring-amber-300'
+                : 'text-slate-400 hover:text-white hover:bg-slate-900'
+            }`}
+            title="Schiera la formazione per la prossima giornata (7ª Giornata, 2-5 Ottobre 2026)"
+          >
+            <Calendar className="w-3.5 h-3.5" />
+            <span>Schiera Prossima Gara (7ª G.)</span>
+            <span className={`px-1.5 py-0.2 rounded text-[9px] font-mono font-bold ${
+              activeTab === 'next' ? 'bg-slate-950 text-amber-300' : 'bg-slate-800 text-slate-400'
+            }`}>
+              2-5 Ott
+            </span>
+          </button>
+
+          {/* TAB 2: PARTITA IN CORSO */}
+          <button
+            onClick={() => {
+              setActiveTab('current');
+              setSwappingPlayerId(null);
+            }}
+            className={`px-3 py-1 rounded-md text-xs font-black flex items-center gap-1.5 transition-all select-none ${
+              activeTab === 'current'
+                ? 'bg-emerald-500 text-slate-950 shadow-md ring-1 ring-emerald-300'
+                : 'text-slate-400 hover:text-white hover:bg-slate-900'
+            }`}
+            title="Visualizza la partita e la formazione del turno attualmente in corso (6ª Giornata)"
+          >
+            <Activity className="w-3.5 h-3.5" />
+            <span>Partita in Corso (6ª G.)</span>
+            <span className={`px-1.5 py-0.2 rounded text-[9px] font-mono font-bold ${
+              activeTab === 'current' ? 'bg-slate-950 text-emerald-300 animate-pulse' : 'bg-slate-800 text-slate-400'
+            }`}>
+              LIVE
+            </span>
+          </button>
+        </div>
+
+        {/* PARTE DESTRA: SELETTORE SQUADRA & MODULO */}
         <div className="flex items-center gap-1.5 sm:gap-2">
           
           {/* SELETTORE SQUADRA FANTACALCIO */}
@@ -266,68 +433,87 @@ export const TedLassoView: React.FC = () => {
             </select>
           </div>
 
-          {/* PULSANTE CHIEDI A TED (AUTO-SCHIERA MIGLIOR 11) */}
+          {/* PULSANTE CHIEDI A TED (AUTO-SCHIERA) */}
           <button
             onClick={handleAskTed}
             className="px-2.5 py-1 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-lg text-xs font-black flex items-center gap-1.5 shadow active:scale-95 transition-all"
-            title="Calcola e schiera automaticamente l'11 migliore con la panchina ottimizzata"
+            title="Calcola e schiera automaticamente l'11 migliore considerando difficoltà avversaria e fattore campo"
           >
             <Zap className="w-3.5 h-3.5 fill-slate-950" />
-            <span className="hidden md:inline">Chiedi a Ted (Auto-Schiera)</span>
-            <span className="md:hidden">Auto-11</span>
+            <span className="hidden xl:inline">Chiedi a Ted (Auto-Schiera)</span>
+            <span className="xl:hidden">Auto-11</span>
+          </button>
+
+          {/* PULSANTE SALVA FORMAZIONE */}
+          <button
+            onClick={handleSaveLineup}
+            className={`px-2.5 py-1 rounded-lg text-xs font-black flex items-center gap-1.5 shadow active:scale-95 transition-all ${
+              saveFeedback 
+                ? 'bg-emerald-600 text-white ring-1 ring-emerald-400' 
+                : 'bg-slate-800 hover:bg-slate-700 text-white border border-slate-700'
+            }`}
+            title="Salva la formazione schierata nel browser per non perderla"
+          >
+            {saveFeedback ? <Check className="w-3.5 h-3.5 text-emerald-300" /> : <Save className="w-3.5 h-3.5 text-slate-300" />}
+            <span className="hidden sm:inline">{saveFeedback ? 'Salvata!' : 'Salva'}</span>
+          </button>
+
+          {/* PULSANTE COPIA WHATSAPP */}
+          <button
+            onClick={handleCopyLineup}
+            className={`px-2 py-1 rounded-lg text-xs font-black flex items-center gap-1.5 shadow active:scale-95 transition-all ${
+              copyFeedback 
+                ? 'bg-emerald-600 text-white ring-1 ring-emerald-400' 
+                : 'bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-slate-700'
+            }`}
+            title="Copia la formazione formattata negli appunti per inviarla al gruppo WhatsApp del Fantacalcio"
+          >
+            {copyFeedback ? <Check className="w-3.5 h-3.5 text-emerald-200" /> : <Copy className="w-3.5 h-3.5" />}
+            <span className="hidden sm:inline">{copyFeedback ? 'Copiata!' : 'Copia'}</span>
           </button>
 
           {/* PULSANTE AGGIORNA DATI ONLINE */}
           <button
             onClick={handleSyncOnline}
             disabled={isSyncingOnline}
-            className={`px-2.5 py-1 rounded-lg text-xs font-black flex items-center gap-1.5 shadow active:scale-95 transition-all select-none ${
+            className={`px-2 py-1 rounded-lg text-xs font-black flex items-center gap-1 shadow active:scale-95 transition-all select-none ${
               isSyncingOnline
                 ? 'bg-emerald-950/90 border border-emerald-500/60 text-emerald-300 cursor-wait'
-                : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-900/30'
+                : 'bg-emerald-600 hover:bg-emerald-500 text-white'
             }`}
-            title="Aggiorna online in tempo reale titolarità, ballottaggi e bollettino medico da Fantacalcio.it e Gazzetta dello Sport"
+            title="Aggiorna online in tempo reale titolarità e probabili formazioni"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isSyncingOnline ? 'animate-spin' : ''}`} />
-            <span className="hidden sm:inline">
-              {isSyncingOnline ? 'Sincronizzazione Live...' : 'Aggiorna Online'}
-            </span>
-            <span className="sm:hidden">
-              {isSyncingOnline ? 'Sync...' : 'Online'}
-            </span>
+            <span className="hidden lg:inline">{isSyncingOnline ? 'Sync...' : 'Sync Live'}</span>
           </button>
         </div>
 
-        {/* PARTE DESTRA: BADGE MODIFICATORE DIFESA & STATO SYNC */}
-        <div className="flex items-center gap-1.5">
-          {/* Badge Stato Ultimo Aggiornamento Online */}
-          {lastOnlineSyncTime ? (
-            <div 
-              className="hidden xl:flex items-center gap-1 px-2 py-0.5 rounded-lg bg-slate-950 border border-slate-800 text-[10px] font-mono text-slate-300"
-              title={`Dati online aggiornati: ${lastOnlineSyncTime} (${syncedOnlineData?.totalPlayers || 479} giocatori censiti, ${syncedOnlineData?.totalBallots || 44} ballottaggi)`}
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span>{lastOnlineSyncTime.split('ore')[1] ? `Ore ${lastOnlineSyncTime.split('ore')[1].trim()}` : lastOnlineSyncTime}</span>
-            </div>
-          ) : (
-            <div className="hidden xl:flex items-center gap-1 px-2 py-0.5 rounded-lg bg-slate-950 border border-slate-800 text-[10px] font-mono text-slate-400">
-              <Globe className="w-3 h-3 text-slate-500" />
-              <span>Dati Serie A TIM</span>
-            </div>
-          )}
+      </div>
 
-          <div className={`px-2 py-0.5 rounded-lg border text-[10px] font-black flex items-center gap-1 ${
-            defenseModifier.isWorthIt
-              ? 'bg-emerald-950/80 border-emerald-500/70 text-emerald-300'
-              : 'bg-slate-950 border-slate-800 text-slate-400'
-          }`}
-          title={defenseModifier.advice}
-          >
-            <Shield className="w-3 h-3 text-emerald-400" />
-            <span>Modificatore: {defenseModifier.expectedBonus}</span>
-          </div>
+      {/* BANNER INFORMATIVO DI SEZIONE CON FOCALIZZAZIONE AVVERSARI */}
+      <div className={`px-3 py-1 rounded-lg text-xs flex items-center justify-between gap-2 border flex-shrink-0 ${
+        activeTab === 'next' 
+          ? 'bg-amber-950/30 border-amber-500/40 text-amber-200' 
+          : 'bg-emerald-950/30 border-emerald-500/40 text-emerald-200'
+      }`}>
+        <div className="flex items-center gap-2">
+          <span className="font-black uppercase tracking-wider text-[11px] px-1.5 py-0.2 rounded bg-slate-900 border border-current">
+            {activeTab === 'next' ? 'PROSSIMA GARA (7ª G.)' : 'PARTITA IN CORSO (6ª G.)'}
+          </span>
+          <span className="text-[11px] hidden sm:inline">
+            {activeTab === 'next' 
+              ? '🎯 Gli avversari, i punteggi Ted Score e i consigli sono calcolati sulla 7ª Giornata (difficoltà squadra avversaria + fattore casa/trasferta).' 
+              : '⚡ Formazione e gare del turno attualmente in corso. Visualizza lo stato della squadra per la 6ª giornata.'}
+          </span>
         </div>
 
+        <button 
+          onClick={() => setShowFixturesModal(true)}
+          className="text-[10px] font-bold underline hover:text-white flex items-center gap-1 flex-shrink-0"
+        >
+          <span>Vedi Calendario ({currentFixtures.length} gare)</span>
+          <ChevronRight className="w-3 h-3" />
+        </button>
       </div>
 
       {/* 2. AREA PRINCIPALE: CAMPO DA CALCIO A SINISTRA (65%) & LAVAGNA TATTICA A DESTRA (35%) */}
@@ -339,14 +525,11 @@ export const TedLassoView: React.FC = () => {
           {/* CAMPO DA CALCIO VERDE (GREEN PITCH) */}
           <div className="fanta-pitch relative flex-1 rounded-xl bg-gradient-to-b from-emerald-900 via-emerald-850 to-emerald-950 border-2 border-emerald-600/40 shadow-inner overflow-hidden min-h-[360px] sm:min-h-[400px]">
             
-            {/* LINEE DEL CAMPO DA CALCIO REGOLAMENTARI */}
+            {/* LINEE DEL CAMPO DA CALCIO */}
             <div className="absolute inset-2 border border-white/20 rounded pointer-events-none" />
-            {/* Centrocampo & Cerchio */}
             <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-white/20 -translate-y-1/2 pointer-events-none" />
             <div className="absolute top-1/2 left-1/2 w-28 h-28 border border-white/20 rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
-            {/* Area Rigore Alto (Porta avversaria) */}
             <div className="absolute top-0 left-1/2 w-48 h-16 border-b border-x border-white/20 -translate-x-1/2 pointer-events-none" />
-            {/* Area Rigore Basso (Tua Porta) */}
             <div className="absolute bottom-0 left-1/2 w-52 h-20 border-t border-x border-white/20 -translate-x-1/2 pointer-events-none" />
 
             {/* AVVISO DI SWAP ATTIVO */}
@@ -372,6 +555,8 @@ export const TedLassoView: React.FC = () => {
               starters.map((card) => {
                 const pos = card.pitchPosition || { x: 50, y: 50 };
                 const isSelectedForSwap = swappingPlayerId === card.player.id;
+                const matchInfo = card.evaluation.match;
+                const diffBadge = matchInfo ? getDifficultyBadge(matchInfo.difficulty) : null;
 
                 return (
                   <div
@@ -387,10 +572,10 @@ export const TedLassoView: React.FC = () => {
                           setSelectedPlayerForReport(card);
                         }
                       }}
-                      className={`group cursor-pointer rounded-lg p-1.5 sm:p-2 bg-slate-950/90 hover:bg-slate-900 border transition-all duration-150 active:scale-95 flex flex-col items-center shadow-lg min-w-[76px] sm:min-w-[92px] max-w-[110px] ${
+                      className={`group cursor-pointer rounded-lg p-1.5 sm:p-2 bg-slate-950/92 hover:bg-slate-900 border transition-all duration-150 active:scale-95 flex flex-col items-center shadow-xl min-w-[82px] sm:min-w-[98px] max-w-[115px] ${
                         isSelectedForSwap
                           ? 'border-amber-400 ring-2 ring-amber-400 scale-105'
-                          : 'border-slate-700/80 hover:border-amber-400/70'
+                          : 'border-slate-700/80 hover:border-amber-400/80'
                       }`}
                     >
                       {/* Top Bar: Ruolo + Ted Score */}
@@ -406,18 +591,36 @@ export const TedLassoView: React.FC = () => {
                       </div>
 
                       {/* Nome Calciatore */}
-                      <span className="text-[11px] sm:text-xs font-black text-white truncate max-w-[85px] leading-tight text-center">
+                      <span className="text-[11px] sm:text-xs font-black text-white truncate max-w-[90px] leading-tight text-center">
                         {card.player.nome}
                       </span>
 
-                      {/* Squadra & Avversaria del turno */}
-                      <div className="text-[9px] text-slate-400 font-mono mt-0.5 truncate max-w-[85px] text-center leading-none">
-                        {card.evaluation.match ? (
-                          <span className={card.evaluation.match.isHome ? "text-emerald-400" : "text-slate-400"}>
-                            {card.evaluation.match.isHome ? "vs " : "@ "}{card.evaluation.match.opponent.slice(0, 4).toUpperCase()}
-                          </span>
+                      {/* Squadra & Avversaria del turno con FDR e Home/Away */}
+                      <div className="text-[9px] font-mono mt-0.5 w-full text-center leading-tight">
+                        {matchInfo ? (
+                          <div className="flex flex-col items-center gap-0.5">
+                            <div className="flex items-center justify-center gap-1">
+                              <span className={`px-1 py-0.2 rounded font-black text-[8px] uppercase ${
+                                matchInfo.isHome 
+                                  ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/40' 
+                                  : 'bg-slate-900 text-slate-300 border border-slate-700'
+                              }`}>
+                                {matchInfo.isHome ? 'CASA' : 'FUORI'}
+                              </span>
+                              <span className="font-black text-amber-300 truncate max-w-[55px]">
+                                {matchInfo.isHome ? 'vs ' : '@ '}{matchInfo.opponent.slice(0, 4).toUpperCase()}
+                              </span>
+                            </div>
+
+                            {/* Badge Difficoltà Squadra Avversaria (FDR) */}
+                            {diffBadge && (
+                              <span className={`px-1 py-0.2 rounded text-[7.5px] font-bold border leading-none ${diffBadge.color}`} title={`Difficoltà partita: ${diffBadge.label}`}>
+                                {diffBadge.label}
+                              </span>
+                            )}
+                          </div>
                         ) : (
-                          card.player.squadra.slice(0, 4).toUpperCase()
+                          <span className="text-slate-400">{card.player.squadra.slice(0, 5).toUpperCase()}</span>
                         )}
                       </div>
 
@@ -433,9 +636,6 @@ export const TedLassoView: React.FC = () => {
                         <span className="text-amber-400 font-bold">
                           {'★'.repeat(card.evaluation.fantagazzetta.stars)}
                         </span>
-                        {card.evaluation.tatticoAdvice && (
-                          <span className="text-amber-400 text-[9px]" title="Consigliato dal Tattico">🎯</span>
-                        )}
                       </div>
 
                       {/* Pulsante rapido Scambia */}
@@ -458,7 +658,7 @@ export const TedLassoView: React.FC = () => {
 
           </div>
 
-          {/* PANCHINA ORDINATA DI TED (BENCH) */}
+          {/* PANCHINA ORDINATA DI TED */}
           <div className="mt-1 bg-slate-950/90 border border-slate-800 rounded-xl px-2 py-1.5 flex-shrink-0">
             <div className="flex items-center justify-between mb-1 text-[11px]">
               <span className="font-black text-slate-300 uppercase flex items-center gap-1.5">
@@ -468,7 +668,7 @@ export const TedLassoView: React.FC = () => {
                 </span>
               </span>
               <span className="text-[10px] text-slate-400 font-mono">
-                Pronti a subentrare in caso di s.v.
+                {activeTab === 'next' ? 'Avversarie 7ª Giornata' : 'Avversarie 6ª Giornata'}
               </span>
             </div>
 
@@ -478,6 +678,8 @@ export const TedLassoView: React.FC = () => {
               <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 scrollbar-thin">
                 {bench.map((card) => {
                   const isTargetForSwap = swappingPlayerId !== null;
+                  const matchInfo = card.evaluation.match;
+                  const diffBadge = matchInfo ? getDifficultyBadge(matchInfo.difficulty) : null;
 
                   return (
                     <div
@@ -502,13 +704,26 @@ export const TedLassoView: React.FC = () => {
                       <span className={`w-3 h-3 rounded text-[8px] font-black flex items-center justify-center ${getRoleBg(card.player.ruolo)}`}>
                         {card.player.ruolo}
                       </span>
-                      <div className="leading-none">
+                      <div className="leading-tight">
                         <span className="text-xs font-black text-white block truncate max-w-[80px]">
                           {card.player.nome}
                         </span>
-                        <span className="text-[9px] text-slate-400 font-mono">
-                          {card.evaluation.match?.opponent ? `@${card.evaluation.match.opponent.slice(0, 3)}` : card.player.squadra.slice(0, 3)}
-                        </span>
+                        <div className="flex items-center gap-1 text-[8.5px] font-mono text-slate-400">
+                          {matchInfo ? (
+                            <>
+                              <span className={matchInfo.isHome ? 'text-emerald-400' : 'text-slate-400'}>
+                                {matchInfo.isHome ? 'vs ' : '@ '}{matchInfo.opponent.slice(0, 3)}
+                              </span>
+                              {diffBadge && (
+                                <span className={`px-0.5 py-0 rounded text-[7px] font-bold border ${diffBadge.color}`}>
+                                  {diffBadge.tag}
+                                </span>
+                              )}
+                            </>
+                          ) : (
+                            <span>{card.player.squadra.slice(0, 3)}</span>
+                          )}
+                        </div>
                       </div>
                       <span className={`px-1 py-0.2 rounded text-[8px] font-black ml-1 border ${getScoreColor(card.tedScore)}`}>
                         {card.tedScore}
@@ -531,7 +746,7 @@ export const TedLassoView: React.FC = () => {
               <div className="flex items-center gap-1.5">
                 <span className="text-base">👨🏻‍💼</span>
                 <span className="text-xs font-black uppercase text-amber-400 tracking-wider">
-                  Il Consiglio del Mister
+                  Il Consiglio del Mister ({activeTab === 'next' ? '7ª Giornata' : '6ª Giornata'})
                 </span>
               </div>
               <button
@@ -571,9 +786,12 @@ export const TedLassoView: React.FC = () => {
 
           {/* 3. LE SCELTE CHIAVE DI GIORNATA */}
           <div className="bg-slate-900 border border-slate-800 rounded-xl p-2.5 shadow-sm space-y-2 flex-1">
-            <span className="text-xs font-black text-white uppercase tracking-wider block">
-              Le Scelte Chiave della Domenica
-            </span>
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-black text-white uppercase tracking-wider block">
+                Le Scelte Chiave ({activeTab === 'next' ? '7ª Giornata' : '6ª Giornata'})
+              </span>
+              <span className="text-[10px] text-slate-400 font-mono">FDR & Casa/Fuori</span>
+            </div>
 
             {/* TOP PICK */}
             {topPick && (
@@ -632,13 +850,13 @@ export const TedLassoView: React.FC = () => {
                     <span className="text-[10px] font-bold text-red-400">Attenzione</span>
                   </div>
                   <span className="text-[10px] text-slate-300 block mt-0.5">
-                    {trappola.evaluation.fantagazzetta.commentoRedazione || "Match ad alto rischio o minutaggio ridotto."}
+                    {trappola.evaluation.fantagazzetta.commentoRedazione || "Match ad alto coefficiente di difficoltà o minutaggio a rischio."}
                   </span>
                 </div>
               </div>
             )}
 
-            {/* 4. BALLOTTAGGI LIVE SUL CAMPO */}
+            {/* BALLOTTAGGI LIVE */}
             {syncedOnlineData?.ballottaggi && syncedOnlineData.ballottaggi.length > 0 && (
               <div className="pt-2 border-t border-slate-800 space-y-1.5">
                 <div className="flex items-center justify-between">
@@ -677,10 +895,12 @@ export const TedLassoView: React.FC = () => {
       {selectedPlayerForReport && (() => {
         const { player, evaluation, tedScore } = selectedPlayerForReport;
         const verdict = getTedPlayerVerdict(player, tedScore, evaluation);
+        const matchInfo = evaluation.match;
+        const diffBadge = matchInfo ? getDifficultyBadge(matchInfo.difficulty) : null;
 
         return (
-          <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-3 animate-in fade-in duration-150">
-            <div className="bg-slate-900 border-2 border-slate-700 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl space-y-3 p-4 select-none">
+          <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-3 animate-in fade-in duration-150">
+            <div className="bg-slate-900 border-2 border-slate-700 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl space-y-3 p-4 select-none max-h-[95vh] overflow-y-auto scrollbar-thin">
               
               {/* TESTATA MODALE CALCIATORE */}
               <div className="flex items-start justify-between pb-2 border-b border-slate-800">
@@ -697,11 +917,9 @@ export const TedLassoView: React.FC = () => {
                       <span>•</span>
                       <span>Qt: <strong className="text-white font-bold">{player.quotazione}</strong></span>
                       <span>•</span>
-                      <span>FVM: <strong className="text-amber-400 text-sm sm:text-base font-black">{player.fvm}</strong></span>
+                      <span>FVM: <strong className="text-amber-400 font-black">{player.fvm}</strong></span>
                       <span>•</span>
-                      <span>MV: <strong className="text-emerald-400 text-sm sm:text-base font-black">{player.seasons?.['2026/27']?.mv ? player.seasons['2026/27'].mv.toFixed(2) : (player.mv ? player.mv.toFixed(2) : '-')}</strong></span>
-                      <span>•</span>
-                      <span title="Media Voto Ultimo Anno (2025/26)">MV '26: <strong className="text-cyan-300 text-sm sm:text-base font-black">{player.seasons?.['2025/26']?.mv ? player.seasons['2025/26'].mv.toFixed(2) : (player.mv ? player.mv.toFixed(2) : '-')}</strong></span>
+                      <span>MV: <strong className="text-emerald-400 font-black">{player.seasons?.['2026/27']?.mv ? player.seasons['2026/27'].mv.toFixed(2) : (player.mv ? player.mv.toFixed(2) : '-')}</strong></span>
                     </div>
                   </div>
                 </div>
@@ -719,12 +937,49 @@ export const TedLassoView: React.FC = () => {
                 </div>
               </div>
 
+              {/* BOX MATCH PREVISTO CON COEFFICIENTE DI DIFFICOLTÀ E FATTORE CAMPO */}
+              {matchInfo && (
+                <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 space-y-1.5">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-black text-amber-400 uppercase flex items-center gap-1.5">
+                      <Calendar className="w-3.5 h-3.5" />
+                      <span>{matchInfo.matchdayTitle}</span>
+                    </span>
+                    <span className={`px-2 py-0.5 rounded font-black text-[10px] uppercase ${
+                      matchInfo.isHome 
+                        ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/40' 
+                        : 'bg-slate-900 text-slate-300 border border-slate-700'
+                    }`}>
+                      {matchInfo.isHome ? 'IN CASA' : 'IN TRASFERTA'}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-slate-300 font-bold">
+                      {matchInfo.isHome ? `${player.squadra} vs ${matchInfo.opponent}` : `${matchInfo.opponent} vs ${player.squadra}`}
+                    </span>
+                    <span className="text-slate-400 font-mono text-[11px]">
+                      {matchInfo.date} {matchInfo.time}
+                    </span>
+                  </div>
+
+                  {diffBadge && (
+                    <div className="flex items-center justify-between pt-1 border-t border-slate-850">
+                      <span className="text-[11px] text-slate-400">Difficoltà Avversario (FDR):</span>
+                      <span className={`px-2 py-0.5 rounded text-[10px] font-black border ${diffBadge.color}`}>
+                        {diffBadge.label}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              )}
+
               {/* CITAZIONE E VERDETTO DI TED LASSO */}
               <div className="bg-amber-950/40 border border-amber-400/50 rounded-xl p-3 space-y-1">
                 <div className="flex items-center justify-between text-xs">
                   <span className="font-black text-amber-400 uppercase flex items-center gap-1">
                     <span>👨🏻‍💼</span>
-                    <span>Verdetto di Ted Lasso: {verdict.badge}</span>
+                    <span>Verdetto Ted Lasso: {verdict.badge}</span>
                   </span>
                 </div>
                 <p className="text-xs text-slate-200 italic font-medium">
@@ -738,23 +993,16 @@ export const TedLassoView: React.FC = () => {
               {/* SEZIONI ANALITICHE INTEGRATE */}
               <div className="space-y-2 text-xs">
                 
-                {/* 1. GAZZETTA DELLO SPORT: PROBABILI FORMAZIONI */}
+                {/* 1. GAZZETTA DELLO SPORT */}
                 <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
                   <div className="flex items-center justify-between">
                     <span className="font-black text-rose-400 uppercase flex items-center gap-1">
                       <Activity className="w-3.5 h-3.5" />
-                      <span>Gazzetta dello Sport: Probabili Formazioni</span>
+                      <span>Probabili Formazioni Gazzetta</span>
                     </span>
-                    <div className="flex items-center gap-1.5">
-                      {syncedOnlineData && (
-                        <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-emerald-950 text-emerald-300 border border-emerald-500/40">
-                          Live Sync
-                        </span>
-                      )}
-                      <span className="font-mono font-bold text-white">
-                        {evaluation.gazzetta.titolaritaPercent}% Titolare
-                      </span>
-                    </div>
+                    <span className="font-mono font-bold text-white">
+                      {evaluation.gazzetta.titolaritaPercent}% Titolare
+                    </span>
                   </div>
                   <p className="text-[11px] text-slate-300">
                     {evaluation.gazzetta.noteGazzetta}
@@ -762,11 +1010,6 @@ export const TedLassoView: React.FC = () => {
                   {evaluation.gazzetta.ballottaggioCon && (
                     <div className="text-[10px] text-amber-400 font-mono font-bold">
                       ⚔️ Ballottaggio: {evaluation.gazzetta.ballottaggioCon}
-                    </div>
-                  )}
-                  {evaluation.gazzetta.rigorista && (
-                    <div className="text-[10px] text-emerald-400 font-bold">
-                      🎯 Designato tra i rigoristi della squadra
                     </div>
                   )}
                 </div>
@@ -787,7 +1030,7 @@ export const TedLassoView: React.FC = () => {
                   </p>
                 </div>
 
-                {/* 3. IL TATTICO LUCA DIDDI (SE CITATO) */}
+                {/* 3. IL TATTICO LUCA DIDDI */}
                 {evaluation.tatticoAdvice && (
                   <div className="p-2.5 rounded-xl bg-slate-950 border border-amber-600/40 space-y-1">
                     <div className="flex items-center justify-between">
@@ -799,16 +1042,6 @@ export const TedLassoView: React.FC = () => {
                     <p className="text-[11px] text-amber-200">
                       {evaluation.tatticoAdvice}
                     </p>
-                  </div>
-                )}
-
-                {/* 4. MATCH DELLA DOMENICA */}
-                {evaluation.match && (
-                  <div className="p-2 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between text-[11px]">
-                    <span className="text-slate-400 font-medium">Partita in programma:</span>
-                    <span className="font-bold text-white">
-                      {evaluation.match.description}
-                    </span>
                   </div>
                 )}
 
@@ -828,6 +1061,54 @@ export const TedLassoView: React.FC = () => {
           </div>
         );
       })()}
+
+      {/* 4. MODALE CALENDARIO COMPLETO TURNO (6ª O 7ª GIORNATA) */}
+      {showFixturesModal && (
+        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-3 animate-in fade-in duration-150">
+          <div className="bg-slate-900 border-2 border-slate-700 rounded-2xl w-full max-w-xl overflow-hidden shadow-2xl p-4 select-none space-y-3">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-800">
+              <div className="flex items-center gap-2">
+                <Calendar className="w-5 h-5 text-amber-400" />
+                <h3 className="text-sm font-black text-white uppercase">{currentTitle}</h3>
+              </div>
+              <button 
+                onClick={() => setShowFixturesModal(false)}
+                className="p-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-1.5 max-h-[60vh] overflow-y-auto pr-1 scrollbar-thin">
+              {currentFixtures.map(m => (
+                <div key={m.id} className="p-2 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-between text-xs">
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono text-[10px] text-slate-400 w-14">{m.date} {m.time}</span>
+                    <span className="font-bold text-white w-24 text-right">{m.homeTeam}</span>
+                    <span className="text-slate-500 font-bold text-[10px]">vs</span>
+                    <span className="font-bold text-white w-24">{m.awayTeam}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[10px] text-slate-400 font-mono hidden sm:inline">{m.stadium}</span>
+                    <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-slate-900 text-amber-300 border border-slate-750">
+                      Diff. H:{m.homeDifficulty} / A:{m.awayDifficulty}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="pt-2 border-t border-slate-800 flex items-center justify-end">
+              <button
+                onClick={() => setShowFixturesModal(false)}
+                className="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-black text-xs"
+              >
+                Chiudi Calendario
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );

@@ -33,8 +33,14 @@ export interface PlayerMatchdayEvaluation {
     opponent: string;
     isHome: boolean;
     difficulty: number;
+    stadium?: string;
+    date?: string;
+    time?: string;
+    matchdayNumber: number;
+    matchdayTitle: string;
     description: string;
   } | null;
+  matchdayType: 'current' | 'next';
   gazzetta: GazzettaPlayerStatus;
   fantagazzetta: FantagazzettaRating;
   tatticoAdvice: string | null;
@@ -45,7 +51,7 @@ export interface PlayerMatchdayEvaluation {
   } | null;
 }
 
-// 1. Calendario del prossimo turno di Serie A (Giornata 6)
+// 1. Calendario del turno in corso (6ª Giornata)
 export const CURRENT_MATCHDAY_NUMBER = 6;
 export const CURRENT_MATCHDAY_TITLE = "6ª Giornata Serie A (25-28 Settembre 2026)";
 
@@ -152,19 +158,136 @@ export const CURRENT_SERIE_A_FIXTURES: SerieAMatch[] = [
   }
 ];
 
-// Helper per ottenere il match di una squadra
-export function getTeamFixture(teamName: string) {
+// 2. Calendario della PROSSIMA GARA (7ª Giornata Serie A, 2-5 Ottobre 2026)
+export const NEXT_MATCHDAY_NUMBER = 7;
+export const NEXT_MATCHDAY_TITLE = "7ª Giornata Serie A (2-5 Ottobre 2026)";
+
+export const NEXT_SERIE_A_FIXTURES: SerieAMatch[] = [
+  {
+    id: "m7-1",
+    homeTeam: "Napoli",
+    awayTeam: "Como",
+    date: "Venerdì",
+    time: "20:45",
+    stadium: "Diego Armando Maradona (Napoli)",
+    homeDifficulty: 1, // Napoli in casa vs Como: molto favorevole (1/5)
+    awayDifficulty: 5  // Como al Maradona: proibitiva (5/5)
+  },
+  {
+    id: "m7-2",
+    homeTeam: "Udinese",
+    awayTeam: "Lecce",
+    date: "Sabato",
+    time: "15:00",
+    stadium: "Bluenergy Stadium (Udine)",
+    homeDifficulty: 2,
+    awayDifficulty: 3
+  },
+  {
+    id: "m7-3",
+    homeTeam: "Atalanta",
+    awayTeam: "Genoa",
+    date: "Sabato",
+    time: "18:00",
+    stadium: "Gewiss Stadium (Bergamo)",
+    homeDifficulty: 2,
+    awayDifficulty: 4
+  },
+  {
+    id: "m7-4",
+    homeTeam: "Inter",
+    awayTeam: "Torino",
+    date: "Sabato",
+    time: "20:45",
+    stadium: "San Siro (Milano)",
+    homeDifficulty: 2,
+    awayDifficulty: 5
+  },
+  {
+    id: "m7-5",
+    homeTeam: "Juventus",
+    awayTeam: "Cagliari",
+    date: "Domenica",
+    time: "12:30",
+    stadium: "Allianz Stadium (Torino)",
+    homeDifficulty: 1,
+    awayDifficulty: 5
+  },
+  {
+    id: "m7-6",
+    homeTeam: "Bologna",
+    awayTeam: "Parma",
+    date: "Domenica",
+    time: "15:00",
+    stadium: "Renato Dall'Ara (Bologna)",
+    homeDifficulty: 2,
+    awayDifficulty: 3
+  },
+  {
+    id: "m7-7",
+    homeTeam: "Lazio",
+    awayTeam: "Sassuolo",
+    date: "Domenica",
+    time: "15:00",
+    stadium: "Olimpico (Roma)",
+    homeDifficulty: 2,
+    awayDifficulty: 4
+  },
+  {
+    id: "m7-8",
+    homeTeam: "Monza",
+    awayTeam: "Roma",
+    date: "Domenica",
+    time: "18:00",
+    stadium: "U-Power Stadium (Monza)",
+    homeDifficulty: 4,
+    awayDifficulty: 2
+  },
+  {
+    id: "m7-9",
+    homeTeam: "Fiorentina",
+    awayTeam: "Milan",
+    date: "Domenica",
+    time: "20:45",
+    stadium: "Artemio Franchi (Firenze)",
+    homeDifficulty: 3,
+    awayDifficulty: 3
+  },
+  {
+    id: "m7-10",
+    homeTeam: "Venezia",
+    awayTeam: "Frosinone",
+    date: "Lunedì",
+    time: "20:45",
+    stadium: "Pier Luigi Penzo (Venezia)",
+    homeDifficulty: 3,
+    awayDifficulty: 3
+  }
+];
+
+// Helper per ottenere il match di una squadra per turno in corso o prossimo
+export function getTeamFixture(teamName: string, matchdayType: 'current' | 'next' = 'next') {
   if (!teamName) return null;
-  const match = CURRENT_SERIE_A_FIXTURES.find(
+  const fixtures = matchdayType === 'current' ? CURRENT_SERIE_A_FIXTURES : NEXT_SERIE_A_FIXTURES;
+  const match = fixtures.find(
     m => m.homeTeam.toLowerCase() === teamName.toLowerCase() || m.awayTeam.toLowerCase() === teamName.toLowerCase()
   );
   if (!match) return null;
   const isHome = match.homeTeam.toLowerCase() === teamName.toLowerCase();
+  const difficulty = isHome ? match.homeDifficulty : match.awayDifficulty;
+  const matchdayNumber = matchdayType === 'current' ? CURRENT_MATCHDAY_NUMBER : NEXT_MATCHDAY_NUMBER;
+  const matchdayTitle = matchdayType === 'current' ? CURRENT_MATCHDAY_TITLE : NEXT_MATCHDAY_TITLE;
+
   return {
     opponent: isHome ? match.awayTeam : match.homeTeam,
     isHome,
-    difficulty: isHome ? match.homeDifficulty : match.awayDifficulty,
-    description: `${isHome ? 'IN CASA contro ' + match.awayTeam : 'TRASFERTA a ' + match.homeTeam} (${match.date} ${match.time})`
+    difficulty,
+    stadium: match.stadium,
+    date: match.date,
+    time: match.time,
+    matchdayNumber,
+    matchdayTitle,
+    description: `${isHome ? 'IN CASA vs ' + match.awayTeam : 'TRASFERTA @ ' + match.homeTeam} (${match.date} ${match.time})`
   };
 }
 
@@ -331,14 +454,15 @@ export function matchSyncedPlayer(
   return null;
 }
 
-// Funzione principale che raccoglie tutti i dati per un calciatore
+// Funzione principale che raccoglie tutti i dati per un calciatore per il turno specificato (in corso o prossimo)
 export function getPlayerMatchdayEvaluation(
   playerName: string, 
   teamName: string,
-  syncedData?: SyncedOnlineData | null
+  syncedData?: SyncedOnlineData | null,
+  matchdayType: 'current' | 'next' = 'next'
 ): PlayerMatchdayEvaluation {
   const normName = playerName.toUpperCase().trim();
-  const fixture = getTeamFixture(teamName);
+  const fixture = getTeamFixture(teamName, matchdayType);
   const injury = getInjuryInfo(normName);
 
   // Gazzetta
@@ -394,22 +518,50 @@ export function getPlayerMatchdayEvaluation(
       fascia: 'Sconsigliato',
       commentoRedazione: `Indisponibile per infortunio (${injury.rientroPrevisto}). Non schierabile.`
     };
-  } else if (fgCustom) {
+  } else if (matchdayType === 'current' && fgCustom) {
+    // Valutazione specifica turno attuale
     fantagazzetta = {
       stars: fgCustom.stars ?? 3,
       fascia: fgCustom.fascia ?? 'Schierabile',
       commentoRedazione: fgCustom.commentoRedazione || "Buona opzione per completare il reparto."
     };
   } else {
-    // Calcolo automatico in base alla difficoltà fixture
+    // Calcolo dinamico in funzione della difficoltà del match e fattore campo
     const diff = fixture ? fixture.difficulty : 3;
-    const stars: 1 | 2 | 3 | 4 | 5 = diff <= 2 ? 4 : diff === 3 ? 3 : 2;
-    const fascia = diff <= 2 ? 'Consigliato' : diff === 3 ? 'Schierabile' : 'Rischioso';
-    fantagazzetta = {
-      stars,
-      fascia,
-      commentoRedazione: `Match di difficoltà ${diff}/5 ${fixture?.isHome ? 'in casa' : 'in trasferta'}. Opzione solida di reparto.`
-    };
+    const isHome = fixture ? fixture.isHome : false;
+    const opp = fixture ? fixture.opponent : "avversario";
+
+    if (diff === 1) {
+      fantagazzetta = {
+        stars: 5,
+        fascia: 'Top di Giornata',
+        commentoRedazione: `Match d'oro ${isHome ? 'in casa' : 'in trasferta'} contro ${opp} (Diff. 1/5). Da mettere assolutamente, altissima probabilità di bonus e voti alti!`
+      };
+    } else if (diff === 2) {
+      fantagazzetta = {
+        stars: 4,
+        fascia: 'Consigliato',
+        commentoRedazione: `Turno favorevole ${isHome ? 'tra le mura amiche' : 'in trasferta'} contro ${opp} (Diff. 2/5). Ottima scelta per il reparto.`
+      };
+    } else if (diff === 3) {
+      fantagazzetta = {
+        stars: 3,
+        fascia: 'Schierabile',
+        commentoRedazione: `Gara equilibrata contro ${opp} (${isHome ? 'in casa' : 'fuori'}). Schierabile titolare con buona fiducia.`
+      };
+    } else if (diff === 4) {
+      fantagazzetta = {
+        stars: 2,
+        fascia: 'Rischioso',
+        commentoRedazione: `Partita insidiosa contro ${opp} (Diff. 4/5). Attenzione ai cartellini e alla pressione difensiva.`
+      };
+    } else {
+      fantagazzetta = {
+        stars: 2,
+        fascia: 'Trappola da Evitare',
+        commentoRedazione: `Match proibitivo ${isHome ? 'in casa' : 'in trasferta'} contro ${opp} (Diff. 5/5): rischio malus elevato, valutare alternative più morbide.`
+      };
+    }
   }
 
   // Aggiustamento dinamico Fantagazzetta se da live sync emerge un ballottaggio rischioso o panchina certa
@@ -431,6 +583,7 @@ export function getPlayerMatchdayEvaluation(
 
   return {
     match: fixture,
+    matchdayType,
     gazzetta,
     fantagazzetta,
     tatticoAdvice,
