@@ -1,0 +1,819 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body {
+    @apply bg-slate-950 text-slate-100 antialiased overflow-x-hidden;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+
+  button, input, select, [role="button"], a {
+    touch-action: manipulation;
+  }
+
+  input[type="text"], input[type="number"], textarea {
+    user-select: text;
+  }
+}
+
+/* Custom scrollbar for fast scrolling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Big button utility for fast touch */
+.btn-large {
+  @apply min-h-[52px] min-w-[52px] font-bold transition-all active:scale-95 select-none rounded-xl;
+}
+
+/* ========================================================================= */
+/* TEMA CHIARO (LIGHT THEME) PROFESSIONALE ED ELEGANTE                       */
+/* ========================================================================= */
+
+html.light {
+  color-scheme: light;
+}
+
+html.light,
+html.light body,
+html.light #root > div {
+  background-color: #f1f5f9 !important; /* Slate 100 */
+  color: #0f172a !important; /* Slate 900 */
+}
+
+/* Backgrounds */
+html.light .bg-slate-950 {
+  background-color: #f8fafc !important; /* Slate 50 */
+}
+
+html.light .bg-slate-950\/40,
+html.light .bg-slate-950\/60,
+html.light .bg-slate-950\/70,
+html.light .bg-slate-950\/80,
+html.light .bg-slate-950\/85,
+html.light .bg-slate-950\/90 {
+  background-color: rgba(248, 250, 252, 0.9) !important;
+}
+
+html.light .bg-slate-900 {
+  background-color: #ffffff !important;
+}
+
+html.light .bg-slate-900\/80,
+html.light .bg-slate-900\/90,
+html.light .bg-slate-900\/95 {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+html.light .bg-slate-850,
+html.light .bg-slate-800 {
+  background-color: #f1f5f9 !important;
+}
+
+html.light .bg-slate-750,
+html.light .bg-slate-700 {
+  background-color: #e2e8f0 !important;
+}
+
+/* Borders */
+html.light .border-slate-950,
+html.light .border-slate-900,
+html.light .border-slate-850,
+html.light .border-slate-800,
+html.light .border-slate-800\/80,
+html.light .border-slate-750,
+html.light .border-slate-700,
+html.light .border-slate-600 {
+  border-color: #e2e8f0 !important;
+}
+
+html.light .divide-slate-800\/60 > * + *,
+html.light .divide-slate-800 > * + *,
+html.light .divide-slate-850 > * + * {
+  border-color: #e2e8f0 !important;
+}
+
+/* Text Colors */
+html.light .text-white,
+html.light .text-slate-100 {
+  color: #0f172a !important; /* Dark Slate */
+}
+
+html.light .text-slate-200,
+html.light .text-slate-300 {
+  color: #1e293b !important;
+}
+
+html.light .text-slate-400 {
+  color: #475569 !important;
+}
+
+html.light .text-slate-500 {
+  color: #64748b !important;
+}
+
+html.light .text-slate-600 {
+  color: #94a3b8 !important;
+}
+
+/* Hover States */
+html.light .hover\:bg-slate-800:hover,
+html.light .hover\:bg-slate-850:hover,
+html.light .hover\:bg-slate-750:hover,
+html.light .hover\:bg-slate-700:hover {
+  background-color: #e2e8f0 !important;
+}
+
+html.light .hover\:bg-slate-900:hover,
+html.light .hover\:bg-slate-950:hover {
+  background-color: #f1f5f9 !important;
+}
+
+html.light .hover\:text-white:hover {
+  color: #0f172a !important;
+}
+
+/* Inputs, Selects & Textareas */
+html.light input[type="text"],
+html.light input[type="number"],
+html.light select,
+html.light textarea {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+
+html.light input::placeholder,
+html.light textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+html.light select option {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+}
+
+/* Header and Footer in Light Theme */
+html.light header {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+html.light footer {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  color: #64748b !important;
+}
+
+/* Table styling in Light Theme */
+html.light thead {
+  background-color: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+}
+
+html.light thead th {
+  color: #334155 !important;
+}
+
+html.light tbody tr:hover {
+  background-color: #f8fafc !important;
+}
+
+/* ========================================================================= */
+/* CORREZIONI COLORI PER MODALITÀ CHIARA (GIALLO, ROSSO, AZZURRO SCARSENAL)   */
+/* ========================================================================= */
+
+/* 1. GIALLO E AMBRA: trasformati in oro ambrato scuro ad alto contrasto */
+html.light .text-yellow-400,
+html.light .text-yellow-300,
+html.light .text-amber-400,
+html.light .text-amber-300 {
+  color: #b45309 !important; /* amber-700 / oro scuro: contrasto 5.2:1 su bianco */
+}
+
+html.light .text-yellow-500,
+html.light .text-amber-500 {
+  color: #92400e !important; /* amber-800 */
+}
+
+html.light .text-amber-200,
+html.light .text-yellow-200 {
+  color: #78350f !important; /* amber-900 */
+}
+
+/* 2. AZZURRO E CIANO (SCARSENAL): sfondo celeste chiarissimo e testo blu oceano leggibilissimo */
+html.light .bg-cyan-950\/20 {
+  background-color: #f0f9ff !important; /* sky-50: celeste chiaro pulito */
+  border-color: #0284c7 !important; /* sky-600 */
+  box-shadow: 0 1px 3px 0 rgba(2, 132, 199, 0.15) !important;
+}
+
+html.light .bg-cyan-950\/80,
+html.light .bg-cyan-950 {
+  background-color: #e0f2fe !important; /* sky-100 */
+  border-color: #38bdf8 !important; /* sky-400 */
+  color: #0369a1 !important; /* sky-700 */
+}
+
+html.light .text-cyan-200,
+html.light .text-cyan-300,
+html.light .text-cyan-400,
+html.light .text-sky-300,
+html.light .text-sky-400 {
+  color: #0369a1 !important; /* sky-700: blu oceano profondo, contrasto 6.5:1 */
+}
+
+html.light .border-cyan-500\/70,
+html.light .border-cyan-500 {
+  border-color: #0284c7 !important;
+}
+
+html.light .ring-cyan-500\/30 {
+  --tw-ring-color: rgba(2, 132, 199, 0.35) !important;
+}
+
+/* 2.5 VERDE E SMERALDO (EMERALD / GREEN / TEAL): TRASFORMATI IN VERDE BOSCO SCURO AD ALTO CONTRASTO */
+html.light .text-emerald-400,
+html.light .text-emerald-300,
+html.light .text-emerald-200 {
+  color: #065f46 !important; /* emerald-800: contrasto > 7.1:1 su bianco e sfondi chiari */
+  font-weight: 800 !important;
+}
+
+html.light .text-emerald-500,
+html.light .text-emerald-600 {
+  color: #047857 !important; /* emerald-700 */
+}
+
+html.light .text-green-400,
+html.light .text-green-300,
+html.light .text-green-200 {
+  color: #166534 !important; /* green-800 */
+  font-weight: 800 !important;
+}
+
+html.light .text-green-500,
+html.light .text-green-600 {
+  color: #15803d !important; /* green-700 */
+}
+
+html.light .text-teal-400,
+html.light .text-teal-300,
+html.light .text-teal-200 {
+  color: #115e59 !important; /* teal-800 */
+  font-weight: 800 !important;
+}
+
+/* Badge e box traslucidi verdi in Light Mode: sfondo pastello morbido, bordo visibile e testo scuro */
+html.light .bg-emerald-500\/10,
+html.light .bg-emerald-500\/20,
+html.light .bg-emerald-500\/25,
+html.light .bg-emerald-500\/30,
+html.light .bg-emerald-600\/20,
+html.light .bg-emerald-600\/30,
+html.light .bg-emerald-950\/10,
+html.light .bg-emerald-950\/20,
+html.light .bg-emerald-950\/25,
+html.light .bg-emerald-950\/30,
+html.light .bg-emerald-950\/40,
+html.light .bg-emerald-950\/50,
+html.light .bg-emerald-950\/60,
+html.light .bg-emerald-950\/80,
+html.light .bg-emerald-950\/90,
+html.light .bg-emerald-950 {
+  background-color: #d1fae5 !important; /* emerald-100 */
+  border-color: #34d399 !important; /* emerald-400 */
+  color: #065f46 !important; /* emerald-800: testo sempre scuro e nitido */
+}
+
+html.light .border-emerald-500\/30,
+html.light .border-emerald-500\/40,
+html.light .border-emerald-500\/50,
+html.light .border-emerald-500\/70,
+html.light .border-emerald-500 {
+  border-color: #059669 !important; /* emerald-600 */
+}
+
+html.light .bg-green-500\/10,
+html.light .bg-green-500\/20,
+html.light .bg-green-500\/25,
+html.light .bg-green-500\/30 {
+  background-color: #dcfce7 !important; /* green-100 */
+  border-color: #4ade80 !important;
+  color: #166534 !important;
+}
+
+/* 2.6 BLU E INDACO (BLUE / INDIGO): TRASFORMATI IN BLU NOTTE PROFONDO AD ALTO CONTRASTO */
+html.light .text-blue-400,
+html.light .text-blue-300,
+html.light .text-blue-200,
+html.light .text-blue-100 {
+  color: #1e3a8a !important; /* blue-900: contrasto > 8.5:1 su bianco e sfondi chiari */
+  font-weight: 800 !important;
+}
+
+html.light .text-blue-500,
+html.light .text-blue-600 {
+  color: #1d4ed8 !important; /* blue-700 */
+}
+
+html.light .text-indigo-400,
+html.light .text-indigo-300,
+html.light .text-indigo-200 {
+  color: #312e81 !important; /* indigo-900: contrasto elevato */
+  font-weight: 800 !important;
+}
+
+html.light .text-indigo-500,
+html.light .text-indigo-600 {
+  color: #4338ca !important; /* indigo-700 */
+}
+
+/* Badge traslucidi blu e indaco in Light Mode */
+html.light .bg-blue-600\/20,
+html.light .bg-blue-600\/30,
+html.light .bg-blue-500\/10,
+html.light .bg-blue-500\/20,
+html.light .bg-blue-500\/25,
+html.light .bg-blue-500\/30,
+html.light .bg-blue-950\/10,
+html.light .bg-blue-950\/20,
+html.light .bg-blue-950\/30,
+html.light .bg-blue-950\/40,
+html.light .bg-blue-950\/50,
+html.light .bg-blue-950\/60,
+html.light .bg-blue-950\/70,
+html.light .bg-blue-950\/80,
+html.light .bg-blue-950\/90,
+html.light .bg-blue-950 {
+  background-color: #dbeafe !important; /* blue-100 */
+  border-color: #60a5fa !important; /* blue-400 */
+  color: #1e3a8a !important; /* blue-900: testo scuro e nitidissimo */
+}
+
+html.light .border-blue-500\/50,
+html.light .border-blue-500\/40,
+html.light .border-blue-500 {
+  border-color: #2563eb !important; /* blue-600 */
+}
+
+html.light .bg-indigo-500\/10,
+html.light .bg-indigo-500\/20,
+html.light .bg-indigo-500\/25,
+html.light .bg-indigo-500\/30,
+html.light .bg-indigo-600\/20,
+html.light .bg-indigo-600\/30 {
+  background-color: #e0e7ff !important; /* indigo-100 */
+  border-color: #818cf8 !important; /* indigo-400 */
+  color: #312e81 !important; /* indigo-900 */
+}
+
+/* 3. ROSSO ALLEGGERITO PER I BOX SQUADRE (Max > Scarsenal) */
+html.light .bg-red-950\/25 {
+  background-color: #fef2f2 !important; /* rose-50: rosso chiarissimo pastello */
+  border-color: #fca5a5 !important; /* rose-300: bordo rosso leggero */
+  box-shadow: 0 1px 3px 0 rgba(239, 68, 68, 0.08) !important;
+}
+
+html.light .text-red-400 {
+  color: #b91c1c !important; /* red-700: rosso rubino profondo, nitido e leggibile */
+}
+
+html.light .text-rose-400 {
+  color: #9f1239 !important; /* rose-800: bordeaux per gli slot liberi */
+}
+
+/* 4. PULSANTI E TAB COLORATI PIENI: TESTO E ICONE SEMPRE BIANCO PURO */
+html.light .bg-red-600,
+html.light .bg-red-600 *,
+html.light .bg-red-500,
+html.light .bg-red-500 *,
+html.light .bg-rose-600,
+html.light .bg-rose-600 *,
+html.light .bg-emerald-600,
+html.light .bg-emerald-600 *,
+html.light .bg-emerald-500,
+html.light .bg-emerald-500 *,
+html.light .bg-blue-600,
+html.light .bg-blue-600 *,
+html.light .bg-purple-600,
+html.light .bg-purple-600 *,
+html.light .bg-indigo-600,
+html.light .bg-indigo-600 *,
+html.light .bg-indigo-700,
+html.light .bg-indigo-700 *,
+html.light .bg-slate-700,
+html.light .bg-slate-700 *,
+html.light button.bg-red-600,
+html.light button.bg-emerald-600,
+html.light button.bg-blue-600,
+html.light button.bg-purple-600,
+html.light button.bg-indigo-600,
+html.light button.bg-indigo-700 {
+  color: #ffffff !important;
+}
+
+html.light .bg-red-600 svg,
+html.light .bg-emerald-600 svg,
+html.light .bg-blue-600 svg,
+html.light .bg-purple-600 svg,
+html.light .bg-indigo-600 svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* Tinted Badges / Navigation Tabs / Colored Buttons */
+/* AMBER / YELLOW */
+html.light .bg-amber-950,
+html.light .bg-amber-950\/10,
+html.light .bg-amber-950\/20,
+html.light .bg-amber-950\/25,
+html.light .bg-amber-950\/30,
+html.light .bg-amber-950\/40,
+html.light .bg-amber-950\/50,
+html.light .bg-amber-950\/60,
+html.light .bg-amber-950\/70,
+html.light .bg-amber-950\/80,
+html.light .bg-amber-950\/90,
+html.light .bg-amber-900,
+html.light .bg-amber-500\/10,
+html.light .bg-amber-500\/20,
+html.light .bg-amber-500\/30,
+html.light .bg-amber-400\/15 {
+  background-color: #fef3c7 !important; /* amber-100 */
+  border-color: #f59e0b !important; /* amber-500 */
+  color: #78350f !important; /* amber-900: scuro e ben visibile */
+}
+
+html.light .hover\:bg-amber-900:hover,
+html.light .hover\:bg-amber-950:hover,
+html.light .hover\:bg-amber-900\/40:hover,
+html.light .hover\:bg-amber-900\/50:hover {
+  background-color: #fde68a !important; /* amber-200 */
+  color: #78350f !important;
+}
+
+/* RED / ROSE */
+html.light .bg-red-950,
+html.light .bg-red-950\/10,
+html.light .bg-red-950\/20,
+html.light .bg-red-950\/25,
+html.light .bg-red-950\/30,
+html.light .bg-red-950\/40,
+html.light .bg-red-950\/50,
+html.light .bg-red-950\/60,
+html.light .bg-red-950\/70,
+html.light .bg-red-950\/80,
+html.light .bg-red-950\/90,
+html.light .bg-red-950\/95,
+html.light .bg-red-900,
+html.light .bg-rose-950,
+html.light .bg-rose-950\/10,
+html.light .bg-rose-950\/20,
+html.light .bg-rose-950\/25,
+html.light .bg-rose-950\/30,
+html.light .bg-rose-950\/40,
+html.light .bg-rose-950\/50,
+html.light .bg-rose-950\/60,
+html.light .bg-rose-950\/70,
+html.light .bg-rose-950\/80,
+html.light .bg-rose-950\/90,
+html.light .bg-rose-900 {
+  background-color: #fee2e2 !important; /* red-100 */
+  border-color: #f87171 !important; /* red-400 */
+  color: #7f1d1d !important; /* red-900: testo scuro contrastato */
+}
+
+html.light .hover\:bg-red-900:hover,
+html.light .hover\:bg-red-950:hover,
+html.light .hover\:bg-rose-900:hover,
+html.light .hover\:bg-rose-950:hover {
+  background-color: #fecaca !important; /* red-200 */
+  color: #7f1d1d !important;
+}
+
+html.light .bg-red-950 strong,
+html.light .bg-red-950\/90 strong,
+html.light .bg-red-950\/80 strong,
+html.light .bg-red-100 strong {
+  color: #991b1b !important; /* red-800 */
+}
+
+/* SKY / CYAN */
+html.light .bg-sky-950,
+html.light .bg-sky-950\/10,
+html.light .bg-sky-950\/20,
+html.light .bg-sky-950\/25,
+html.light .bg-sky-950\/30,
+html.light .bg-sky-950\/40,
+html.light .bg-sky-950\/50,
+html.light .bg-sky-950\/60,
+html.light .bg-sky-950\/70,
+html.light .bg-sky-950\/80,
+html.light .bg-sky-950\/90,
+html.light .bg-sky-900,
+html.light .bg-cyan-950,
+html.light .bg-cyan-950\/10,
+html.light .bg-cyan-950\/20,
+html.light .bg-cyan-950\/25,
+html.light .bg-cyan-950\/30,
+html.light .bg-cyan-950\/40,
+html.light .bg-cyan-950\/50,
+html.light .bg-cyan-950\/60,
+html.light .bg-cyan-950\/70,
+html.light .bg-cyan-950\/80,
+html.light .bg-cyan-950\/90,
+html.light .bg-cyan-900 {
+  background-color: #e0f2fe !important; /* sky-100 */
+  border-color: #38bdf8 !important; /* sky-400 */
+  color: #0369a1 !important; /* sky-700 */
+}
+
+html.light .hover\:bg-sky-900:hover,
+html.light .hover\:bg-sky-950:hover,
+html.light .hover\:bg-cyan-900:hover,
+html.light .hover\:bg-cyan-950:hover {
+  background-color: #bae6fd !important; /* sky-200 */
+  color: #0c4a6e !important;
+}
+
+/* PURPLE */
+html.light .bg-purple-950,
+html.light .bg-purple-950\/10,
+html.light .bg-purple-950\/20,
+html.light .bg-purple-950\/25,
+html.light .bg-purple-950\/30,
+html.light .bg-purple-950\/40,
+html.light .bg-purple-950\/50,
+html.light .bg-purple-950\/60,
+html.light .bg-purple-950\/70,
+html.light .bg-purple-950\/80,
+html.light .bg-purple-950\/90,
+html.light .bg-purple-900 {
+  background-color: #f3e8ff !important; /* purple-100 */
+  border-color: #c084fc !important; /* purple-400 */
+  color: #581c87 !important; /* purple-900 */
+}
+
+html.light .hover\:bg-purple-900:hover,
+html.light .hover\:bg-purple-950:hover {
+  background-color: #e9d5ff !important; /* purple-200 */
+  color: #581c87 !important;
+}
+
+/* EMERALD / GREEN */
+html.light .bg-emerald-950\/40,
+html.light .bg-emerald-950\/80,
+html.light .bg-emerald-950\/90,
+html.light .bg-emerald-950 {
+  background-color: #d1fae5 !important;
+  border-color: #a7f3d0 !important;
+  color: #065f46 !important;
+}
+
+html.light .hover\:bg-emerald-900:hover,
+html.light .hover\:bg-emerald-950:hover {
+  background-color: #a7f3d0 !important; /* emerald-200 */
+  color: #064e3b !important;
+}
+
+/* INDIGO */
+html.light .bg-indigo-950,
+html.light .bg-indigo-950\/10,
+html.light .bg-indigo-950\/20,
+html.light .bg-indigo-950\/25,
+html.light .bg-indigo-950\/30,
+html.light .bg-indigo-950\/40,
+html.light .bg-indigo-950\/50,
+html.light .bg-indigo-950\/60,
+html.light .bg-indigo-950\/70,
+html.light .bg-indigo-950\/80,
+html.light .bg-indigo-950\/90,
+html.light .bg-indigo-900 {
+  background-color: #e0e7ff !important; /* indigo-100 */
+  border-color: #818cf8 !important; /* indigo-400 */
+  color: #312e81 !important; /* indigo-900 */
+}
+
+html.light .hover\:bg-indigo-900:hover,
+html.light .hover\:bg-indigo-950:hover {
+  background-color: #c7d2fe !important; /* indigo-200 */
+  color: #312e81 !important;
+}
+
+/* BLUE */
+html.light .bg-blue-950,
+html.light .bg-blue-950\/10,
+html.light .bg-blue-950\/20,
+html.light .bg-blue-950\/25,
+html.light .bg-blue-950\/30,
+html.light .bg-blue-950\/40,
+html.light .bg-blue-950\/50,
+html.light .bg-blue-950\/60,
+html.light .bg-blue-950\/70,
+html.light .bg-blue-950\/80,
+html.light .bg-blue-950\/90,
+html.light .bg-blue-900 {
+  background-color: #dbeafe !important; /* blue-100 */
+  border-color: #60a5fa !important; /* blue-400 */
+  color: #1e3a8a !important; /* blue-900 */
+}
+
+html.light .hover\:bg-blue-900:hover,
+html.light .hover\:bg-blue-950:hover {
+  background-color: #bfdbfe !important; /* blue-200 */
+  color: #1e3a8a !important;
+}
+
+/* Light Scrollbar */
+html.light ::-webkit-scrollbar-track {
+  background: #f1f5f9 !important;
+}
+
+html.light ::-webkit-scrollbar-thumb {
+  background: #cbd5e1 !important;
+  border-radius: 4px;
+}
+
+html.light ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8 !important;
+}
+
+/* 5. CAMPO DA CALCIO TED LASSO (Mantiene erba verde e linee visibili in Dark e Light Theme) */
+.fanta-pitch {
+  background: linear-gradient(180deg, #064e3b 0%, #065f46 50%, #022c22 100%) !important;
+}
+
+html.light .fanta-pitch {
+  background: linear-gradient(180deg, #065f46 0%, #047857 50%, #064e3b 100%) !important;
+  border-color: #059669 !important;
+}
+
+html.light .fanta-pitch .border-white\/20 {
+  border-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+html.light .fanta-pitch .bg-white\/20 {
+  background-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+/* ========================================================================= */
+/* 6. BANNER INFORTUNIO AD ALTISSIMO CONTRASTO (LIGHT & DARK MODE)            */
+/* ========================================================================= */
+.injury-banner {
+  background-color: #fee2e2 !important; /* red-100 chiaro pulito */
+  border-color: #ef4444 !important; /* red-500 ben visibile */
+  color: #450a0a !important; /* red-950 nero/bordeaux scurissimo */
+}
+
+.injury-banner .injury-title {
+  color: #991b1b !important; /* red-800 */
+  font-weight: 900 !important;
+}
+
+.injury-banner .injury-text {
+  color: #450a0a !important; /* red-950: massima leggibilità */
+  font-weight: 700 !important;
+}
+
+.injury-banner .injury-badge {
+  background-color: #b91c1c !important; /* red-700 pieno */
+  color: #ffffff !important; /* bianco puro */
+  border-color: #991b1b !important;
+  font-weight: 900 !important;
+}
+
+html.dark .injury-banner {
+  background-color: rgba(69, 10, 10, 0.9) !important;
+  border-color: rgba(239, 68, 68, 0.8) !important;
+  color: #fecaca !important;
+}
+
+html.dark .injury-banner .injury-title {
+  color: #fde047 !important; /* yellow-300 oro */
+  font-weight: 900 !important;
+}
+
+html.dark .injury-banner .injury-text {
+  color: #fee2e2 !important; /* red-100 */
+  font-weight: 600 !important;
+}
+
+html.dark .injury-banner .injury-badge {
+  background-color: #7f1d1d !important;
+  color: #fef08a !important; /* yellow-200 */
+  border-color: #ef4444 !important;
+  font-weight: 800 !important;
+}
+
+/* Override generico per testi rossi chiari in modalità chiara */
+html.light .text-red-200,
+html.light .text-red-300 {
+  color: #7f1d1d !important; /* mai rosa pallido su sfondo chiaro */
+}
+
+html.light .text-red-100 {
+  color: #450a0a !important;
+}
+
+/* ========================================================================= */
+/* 7. EVIDENZIAZIONE SQUADRE: PIÙ RICCO (MAX SOLDI) E MENO SOLDI (MIN BUDGET) */
+/* ========================================================================= */
+/* MAX BUDGET (PIÙ RICCO) */
+.team-card-max-budget {
+  border-color: #10b981 !important; /* emerald-500 */
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.35) !important;
+}
+
+html.light .team-card-max-budget {
+  background-color: #ecfdf5 !important; /* emerald-50 */
+  border-color: #059669 !important; /* emerald-600 */
+}
+
+.team-budget-max {
+  background-color: rgba(6, 95, 70, 0.7) !important;
+  color: #34d399 !important;
+  border-color: #10b981 !important;
+}
+
+html.light .team-budget-max {
+  background-color: #d1fae5 !important; /* emerald-100 */
+  color: #065f46 !important; /* emerald-900 */
+  border-color: #10b981 !important;
+  font-weight: 900 !important;
+}
+
+/* MIN BUDGET (MENO SOLDI) */
+.team-card-min-budget {
+  border-color: #f43f5e !important; /* rose-500 */
+  box-shadow: 0 0 12px rgba(244, 63, 94, 0.3) !important;
+}
+
+html.light .team-card-min-budget {
+  background-color: #fff1f2 !important; /* rose-50 */
+  border-color: #e11d48 !important; /* rose-600 */
+}
+
+.team-budget-min {
+  background-color: rgba(136, 19, 55, 0.7) !important;
+  color: #fb7185 !important;
+  border-color: #f43f5e !important;
+}
+
+html.light .team-budget-min {
+  background-color: #ffe4e6 !important; /* rose-100 */
+  color: #9f1239 !important; /* rose-900 */
+  border-color: #f43f5e !important;
+  font-weight: 900 !important;
+}
+
+/* ========================================================================= */
+/* 8. HOME VIEW MACRO CARDS IN MODALITÀ CHIARA                                */
+/* ========================================================================= */
+html.light .home-macro-card {
+  background-color: #ffffff !important;
+  background-image: none !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04) !important;
+}
+
+html.light .home-macro-card:hover {
+  background-color: #f8fafc !important;
+  background-image: none !important;
+}
+
+html.light .home-macro-card .home-card-title {
+  color: #0f172a !important;
+}
+
+html.light .home-macro-card .home-card-desc {
+  color: #475569 !important;
+}
+
+html.light .home-macro-card .home-pill {
+  background-color: #f1f5f9 !important;
+  border-color: #cbd5e1 !important;
+  color: #334155 !important;
+}
+
+
+

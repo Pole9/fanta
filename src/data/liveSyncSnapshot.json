@@ -1,0 +1,3719 @@
+{
+  "success": true,
+  "timestamp": "25/09/2026 ore 15:23",
+  "syncedAt": 1790342580000,
+  "totalPlayers": 488,
+  "totalBallots": 45,
+  "players": {
+    "VARELA G": {
+      "name": "Varela G.",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "KOUADIO": {
+      "name": "Kouadio",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "LUCCHESI": {
+      "name": "Lucchesi",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "CARBONI A": {
+      "name": "Carboni A.",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BIRINDELLI": {
+      "name": "Birindelli",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "AKINSANMIRO": {
+      "name": "Akinsanmiro",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "FOLORUNSHO": {
+      "name": "Folorunsho",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BAKOUNE": {
+      "name": "Bakoune",
+      "titolaritaPercent": 80,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "COLPANI": {
+      "name": "Colpani",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Colpani 60% - Forson O. 40%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ROBINSON J": {
+      "name": "Robinson J.",
+      "titolaritaPercent": 80,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "TORNQVIST": {
+      "name": "Tornqvist",
+      "titolaritaPercent": 45,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Tornqvist 45% - Thiam 55%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "STRAJNAR": {
+      "name": "Strajnar",
+      "titolaritaPercent": 1,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ANTOV": {
+      "name": "Antov",
+      "titolaritaPercent": 20,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "GOGLICHIDZE": {
+      "name": "Goglichidze",
+      "titolaritaPercent": 35,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MAYE": {
+      "name": "Maye",
+      "titolaritaPercent": 35,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "FORSON O": {
+      "name": "Forson O.",
+      "titolaritaPercent": 40,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Forson O. 40% - Colpani 60%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "FOE ONDOA": {
+      "name": "Foe Ondoa",
+      "titolaritaPercent": 35,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "COLOMBO L": {
+      "name": "Colombo L.",
+      "titolaritaPercent": 30,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "TOUR I": {
+      "name": "Tour&#xE8; I.",
+      "titolaritaPercent": 30,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MOUT": {
+      "name": "Mout",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "CUTRONE": {
+      "name": "Cutrone",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MOTA": {
+      "name": "Mota",
+      "titolaritaPercent": 50,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "NGONGE": {
+      "name": "Ngonge",
+      "titolaritaPercent": 30,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ZEBALLOS": {
+      "name": "Zeballos",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MURIC": {
+      "name": "Muric",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "CINQUEGRANO": {
+      "name": "Cinquegrano",
+      "titolaritaPercent": 80,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "CALETA CAR": {
+      "name": "Caleta-Car",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "LEYSEN F": {
+      "name": "Leysen F.",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "DOIG": {
+      "name": "Doig",
+      "titolaritaPercent": 85,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "THORSTVEDT": {
+      "name": "Thorstvedt",
+      "titolaritaPercent": 80,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MATIC": {
+      "name": "Matic",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ADZIC": {
+      "name": "Adzic",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Adzic 60% - Bakola 40%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BERARDI": {
+      "name": "Berardi",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ESPOSITO SE": {
+      "name": "Esposito Se.",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Esposito Se. 60% - Bowie 40%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "LAURIENT": {
+      "name": "Laurient&#xE8;",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "TURATI": {
+      "name": "Turati",
+      "titolaritaPercent": 5,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "SATALINO": {
+      "name": "Satalino",
+      "titolaritaPercent": 1,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "VAN DER BREMPT": {
+      "name": "Van Der Brempt",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "OBRADOR": {
+      "name": "Obrador",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ODENTHAL": {
+      "name": "Odenthal",
+      "titolaritaPercent": 25,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "LIPANI": {
+      "name": "Lipani",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "DOMINGUEZ B": {
+      "name": "Dominguez B.",
+      "titolaritaPercent": 40,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "GHION": {
+      "name": "Ghion",
+      "titolaritaPercent": 30,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "SULEMANA I": {
+      "name": "Sulemana I.",
+      "titolaritaPercent": 30,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BAKOLA": {
+      "name": "Bakola",
+      "titolaritaPercent": 40,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Bakola 40% - Adzic 60%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BOWIE": {
+      "name": "Bowie",
+      "titolaritaPercent": 40,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Bowie 40% - Esposito Se. 60%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "PIERINI": {
+      "name": "Pierini",
+      "titolaritaPercent": 15,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "SKJELLERUP": {
+      "name": "Skjellerup",
+      "titolaritaPercent": 15,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "THIAM": {
+      "name": "Thiam",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Thiam 55% - Tornqvist 45%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "HOLM": {
+      "name": "Holm",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Holm 60% - Zortea 40%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "HEGGEM": {
+      "name": "Heggem",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "THEATE": {
+      "name": "Theate",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MIRANDA J": {
+      "name": "Miranda J.",
+      "titolaritaPercent": 80,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "POBEGA": {
+      "name": "Pobega",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Pobega 60% - Moro N. 40%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "FERGUSON": {
+      "name": "Ferguson",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ODGAARD": {
+      "name": "Odgaard",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Odgaard 55% - Vitik 45%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BERNARDESCHI": {
+      "name": "Bernardeschi",
+      "titolaritaPercent": 80,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "PICCOLI": {
+      "name": "Piccoli",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "CAMBIAGHI": {
+      "name": "Cambiaghi",
+      "titolaritaPercent": 80,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "PESSINA MAS": {
+      "name": "Pessina Mas.",
+      "titolaritaPercent": 5,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ALHASSANE": {
+      "name": "Alhassane",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "HELLAND": {
+      "name": "Helland",
+      "titolaritaPercent": 35,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "VITIK": {
+      "name": "Vitik",
+      "titolaritaPercent": 45,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Vitik 45% - Odgaard 55%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "DE SILVESTRI": {
+      "name": "De Silvestri",
+      "titolaritaPercent": 20,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "CASALE": {
+      "name": "Casale",
+      "titolaritaPercent": 25,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "AMONDARAIN": {
+      "name": "Amondarain",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MORO N": {
+      "name": "Moro N.",
+      "titolaritaPercent": 40,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Moro N. 40% - Pobega 60%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "LIBRA": {
+      "name": "Libra",
+      "titolaritaPercent": 40,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MBANGULA": {
+      "name": "Mbangula",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ENEM": {
+      "name": "Enem",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "PERRI": {
+      "name": "Perri",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "COMUZZO": {
+      "name": "Comuzzo",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "COCO": {
+      "name": "Coco",
+      "titolaritaPercent": 80,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "COMERT": {
+      "name": "Comert",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BELGHALI": {
+      "name": "Belghali",
+      "titolaritaPercent": 80,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "GINEITIS": {
+      "name": "Gineitis",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Gineitis 55% - Braganca 45%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MANDRAGORA": {
+      "name": "Mandragora",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "FITZ JIM": {
+      "name": "Fitz-Jim",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "CACCIAMANI": {
+      "name": "Cacciamani",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Cacciamani 60% - Fortini 40%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "VLASIC": {
+      "name": "Vlasic",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "SIMEONE": {
+      "name": "Simeone",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MASCARDI": {
+      "name": "Mascardi",
+      "titolaritaPercent": 5,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "SIVIERO": {
+      "name": "Siviero",
+      "titolaritaPercent": 1,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ISMAJLI": {
+      "name": "Ismajli",
+      "titolaritaPercent": 50,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "PATTERSON": {
+      "name": "Patterson",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BIRAGHI": {
+      "name": "Biraghi",
+      "titolaritaPercent": 20,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "RODRIGUEZ R": {
+      "name": "Rodriguez R.",
+      "titolaritaPercent": 40,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "FORTINI": {
+      "name": "Fortini",
+      "titolaritaPercent": 40,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Fortini 40% - Cacciamani 60%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ILKHAN": {
+      "name": "Ilkhan",
+      "titolaritaPercent": 40,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ABOUKHLAL": {
+      "name": "Aboukhlal",
+      "titolaritaPercent": 30,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BRAGANCA": {
+      "name": "Braganca",
+      "titolaritaPercent": 45,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Braganca 45% - Gineitis 55%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "LUONGO": {
+      "name": "Luongo",
+      "titolaritaPercent": 15,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ORISTANIO": {
+      "name": "Oristanio",
+      "titolaritaPercent": 35,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ZAPATA D": {
+      "name": "Zapata D.",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "KULENOVIC": {
+      "name": "Kulenovic",
+      "titolaritaPercent": 35,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ABANKWAH": {
+      "name": "Abankwah",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "KABASELE": {
+      "name": "Kabasele",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "EBOSSE": {
+      "name": "Ebosse",
+      "titolaritaPercent": 80,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "VOJVODA": {
+      "name": "Vojvoda",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MILLER L": {
+      "name": "Miller L.",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "KARLSTROM": {
+      "name": "Karlstrom",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "KAMARA H": {
+      "name": "Kamara H.",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ZANIOLO": {
+      "name": "Zaniolo",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Zaniolo 55% - Unai Gomez 45%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "EKKELENKAMP": {
+      "name": "Ekkelenkamp",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "DAVIS K": {
+      "name": "Davis K.",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MROZEK": {
+      "name": "Mrozek",
+      "titolaritaPercent": 5,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "PADELLI": {
+      "name": "Padelli",
+      "titolaritaPercent": 1,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BERTOLA": {
+      "name": "Bertola",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "JOVANOVIC": {
+      "name": "Jovanovic",
+      "titolaritaPercent": 35,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "CHAKVETADZE": {
+      "name": "Chakvetadze",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ZARRAGA": {
+      "name": "Zarraga",
+      "titolaritaPercent": 50,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "LOVRIC": {
+      "name": "Lovric",
+      "titolaritaPercent": 25,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "UNAI GOMEZ": {
+      "name": "Unai Gomez",
+      "titolaritaPercent": 45,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Unai Gomez 45% - Zaniolo 55%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "GUEYE": {
+      "name": "Gueye",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BAYO V": {
+      "name": "Bayo V.",
+      "titolaritaPercent": 40,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "CAPRILE": {
+      "name": "Caprile",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "Z PEDRO": {
+      "name": "Z&#xE8; Pedro",
+      "titolaritaPercent": 80,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "DEIOLA": {
+      "name": "Deiola",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Deiola 60% - Mina 40%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "RODRIGUEZ JU": {
+      "name": "Rodriguez Ju.",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "OBERT": {
+      "name": "Obert",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ADOPO": {
+      "name": "Adopo",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "WINKS": {
+      "name": "Winks",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ROMANO": {
+      "name": "Romano",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "FAZZINI": {
+      "name": "Fazzini",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MALDINI": {
+      "name": "Maldini",
+      "titolaritaPercent": 80,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MENDY P": {
+      "name": "Mendy P.",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "RADUNOVIC": {
+      "name": "Radunovic",
+      "titolaritaPercent": 5,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "SHERRI": {
+      "name": "Sherri",
+      "titolaritaPercent": 1,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "AURELIO": {
+      "name": "Aurelio",
+      "titolaritaPercent": 25,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "SUGAWARA": {
+      "name": "Sugawara",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MINA": {
+      "name": "Mina",
+      "titolaritaPercent": 40,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Mina 40% - Deiola 60%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "KOFLER": {
+      "name": "Kofler",
+      "titolaritaPercent": 40,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "LITETA": {
+      "name": "Liteta",
+      "titolaritaPercent": 20,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "CIERVO": {
+      "name": "Ciervo",
+      "titolaritaPercent": 40,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "GAGLIARDINI": {
+      "name": "Gagliardini",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "FADERA": {
+      "name": "Fadera",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MASSOLIN": {
+      "name": "Massolin",
+      "titolaritaPercent": 40,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "SULEV": {
+      "name": "Sulev",
+      "titolaritaPercent": 15,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "SUGAMELE": {
+      "name": "Sugamele",
+      "titolaritaPercent": 30,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "NZOLA": {
+      "name": "Nzola",
+      "titolaritaPercent": 20,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "KEVIN CARLOS": {
+      "name": "Kevin Carlos",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MANCINI": {
+      "name": "Mancini",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "NDICKA": {
+      "name": "N&#x27;Dicka",
+      "titolaritaPercent": 70,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "HERMOSO": {
+      "name": "Hermoso",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MOLINA N": {
+      "name": "Molina N.",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Molina N. 60% - Lulli 40%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "CRISTANTE": {
+      "name": "Cristante",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "KON M": {
+      "name": "Kon&#xE8; M.",
+      "titolaritaPercent": 75,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "WESLEY": {
+      "name": "Wesley",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "SOUL": {
+      "name": "Soul&#xE8;",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Soul&#xE8; 55% - Mora 45%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "DYBALA": {
+      "name": "Dybala",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MALEN": {
+      "name": "Malen",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "GOLLINI": {
+      "name": "Gollini",
+      "titolaritaPercent": 5,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "DE MARZI": {
+      "name": "De Marzi",
+      "titolaritaPercent": 1,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BALERDI": {
+      "name": "Balerdi",
+      "titolaritaPercent": 50,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "LULLI": {
+      "name": "Lulli",
+      "titolaritaPercent": 40,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Lulli 40% - Molina N. 60%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "KOULIERAKIS": {
+      "name": "Koulierakis",
+      "titolaritaPercent": 30,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "RENSCH": {
+      "name": "Rensch",
+      "titolaritaPercent": 40,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "GHILARDI": {
+      "name": "Ghilardi",
+      "titolaritaPercent": 30,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "DE ROON": {
+      "name": "De Roon",
+      "titolaritaPercent": 40,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "PISILLI": {
+      "name": "Pisilli",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MORA": {
+      "name": "Mora",
+      "titolaritaPercent": 45,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Mora 45% - Soul&#xE8; 55%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "PELLEGRINI LO": {
+      "name": "Pellegrini Lo.",
+      "titolaritaPercent": 25,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "CASTRO S": {
+      "name": "Castro S.",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ARENA A": {
+      "name": "Arena A.",
+      "titolaritaPercent": 10,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MARTINEZ JO": {
+      "name": "Martinez Jo.",
+      "titolaritaPercent": 80,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BISSECK": {
+      "name": "Bisseck",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "AKANJI": {
+      "name": "Akanji",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BASTONI": {
+      "name": "Bastoni",
+      "titolaritaPercent": 80,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "DIOUF": {
+      "name": "Diouf",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BARELLA": {
+      "name": "Barella",
+      "titolaritaPercent": 0,
+      "status": "infortunato",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ZIELINSKI": {
+      "name": "Zielinski",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "JONES C": {
+      "name": "Jones C.",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Jones C. 60% - Sucic P. 40%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "DIMARCO": {
+      "name": "Dimarco",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "THURAM": {
+      "name": "Thuram",
+      "titolaritaPercent": 95,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MARTINEZ L": {
+      "name": "Martinez L.",
+      "titolaritaPercent": 95,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "PROVEDEL": {
+      "name": "Provedel",
+      "titolaritaPercent": 5,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "DI GENNARO": {
+      "name": "Di Gennaro",
+      "titolaritaPercent": 1,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "PAVARD": {
+      "name": "Pavard",
+      "titolaritaPercent": 50,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "CARLOS AUGUSTO": {
+      "name": "Carlos Augusto",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "SPENCE": {
+      "name": "Spence",
+      "titolaritaPercent": 0,
+      "status": "infortunato",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "LUIS HENRIQUE": {
+      "name": "Luis Henrique",
+      "titolaritaPercent": 35,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MKHITARYAN": {
+      "name": "Mkhitaryan",
+      "titolaritaPercent": 40,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "SUCIC P": {
+      "name": "Sucic P.",
+      "titolaritaPercent": 40,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Sucic P. 40% - Jones C. 60%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "STANKOVIC A": {
+      "name": "Stankovic A.",
+      "titolaritaPercent": 25,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BONNY": {
+      "name": "Bonny",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ESPOSITO F P": {
+      "name": "Esposito F.P.",
+      "titolaritaPercent": 45,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Esposito F.P. 45% - Thuram 55%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "SCHINGTIENNE": {
+      "name": "Schingtienne",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MORENO M": {
+      "name": "Moreno M.",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Moreno M. 55% - Halhal 45%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "HAPS": {
+      "name": "Haps",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "HAINAUT": {
+      "name": "Hainaut",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Hainaut 60% - Mazzocchi 40%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "PEREZ K": {
+      "name": "Perez K.",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "HELGASON": {
+      "name": "Helgason",
+      "titolaritaPercent": 70,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "SOHM": {
+      "name": "Sohm",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "SAGRADO": {
+      "name": "Sagrado",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Sagrado 55% - Juan Jesus 45%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "YEBOAH J": {
+      "name": "Yeboah J.",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ADAMS A": {
+      "name": "Adams A.",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MONTIP": {
+      "name": "Montip&#xF2;",
+      "titolaritaPercent": 5,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "GRANDI": {
+      "name": "Grandi",
+      "titolaritaPercent": 1,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "HALHAL": {
+      "name": "Halhal",
+      "titolaritaPercent": 45,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Halhal 45% - Moreno M. 55%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "GOMES": {
+      "name": "Gomes",
+      "titolaritaPercent": 25,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "CORREIA T": {
+      "name": "Correia T.",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "JUAN JESUS": {
+      "name": "Juan Jesus",
+      "titolaritaPercent": 45,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Juan Jesus 45% - Sagrado 55%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MAZZOCCHI": {
+      "name": "Mazzocchi",
+      "titolaritaPercent": 40,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Mazzocchi 40% - Hainaut 60%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "PANADA": {
+      "name": "Panada",
+      "titolaritaPercent": 20,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "FANNE": {
+      "name": "Fanne",
+      "titolaritaPercent": 15,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "FERNANDEZ T": {
+      "name": "Fernandez T.",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "RRAHMANI AL": {
+      "name": "Rrahmani Al.",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "LAUBERBACH": {
+      "name": "Lauberbach",
+      "titolaritaPercent": 40,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "LISMAN": {
+      "name": "Lisman",
+      "titolaritaPercent": 15,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MANDAS": {
+      "name": "Mandas",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "FLORIANI MUSSOLINI": {
+      "name": "Floriani Mussolini",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "SUTALO J": {
+      "name": "Sutalo J.",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Sutalo J. 60% - Doekhi 40%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "PROVSTGAARD": {
+      "name": "Provstgaard",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "TAVARES N": {
+      "name": "Tavares N.",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "FRATTESI": {
+      "name": "Frattesi",
+      "titolaritaPercent": 95,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BELAHYANE": {
+      "name": "Belahyane",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "TAYLOR K": {
+      "name": "Taylor K.",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "CANCELLIERI": {
+      "name": "Cancellieri",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Cancellieri 55% - Isaksen 45%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "NOSLIN": {
+      "name": "Noslin",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Noslin 60% - Pinamonti 40%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ZACCAGNI": {
+      "name": "Zaccagni",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MOTTA": {
+      "name": "Motta",
+      "titolaritaPercent": 5,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "RENZETTI": {
+      "name": "Renzetti",
+      "titolaritaPercent": 1,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "PEDRAZA": {
+      "name": "Pedraza",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "DOEKHI": {
+      "name": "Doekhi",
+      "titolaritaPercent": 40,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Doekhi 40% - Sutalo J. 60%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "LEITE": {
+      "name": "Leite",
+      "titolaritaPercent": 30,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "LAZZARI": {
+      "name": "Lazzari",
+      "titolaritaPercent": 40,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "CATALDI": {
+      "name": "Cataldi",
+      "titolaritaPercent": 50,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "DELE BASHIRU": {
+      "name": "Dele-Bashiru",
+      "titolaritaPercent": 30,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ISAKSEN": {
+      "name": "Isaksen",
+      "titolaritaPercent": 45,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Isaksen 45% - Cancellieri 55%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "PRZYBOREK": {
+      "name": "Przyborek",
+      "titolaritaPercent": 15,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "GUDMUNDSSON A": {
+      "name": "Gudmundsson A.",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "PINAMONTI": {
+      "name": "Pinamonti",
+      "titolaritaPercent": 40,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Pinamonti 40% - Noslin 60%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "JIMENEZ A": {
+      "name": "Jimenez A.",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "DRAGUSIN": {
+      "name": "Dragusin",
+      "titolaritaPercent": 80,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "RANIERI L": {
+      "name": "Ranieri L.",
+      "titolaritaPercent": 80,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "VIERY": {
+      "name": "Viery",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "NDOUR": {
+      "name": "Ndour",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "FAGIOLI": {
+      "name": "Fagioli",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ATTA": {
+      "name": "Atta",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MASTANTUONO": {
+      "name": "Mastantuono",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "NJIE": {
+      "name": "Njie",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Njie 60% - Goncalves P. 40%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BETO": {
+      "name": "Beto",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Beto 60% - Pellegrino M. 40%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "CHRISTENSEN O": {
+      "name": "Christensen O.",
+      "titolaritaPercent": 5,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "LEZZERINI": {
+      "name": "Lezzerini",
+      "titolaritaPercent": 1,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "JOAO MARIO": {
+      "name": "Joao Mario",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "DOD": {
+      "name": "Dod&#xF2;",
+      "titolaritaPercent": 25,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "PONGRACIC": {
+      "name": "Pongracic",
+      "titolaritaPercent": 35,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "VALDEPENAS": {
+      "name": "Valdepenas",
+      "titolaritaPercent": 40,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BRESCIANINI": {
+      "name": "Brescianini",
+      "titolaritaPercent": 40,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "OULAI": {
+      "name": "Oulai",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "GONCALVES P": {
+      "name": "Goncalves P.",
+      "titolaritaPercent": 40,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Goncalves P. 40% - Njie 60%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "GNONTO": {
+      "name": "Gnonto",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "PELLEGRINO M": {
+      "name": "Pellegrino M.",
+      "titolaritaPercent": 40,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Pellegrino M. 40% - Beto 60%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MILINKOVIC SAVIC V": {
+      "name": "Milinkovic-Savic V.",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "DI LORENZO": {
+      "name": "Di Lorenzo",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "RRAHMANI": {
+      "name": "Rrahmani",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MARIN R": {
+      "name": "Marin R.",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "SPINAZZOLA": {
+      "name": "Spinazzola",
+      "titolaritaPercent": 45,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Spinazzola 45% - Olivera 55%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "GILMOUR": {
+      "name": "Gilmour",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Gilmour 60% - Zambo Anguissa 40%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "LOBOTKA": {
+      "name": "Lobotka",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "DE BRUYNE": {
+      "name": "De Bruyne",
+      "titolaritaPercent": 80,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "POLITANO": {
+      "name": "Politano",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "HOJLUND": {
+      "name": "Hojlund",
+      "titolaritaPercent": 95,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "VERGARA": {
+      "name": "Vergara",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Vergara 60% - Lang 40%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "CONTINI": {
+      "name": "Contini",
+      "titolaritaPercent": 5,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "OLIVERA": {
+      "name": "Olivera",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Olivera 55% - Spinazzola 45%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "FAVASULI": {
+      "name": "Favasuli",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BEUKEMA": {
+      "name": "Beukema",
+      "titolaritaPercent": 40,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BADIASHILE": {
+      "name": "Badiashile",
+      "titolaritaPercent": 35,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ZAMBO ANGUISSA": {
+      "name": "Zambo Anguissa",
+      "titolaritaPercent": 40,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Zambo Anguissa 40% - Gilmour 60%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "LANG": {
+      "name": "Lang",
+      "titolaritaPercent": 40,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Lang 40% - Vergara 60%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "NERES": {
+      "name": "Neres",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "LUCCA": {
+      "name": "Lucca",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "OYONO A": {
+      "name": "Oyono A.",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "CALVANI": {
+      "name": "Calvani",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "CITTADINI": {
+      "name": "Cittadini",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Cittadini 60% - Monterisi 40%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BRACAGLIA": {
+      "name": "Bracaglia",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "CAL": {
+      "name": "Cal&#xF2;",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MASINI": {
+      "name": "Masini",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "GHEDJEMIS": {
+      "name": "Ghedjemis",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "SCHMID": {
+      "name": "Schmid",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "KVERNADZE": {
+      "name": "Kvernadze",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "RAIMONDO": {
+      "name": "Raimondo",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "DESPLANCHES": {
+      "name": "Desplanches",
+      "titolaritaPercent": 5,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "PISSERI": {
+      "name": "Pisseri",
+      "titolaritaPercent": 1,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MONTERISI": {
+      "name": "Monterisi",
+      "titolaritaPercent": 40,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Monterisi 40% - Cittadini 60%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "TCHATO": {
+      "name": "Tchato",
+      "titolaritaPercent": 30,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "OMAR FAYED": {
+      "name": "Omar Fayed",
+      "titolaritaPercent": 20,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "TERZIC": {
+      "name": "Terzic",
+      "titolaritaPercent": 40,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "AMEY": {
+      "name": "Amey",
+      "titolaritaPercent": 30,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "AKPOGUMA": {
+      "name": "Akpoguma",
+      "titolaritaPercent": 25,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "FINI": {
+      "name": "Fini",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "CICHELLA": {
+      "name": "Cichella",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "HASA": {
+      "name": "Hasa",
+      "titolaritaPercent": 40,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "EL AZZOUZI A": {
+      "name": "El Azzouzi A.",
+      "titolaritaPercent": 25,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ZERBIN": {
+      "name": "Zerbin",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BIRLIGEA": {
+      "name": "Birligea",
+      "titolaritaPercent": 40,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BOBCEK": {
+      "name": "Bobcek",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BUTEZ": {
+      "name": "Butez",
+      "titolaritaPercent": 80,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "COUTO": {
+      "name": "Couto",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Couto 60% - Smolcic I. 40%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "RAMON": {
+      "name": "Ramon",
+      "titolaritaPercent": 80,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "CHALOBAH T": {
+      "name": "Chalobah T.",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "KAIKI": {
+      "name": "Kaiki",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Kaiki 55% - Valle 45%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "DA CUNHA": {
+      "name": "Da Cunha",
+      "titolaritaPercent": 80,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "PERRONE": {
+      "name": "Perrone",
+      "titolaritaPercent": 80,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "DIAO": {
+      "name": "Diao",
+      "titolaritaPercent": 85,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "PAZ N": {
+      "name": "Paz N.",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BATURINA": {
+      "name": "Baturina",
+      "titolaritaPercent": 85,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "KEAN": {
+      "name": "Kean",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Kean 55% - Douvikas 45%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "SANCHEZ RO": {
+      "name": "Sanchez Ro.",
+      "titolaritaPercent": 5,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "VIGORITO": {
+      "name": "Vigorito",
+      "titolaritaPercent": 1,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "SMOLCIC I": {
+      "name": "Smolcic I.",
+      "titolaritaPercent": 40,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Smolcic I. 40% - Couto 60%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "KEMPF": {
+      "name": "Kempf",
+      "titolaritaPercent": 35,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "VALLE": {
+      "name": "Valle",
+      "titolaritaPercent": 45,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Valle 45% - Kaiki 55%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "KAMBWALA": {
+      "name": "Kambwala",
+      "titolaritaPercent": 25,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "DOSSENA": {
+      "name": "Dossena",
+      "titolaritaPercent": 15,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "GOLDANIGA": {
+      "name": "Goldaniga",
+      "titolaritaPercent": 20,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MILLA": {
+      "name": "Milla",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "CAQUERET": {
+      "name": "Caqueret",
+      "titolaritaPercent": 40,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "LAHDO": {
+      "name": "Lahdo",
+      "titolaritaPercent": 15,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "RICCI S": {
+      "name": "Ricci S.",
+      "titolaritaPercent": 50,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "LIBERALI": {
+      "name": "Liberali",
+      "titolaritaPercent": 35,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "RODRIGUEZ JE": {
+      "name": "Rodriguez Je.",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "DOUVIKAS": {
+      "name": "Douvikas",
+      "titolaritaPercent": 45,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Douvikas 45% - Kean 55%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "DELPRATO": {
+      "name": "Delprato",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "TROILO": {
+      "name": "Troilo",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "DIEGO CARLOS": {
+      "name": "Diego Carlos",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BRITSCHGI": {
+      "name": "Britschgi",
+      "titolaritaPercent": 80,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BERNAB": {
+      "name": "Bernab&#xE8;",
+      "titolaritaPercent": 75,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "SIERRO": {
+      "name": "Sierro",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "KEITA M": {
+      "name": "Keita M.",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "VALERI": {
+      "name": "Valeri",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ROMERO D": {
+      "name": "Romero D.",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Romero D. 55% - Elphege 45%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "TOUR E": {
+      "name": "Tour&#xE8; E.",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Tour&#xE8; E. 60% - Lontani 40%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "DAFFARA": {
+      "name": "Daffara",
+      "titolaritaPercent": 5,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "GHIDOTTI": {
+      "name": "Ghidotti",
+      "titolaritaPercent": 1,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "VALENTI": {
+      "name": "Valenti",
+      "titolaritaPercent": 40,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "NDIAYE": {
+      "name": "Ndiaye",
+      "titolaritaPercent": 40,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "DROBNIC": {
+      "name": "Drobnic",
+      "titolaritaPercent": 25,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "CARBONI F": {
+      "name": "Carboni F.",
+      "titolaritaPercent": 30,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "CREMASCHI": {
+      "name": "Cremaschi",
+      "titolaritaPercent": 35,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "KONATE A": {
+      "name": "Konate A.",
+      "titolaritaPercent": 30,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ORDONEZ C": {
+      "name": "Ordonez C.",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "FABBIAN": {
+      "name": "Fabbian",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "DIALLO O": {
+      "name": "Diallo O.",
+      "titolaritaPercent": 20,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ALMQVIST": {
+      "name": "Almqvist",
+      "titolaritaPercent": 40,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "LONTANI": {
+      "name": "Lontani",
+      "titolaritaPercent": 40,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Lontani 40% - Tour&#xE8; E. 60%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ELPHEGE": {
+      "name": "Elphege",
+      "titolaritaPercent": 45,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Elphege 45% - Romero D. 55%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "FRIGAN": {
+      "name": "Frigan",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BIJLOW": {
+      "name": "Bijlow",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MARCANDALLI": {
+      "name": "Marcandalli",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "OSTIGARD": {
+      "name": "Ostigard",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "OTOA": {
+      "name": "Otoa",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "EHIZIBUE": {
+      "name": "Ehizibue",
+      "titolaritaPercent": 80,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "FRENDRUP": {
+      "name": "Frendrup",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "SOW": {
+      "name": "Sow",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BALDANZI": {
+      "name": "Baldanzi",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ELLERTSSON": {
+      "name": "Ellertsson",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "COLOMBO": {
+      "name": "Colombo",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "OSMAJIC": {
+      "name": "Osmajic",
+      "titolaritaPercent": 80,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "STOLZ": {
+      "name": "Stolz",
+      "titolaritaPercent": 5,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "SOMMARIVA": {
+      "name": "Sommariva",
+      "titolaritaPercent": 1,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MITAJ": {
+      "name": "Mitaj",
+      "titolaritaPercent": 40,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "PUCZKA": {
+      "name": "Puczka",
+      "titolaritaPercent": 25,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "SABELLI": {
+      "name": "Sabelli",
+      "titolaritaPercent": 30,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "DRAMEH": {
+      "name": "Drameh",
+      "titolaritaPercent": 25,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "AMORIM": {
+      "name": "Amorim",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MESSIAS": {
+      "name": "Messias",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "TRAOR HJ": {
+      "name": "Traor&#xE8; Hj.",
+      "titolaritaPercent": 40,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MEICHTRY": {
+      "name": "Meichtry",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "EL SHAARAWY": {
+      "name": "El Shaarawy",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "WIAFE": {
+      "name": "Wiafe",
+      "titolaritaPercent": 15,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "VITINHA O": {
+      "name": "Vitinha O.",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "KALULU": {
+      "name": "Kalulu",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BREMER": {
+      "name": "Bremer",
+      "titolaritaPercent": 80,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "LUCUM": {
+      "name": "Lucum&#xEC;",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Lucum&#xEC; 60% - Kelly L. 40%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "CELIK": {
+      "name": "Celik",
+      "titolaritaPercent": 85,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "KOOPMEINERS": {
+      "name": "Koopmeiners",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Koopmeiners 60% - Sarr P. 40%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "DOUGLAS LUIZ": {
+      "name": "Douglas Luiz",
+      "titolaritaPercent": 80,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "CONCEICAO": {
+      "name": "Conceicao",
+      "titolaritaPercent": 85,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "GONZALEZ N": {
+      "name": "Gonzalez N.",
+      "titolaritaPercent": 80,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ALAJBEGOVIC": {
+      "name": "Alajbegovic",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Alajbegovic 60% - Woltemade 40%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "KOLO MUANI": {
+      "name": "Kolo Muani",
+      "titolaritaPercent": 80,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "GRABARA": {
+      "name": "Grabara",
+      "titolaritaPercent": 5,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "PINSOGLIO": {
+      "name": "Pinsoglio",
+      "titolaritaPercent": 1,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "CAMBIASO": {
+      "name": "Cambiaso",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "KELLY L": {
+      "name": "Kelly L.",
+      "titolaritaPercent": 40,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Kelly L. 40% - Lucum&#xEC; 60%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "RUGANI": {
+      "name": "Rugani",
+      "titolaritaPercent": 25,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "GATTI": {
+      "name": "Gatti",
+      "titolaritaPercent": 35,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MCKENNIE": {
+      "name": "McKennie",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "SARR P": {
+      "name": "Sarr P.",
+      "titolaritaPercent": 40,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Sarr P. 40% - Koopmeiners 60%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ZHEGROVA": {
+      "name": "Zhegrova",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "WOLTEMADE": {
+      "name": "Woltemade",
+      "titolaritaPercent": 40,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Woltemade 40% - Alajbegovic 60%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "CARNESECCHI": {
+      "name": "Carnesecchi",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BELLANOVA": {
+      "name": "Bellanova",
+      "titolaritaPercent": 80,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "KOSSOUNOU": {
+      "name": "Kossounou",
+      "titolaritaPercent": 75,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "SCALVINI": {
+      "name": "Scalvini",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "KOLASINAC": {
+      "name": "Kolasinac",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Kolasinac 55% - Bernasconi 45%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "SAMARDZIC": {
+      "name": "Samardzic",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Samardzic 55% - Pasalic 45%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "GAETANO": {
+      "name": "Gaetano",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Gaetano 60% - Kessi&#xE8; 40%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "EDERSON D S": {
+      "name": "Ederson D.S.",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "DE KETELAERE": {
+      "name": "De Ketelaere",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "SCAMACCA": {
+      "name": "Scamacca",
+      "titolaritaPercent": 75,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ROWE": {
+      "name": "Rowe",
+      "titolaritaPercent": 75,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "SPORTIELLO": {
+      "name": "Sportiello",
+      "titolaritaPercent": 5,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "POMPEI": {
+      "name": "Pompei",
+      "titolaritaPercent": 1,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ZAPPACOSTA": {
+      "name": "Zappacosta",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "OBRIC": {
+      "name": "Obric",
+      "titolaritaPercent": 15,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "KRISTENSEN T": {
+      "name": "Kristensen T.",
+      "titolaritaPercent": 35,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BERNASCONI": {
+      "name": "Bernasconi",
+      "titolaritaPercent": 45,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Bernasconi 45% - Kolasinac 55%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "PASALIC": {
+      "name": "Pasalic",
+      "titolaritaPercent": 45,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Pasalic 45% - Samardzic 55%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "KESSI": {
+      "name": "Kessi&#xE8;",
+      "titolaritaPercent": 40,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Kessi&#xE8; 40% - Gaetano 60%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ELMAS": {
+      "name": "Elmas",
+      "titolaritaPercent": 40,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ZALEWSKI": {
+      "name": "Zalewski",
+      "titolaritaPercent": 40,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "KRSTOVIC": {
+      "name": "Krstovic",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "RASPADORI": {
+      "name": "Raspadori",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "GILA": {
+      "name": "Gila",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "DE WINTER": {
+      "name": "De Winter",
+      "titolaritaPercent": 80,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "PAVLOVIC": {
+      "name": "Pavlovic",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "CHUKWUEZE": {
+      "name": "Chukwueze",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Chukwueze 60% - Estupinan 40%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MODRIC": {
+      "name": "Modric",
+      "titolaritaPercent": 80,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MUSAH": {
+      "name": "Musah",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Musah 60% - Loftus-Cheek 40%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MOREIRA": {
+      "name": "Moreira",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "RABIOT": {
+      "name": "Rabiot",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "PULISIC": {
+      "name": "Pulisic",
+      "titolaritaPercent": 95,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "RAMOS G": {
+      "name": "Ramos G.",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "TERRACCIANO": {
+      "name": "Terracciano",
+      "titolaritaPercent": 5,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "TORRIANI": {
+      "name": "Torriani",
+      "titolaritaPercent": 1,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "TOMORI": {
+      "name": "Tomori",
+      "titolaritaPercent": 25,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "GABBIA": {
+      "name": "Gabbia",
+      "titolaritaPercent": 50,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "TERRACCIANO F": {
+      "name": "Terracciano F.",
+      "titolaritaPercent": 30,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BARTESAGHI": {
+      "name": "Bartesaghi",
+      "titolaritaPercent": 40,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "DIAWARA S": {
+      "name": "Diawara S.",
+      "titolaritaPercent": 20,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ESTUPINAN": {
+      "name": "Estupinan",
+      "titolaritaPercent": 40,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Estupinan 40% - Chukwueze 60%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "COMOTTO": {
+      "name": "Comotto",
+      "titolaritaPercent": 10,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "JASHARI": {
+      "name": "Jashari",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "SAELEMAEKERS": {
+      "name": "Saelemaekers",
+      "titolaritaPercent": 0,
+      "status": "infortunato",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "HUTCHINSON": {
+      "name": "Hutchinson",
+      "titolaritaPercent": 50,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "LOFTUS CHEEK": {
+      "name": "Loftus-Cheek",
+      "titolaritaPercent": 40,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Loftus-Cheek 40% - Musah 60%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "CISS A": {
+      "name": "Ciss&#xE8; A.",
+      "titolaritaPercent": 45,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Ciss&#xE8; A. 45% - Pulisic 55%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "CAMARDA": {
+      "name": "Camarda",
+      "titolaritaPercent": 30,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "FALCONE": {
+      "name": "Falcone",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "VEIGA D": {
+      "name": "Veiga D.",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "SIEBERT": {
+      "name": "Siebert",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Siebert 55% - Gaspar K. 45%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "TIAGO GABRIEL": {
+      "name": "Tiago Gabriel",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "GALLO": {
+      "name": "Gallo",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "COULIBALY L": {
+      "name": "Coulibaly L.",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ILIC": {
+      "name": "Ilic",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MALEH": {
+      "name": "Maleh",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Maleh 60% - Ngom 40%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "NDRI": {
+      "name": "N&#x27;Dri",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": "N&#x27;Dri 55% - Pierotti 45%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "STULIC": {
+      "name": "Stulic",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MONTEIRO J": {
+      "name": "Monteiro J.",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BLEVE": {
+      "name": "Bleve",
+      "titolaritaPercent": 5,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "PENEV": {
+      "name": "Penev",
+      "titolaritaPercent": 1,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "NDABA": {
+      "name": "Ndaba",
+      "titolaritaPercent": 40,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "DEMBEL A": {
+      "name": "Dembel&#xE8; A.",
+      "titolaritaPercent": 35,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "GASPAR K": {
+      "name": "Gaspar K.",
+      "titolaritaPercent": 45,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Gaspar K. 45% - Siebert 55%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "JEAN": {
+      "name": "Jean",
+      "titolaritaPercent": 20,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "GORTER": {
+      "name": "Gorter",
+      "titolaritaPercent": 55,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "NGOM": {
+      "name": "Ngom",
+      "titolaritaPercent": 40,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Ngom 40% - Maleh 60%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "KABA": {
+      "name": "Kaba",
+      "titolaritaPercent": 20,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "PIEROTTI": {
+      "name": "Pierotti",
+      "titolaritaPercent": 45,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Pierotti 45% - N&#x27;Dri 55%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "FOFANA SA": {
+      "name": "Fofana Sa.",
+      "titolaritaPercent": 30,
+      "status": "panchina",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "FATAH": {
+      "name": "Fatah",
+      "titolaritaPercent": 60,
+      "status": "ballottaggio",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "SKORUPSKI": {
+      "name": "Skorupski",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it Pitch Starter"
+    },
+    "OKOYE": {
+      "name": "Okoye",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it Pitch Starter"
+    },
+    "SVILAR": {
+      "name": "Svilar",
+      "titolaritaPercent": 95,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it Pitch Starter"
+    },
+    "STANKOVIC F": {
+      "name": "Stankovic F.",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it Pitch Starter"
+    },
+    "DE GEA": {
+      "name": "De Gea",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it Pitch Starter"
+    },
+    "PALMISANI": {
+      "name": "Palmisani",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it Pitch Starter"
+    },
+    "CORVI": {
+      "name": "Corvi",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it Pitch Starter"
+    },
+    "VICARIO": {
+      "name": "Vicario",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it Pitch Starter"
+    },
+    "MAIGNAN": {
+      "name": "Maignan",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it Pitch Starter"
+    },
+    "CALHANOGLU": {
+      "name": "Calhanoglu",
+      "titolaritaPercent": 65,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Calhanoglu 65% - Asllani 35%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "DOVBYK": {
+      "name": "Dovbyk",
+      "titolaritaPercent": 0,
+      "status": "infortunato",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "VASQUEZ": {
+      "name": "Vasquez",
+      "titolaritaPercent": 90,
+      "status": "titolare",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ADAMS C": {
+      "name": "Adams C.",
+      "titolaritaPercent": 0,
+      "status": "infortunato",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MERET": {
+      "name": "Meret",
+      "titolaritaPercent": 0,
+      "status": "infortunato",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "ZORTEA": {
+      "name": "Zortea",
+      "titolaritaPercent": 40,
+      "status": "ballottaggio",
+      "ballottaggioCon": "Zortea 40% - Holm 60%",
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "BUSIO": {
+      "name": "Busio",
+      "titolaritaPercent": 0,
+      "status": "infortunato",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "STONES": {
+      "name": "Stones",
+      "titolaritaPercent": 0,
+      "status": "infortunato",
+      "ballottaggioCon": null,
+      "source": "Fantacalcio.it / Gazzetta Live"
+    },
+    "MILINKOVIC-SAVIC V": {
+      "name": "Milinkovic-savic v",
+      "source": "Fantacalcio.it / Gazzetta Live",
+      "titolaritaPercent": 95,
+      "status": "titolare",
+      "ballottaggioCon": null
+    },
+    "MALINOVSKYI": {
+      "name": "Malinovskyi",
+      "source": "Fantacalcio.it / Gazzetta Live",
+      "titolaritaPercent": 0,
+      "status": "infortunato",
+      "ballottaggioCon": null
+    },
+    "ORSOLINI": {
+      "name": "Orsolini",
+      "source": "Fantacalcio.it / Gazzetta Live",
+      "titolaritaPercent": 85,
+      "status": "titolare",
+      "ballottaggioCon": null
+    },
+    "GUDMUNDSSON": {
+      "name": "Gudmundsson",
+      "source": "Fantacalcio.it / Gazzetta Live",
+      "titolaritaPercent": 85,
+      "status": "titolare",
+      "ballottaggioCon": null
+    },
+    "DAWIDOWICZ": {
+      "name": "Dawidowicz",
+      "source": "Fantacalcio.it / Gazzetta Live",
+      "titolaritaPercent": 0,
+      "status": "squalificato",
+      "ballottaggioCon": null
+    },
+    "GUILBERT": {
+      "name": "Guilbert",
+      "source": "Fantacalcio.it / Gazzetta Live",
+      "titolaritaPercent": 0,
+      "status": "squalificato",
+      "ballottaggioCon": null
+    },
+    "MCTOMINAY": {
+      "name": "Mctominay",
+      "source": "Fantacalcio.it / Gazzetta Live",
+      "titolaritaPercent": 95,
+      "status": "titolare",
+      "ballottaggioCon": null
+    }
+  },
+  "teamComments": {
+    "MONZA": "",
+    "SASSUOLO": "",
+    "BOLOGNA": "",
+    "TORINO": "",
+    "UDINESE": "",
+    "CAGLIARI": "",
+    "ROMA": "",
+    "INTER": "",
+    "VENEZIA": "",
+    "LAZIO": "",
+    "FIORENTINA": "",
+    "NAPOLI": "",
+    "FROSINONE": "",
+    "COMO": "",
+    "PARMA": "",
+    "GENOA": "",
+    "JUVENTUS": "",
+    "ATALANTA": "",
+    "MILAN": "",
+    "LECCE": ""
+  },
+  "ballottaggi": [
+    {
+      "p1": "Thiam",
+      "perc1": 55,
+      "p2": "Tornqvist",
+      "perc2": 45
+    },
+    {
+      "p1": "Colpani",
+      "perc1": 60,
+      "p2": "Forson O.",
+      "perc2": 40
+    },
+    {
+      "p1": "Adzic",
+      "perc1": 60,
+      "p2": "Bakola",
+      "perc2": 40
+    },
+    {
+      "p1": "Esposito Se.",
+      "perc1": 60,
+      "p2": "Bowie",
+      "perc2": 40
+    },
+    {
+      "p1": "Pobega",
+      "perc1": 60,
+      "p2": "Moro N.",
+      "perc2": 40
+    },
+    {
+      "p1": "Odgaard",
+      "perc1": 55,
+      "p2": "Vitik",
+      "perc2": 45
+    },
+    {
+      "p1": "Gineitis",
+      "perc1": 55,
+      "p2": "Braganca",
+      "perc2": 45
+    },
+    {
+      "p1": "Cacciamani",
+      "perc1": 60,
+      "p2": "Fortini",
+      "perc2": 40
+    },
+    {
+      "p1": "Zaniolo",
+      "perc1": 55,
+      "p2": "Unai Gomez",
+      "perc2": 45
+    },
+    {
+      "p1": "Deiola",
+      "perc1": 60,
+      "p2": "Mina",
+      "perc2": 40
+    },
+    {
+      "p1": "Molina N.",
+      "perc1": 60,
+      "p2": "Lulli",
+      "perc2": 40
+    },
+    {
+      "p1": "Soul&#xE8;",
+      "perc1": 55,
+      "p2": "Mora",
+      "perc2": 45
+    },
+    {
+      "p1": "Jones C.",
+      "perc1": 60,
+      "p2": "Sucic P.",
+      "perc2": 40
+    },
+    {
+      "p1": "Thuram",
+      "perc1": 55,
+      "p2": "Esposito F.P.",
+      "perc2": 45
+    },
+    {
+      "p1": "Moreno M.",
+      "perc1": 55,
+      "p2": "Halhal",
+      "perc2": 45
+    },
+    {
+      "p1": "Hainaut",
+      "perc1": 60,
+      "p2": "Mazzocchi",
+      "perc2": 40
+    },
+    {
+      "p1": "Sagrado",
+      "perc1": 55,
+      "p2": "Juan Jesus",
+      "perc2": 45
+    },
+    {
+      "p1": "Sutalo J.",
+      "perc1": 60,
+      "p2": "Doekhi",
+      "perc2": 40
+    },
+    {
+      "p1": "Njie",
+      "perc1": 60,
+      "p2": "Goncalves P.",
+      "perc2": 40
+    },
+    {
+      "p1": "Beto",
+      "perc1": 60,
+      "p2": "Pellegrino M.",
+      "perc2": 40
+    },
+    {
+      "p1": "Gilmour",
+      "perc1": 60,
+      "p2": "Zambo Anguissa",
+      "perc2": 40
+    },
+    {
+      "p1": "Vergara",
+      "perc1": 60,
+      "p2": "Lang",
+      "perc2": 40
+    },
+    {
+      "p1": "Cittadini",
+      "perc1": 60,
+      "p2": "Monterisi",
+      "perc2": 40
+    },
+    {
+      "p1": "Couto",
+      "perc1": 60,
+      "p2": "Smolcic I.",
+      "perc2": 40
+    },
+    {
+      "p1": "Kaiki",
+      "perc1": 55,
+      "p2": "Valle",
+      "perc2": 45
+    },
+    {
+      "p1": "Kean",
+      "perc1": 55,
+      "p2": "Douvikas",
+      "perc2": 45
+    },
+    {
+      "p1": "Romero D.",
+      "perc1": 55,
+      "p2": "Elphege",
+      "perc2": 45
+    },
+    {
+      "p1": "Tour&#xE8; E.",
+      "perc1": 60,
+      "p2": "Lontani",
+      "perc2": 40
+    },
+    {
+      "p1": "Lucum&#xEC;",
+      "perc1": 60,
+      "p2": "Kelly L.",
+      "perc2": 40
+    },
+    {
+      "p1": "Koopmeiners",
+      "perc1": 60,
+      "p2": "Sarr P.",
+      "perc2": 40
+    },
+    {
+      "p1": "Alajbegovic",
+      "perc1": 60,
+      "p2": "Woltemade",
+      "perc2": 40
+    },
+    {
+      "p1": "Kolasinac",
+      "perc1": 55,
+      "p2": "Bernasconi",
+      "perc2": 45
+    },
+    {
+      "p1": "Samardzic",
+      "perc1": 55,
+      "p2": "Pasalic",
+      "perc2": 45
+    },
+    {
+      "p1": "Gaetano",
+      "perc1": 60,
+      "p2": "Kessi&#xE8;",
+      "perc2": 40
+    },
+    {
+      "p1": "Pulisic",
+      "perc1": 55,
+      "p2": "Ciss&#xE8; A.",
+      "perc2": 45
+    },
+    {
+      "p1": "Chukwueze",
+      "perc1": 60,
+      "p2": "Estupinan",
+      "perc2": 40
+    },
+    {
+      "p1": "Musah",
+      "perc1": 60,
+      "p2": "Loftus-Cheek",
+      "perc2": 40
+    },
+    {
+      "p1": "Siebert",
+      "perc1": 55,
+      "p2": "Gaspar K.",
+      "perc2": 45
+    },
+    {
+      "p1": "Maleh",
+      "perc1": 60,
+      "p2": "Ngom",
+      "perc2": 40
+    },
+    {
+      "p1": "N&#x27;Dri",
+      "perc1": 55,
+      "p2": "Pierotti",
+      "perc2": 45
+    },
+    {
+      "p1": "Spinazzola",
+      "perc1": 45,
+      "p2": "Olivera",
+      "perc2": 55
+    },
+    {
+      "p1": "Holm",
+      "perc1": 60,
+      "p2": "Zortea",
+      "perc2": 40
+    },
+    {
+      "p1": "Noslin",
+      "perc1": 60,
+      "p2": "Pinamonti",
+      "perc2": 40
+    },
+    {
+      "p1": "Cancellieri",
+      "perc1": 55,
+      "p2": "Isaksen",
+      "perc2": 45
+    },
+    {
+      "p1": "Calhanoglu",
+      "perc1": 65,
+      "p2": "Asllani",
+      "perc2": 35
+    }
+  ]
+}
