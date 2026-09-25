@@ -49,6 +49,7 @@ import {
   Check,
   MapPin,
   ChevronRight,
+  ChevronLeft,
   Info,
   Home,
   Settings
@@ -227,6 +228,47 @@ export const TedLassoView: React.FC = () => {
     const trap = sorted.find(c => c.evaluation.fantagazzetta.fascia === 'Trappola da Evitare' || (c.evaluation.match && c.evaluation.match.difficulty >= 4 && c.tedScore < 65)) || sorted[sorted.length - 1] || null;
     return { topPick: top, scommessa: scomm, trappola: trap };
   }, [starters, bench]);
+
+  // Lista ordinata di tutti i calciatori della formazione (titolari + panchina) per navigazione modale
+  const allReportCards = useMemo(() => {
+    return [...starters, ...bench];
+  }, [starters, bench]);
+
+  // Navigazione tra calciatori con frecce (tastiera e pulsanti)
+  const handlePrevPlayer = () => {
+    if (!selectedPlayerForReport || allReportCards.length === 0) return;
+    const currentIndex = allReportCards.findIndex(c => c.player.id === selectedPlayerForReport.player.id);
+    const prevIndex = (currentIndex - 1 + allReportCards.length) % allReportCards.length;
+    setSelectedPlayerForReport(allReportCards[prevIndex]);
+  };
+
+  const handleNextPlayer = () => {
+    if (!selectedPlayerForReport || allReportCards.length === 0) return;
+    const currentIndex = allReportCards.findIndex(c => c.player.id === selectedPlayerForReport.player.id);
+    const nextIndex = (currentIndex + 1) % allReportCards.length;
+    setSelectedPlayerForReport(allReportCards[nextIndex]);
+  };
+
+  // Listener da tastiera per navigare con freccia sinistra e freccia destra
+  useEffect(() => {
+    if (!selectedPlayerForReport) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        handlePrevPlayer();
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        handleNextPlayer();
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        setSelectedPlayerForReport(null);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedPlayerForReport, allReportCards]);
 
   // Set normalizzato dei nomi dei calciatori appartenenti alla rosa dell'utente
   const squadPlayerCleanNames = useMemo(() => {
@@ -1205,9 +1247,34 @@ ${benchText}
                   <div className={`px-2.5 py-1 rounded-xl text-xs font-black border ${getScoreColor(tedScore)}`}>
                     Ted Score: {tedScore}/100
                   </div>
+
+                  {/* NAVIGAZIONE TRA CALCIATORI CON FRECCE */}
+                  <div className="flex items-center bg-slate-950 border border-slate-800 rounded-lg p-0.5 shadow-sm">
+                    <button
+                      onClick={handlePrevPlayer}
+                      className="p-1 rounded hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"
+                      title="Giocatore precedente (Freccia Sinistra ←)"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                    </button>
+                    
+                    <span className="px-1.5 text-[10px] font-mono font-bold text-slate-400">
+                      {allReportCards.findIndex(c => c.player.id === player.id) + 1}/{allReportCards.length}
+                    </span>
+
+                    <button
+                      onClick={handleNextPlayer}
+                      className="p-1 rounded hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"
+                      title="Giocatore successivo (Freccia Destra →)"
+                    >
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                  </div>
+
                   <button
                     onClick={() => setSelectedPlayerForReport(null)}
-                    className="p-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white"
+                    className="p-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
+                    title="Chiudi Report (Esc)"
                   >
                     <X className="w-5 h-5" />
                   </button>
@@ -1351,8 +1418,30 @@ ${benchText}
 
               </div>
 
-              {/* FOOTER MODALE */}
-              <div className="pt-2 border-t border-slate-800 flex items-center justify-end">
+              {/* FOOTER MODALE CON NAVIGAZIONE FRECCE */}
+              <div className="pt-2 border-t border-slate-800 flex items-center justify-between flex-wrap gap-2">
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={handlePrevPlayer}
+                    className="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-xs flex items-center gap-1 transition-all active:scale-95"
+                    title="Tasto Freccia Sinistra ←"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                    <span className="hidden sm:inline">Precedente</span>
+                  </button>
+                  <button
+                    onClick={handleNextPlayer}
+                    className="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-xs flex items-center gap-1 transition-all active:scale-95"
+                    title="Tasto Freccia Destra →"
+                  >
+                    <span className="hidden sm:inline">Successivo</span>
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                  <span className="text-[11px] text-slate-500 font-mono hidden md:inline ml-1">
+                    (Scorri con ← → da tastiera)
+                  </span>
+                </div>
+
                 <button
                   onClick={() => setSelectedPlayerForReport(null)}
                   className="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-black text-xs transition-all active:scale-95"

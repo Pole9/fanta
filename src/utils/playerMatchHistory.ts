@@ -1,13 +1,15 @@
 import { Player } from '../types';
+import { getInjuryInfo } from '../data/injuryData';
 
 export type MatchdayStatus = 
-  | 'titolare_completo'    // 1) Partito titolare e non sostituito -> verde chiaro
-  | 'titolare_sostituito'  // 2) Partito titolare e sostituito -> verde chiaro a righe diagonali
-  | 'subentrato'           // 3) Entrato da panchina -> giallo
-  | 'senza_voto'           // 4) Entrato senza voto -> SV
-  | 'uscito_infortunato'   // 5) Uscito per infortunio -> viola
-  | 'non_ha_giocato'       // Non sceso in campo
-  | 'futura';              // Giornate non ancora giocate
+  | 'titolare_completo'      // 1) Partito titolare e non sostituito -> verde chiaro
+  | 'titolare_sostituito'    // 2) Partito titolare e sostituito -> verde chiaro a righe diagonali
+  | 'subentrato'             // 3) Entrato da panchina -> giallo
+  | 'senza_voto'             // 4) Entrato senza voto -> SV
+  | 'uscito_infortunato'     // 5) Uscito per infortunio -> viola
+  | 'non_giocato_infortunio' // 6) Non ha giocato per infortunio -> sigla INF
+  | 'non_ha_giocato'         // Non sceso in campo
+  | 'futura';                // Giornate non ancora giocate
 
 export interface MatchdayHistoryItem {
   matchday: number;
@@ -84,8 +86,12 @@ export function getPlayerPerformanceHistory(player: Player, playedMatchdaysCount
     return x - Math.floor(x);
   };
 
-  // Se il calciatore ha subito infortuni recenti
-  const hasInjury = !!s26?.motivoTitolarita && (s26.motivoTitolarita === 'titolare_rotto' || s26.motivoTitolarita === 'infortunato');
+  // Se il calciatore ha subito infortuni recenti o è attualmente infortunato
+  const injuryInfo = getInjuryInfo(player.nome);
+  const hasInjury = !!injuryInfo || 
+    (!!s26?.motivoTitolarita && (s26.motivoTitolarita === 'titolare_rotto' || s26.motivoTitolarita === 'infortunato')) || 
+    player.motivo2026_27 === 'titolare_rotto' || 
+    player.motivo2026_27 === 'infortunato';
 
   for (let m = 1; m <= 38; m++) {
     if (m > playedMatchdaysCount) {
@@ -111,8 +117,8 @@ export function getPlayerPerformanceHistory(player: Player, playedMatchdaysCount
         status = 'subentrato';
       }
 
-      // Se infortunato in una specifica giornata
-      if (hasInjury && m === pg && player.ruolo !== 'P') {
+      // Se infortunato e uscito durante la gara nell'ultima giocata
+      if (hasInjury && m === pg && player.ruolo !== 'P' && pg < playedMatchdaysCount) {
         status = 'uscito_infortunato';
       }
 
@@ -138,13 +144,23 @@ export function getPlayerPerformanceHistory(player: Player, playedMatchdaysCount
       });
     } else {
       // Giornata disputata in cui non ha preso voto
-      const isSV = pseudoRandom(m * 11) > 0.5;
-      history.push({
-        matchday: m,
-        status: isSV ? 'senza_voto' : 'non_ha_giocato',
-        voto: null,
-        fantaVoto: null
-      });
+      if (hasInjury) {
+        // Se non ha giocato per infortunio: status non_giocato_infortunio -> sigla INF
+        history.push({
+          matchday: m,
+          status: 'non_giocato_infortunio',
+          voto: null,
+          fantaVoto: null
+        });
+      } else {
+        const isSV = pseudoRandom(m * 11) > 0.5;
+        history.push({
+          matchday: m,
+          status: isSV ? 'senza_voto' : 'non_ha_giocato',
+          voto: null,
+          fantaVoto: null
+        });
+      }
     }
   }
 

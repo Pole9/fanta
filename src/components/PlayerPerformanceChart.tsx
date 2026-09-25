@@ -201,6 +201,7 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
             <div className="relative z-10 w-full h-full flex items-end pl-5 gap-[2px]">
               {history.map((item) => {
                 const isSV = item.status === 'senza_voto';
+                const isINF = item.status === 'non_giocato_infortunio';
                 const hasVoto = item.voto !== null && item.voto > 0;
                 const heightPercent = hasVoto ? Math.min(100, (item.voto! / maxScale) * 100) : 0;
                 const { style, className } = getBarStyle(item.status, item.voto);
@@ -212,11 +213,16 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
                   >
                     {/* TOOLTIP ON HOVER */}
                     <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-8 z-30 pointer-events-none bg-slate-900 border border-slate-700 text-white text-[10px] px-2 py-0.5 rounded shadow-lg whitespace-nowrap font-mono">
-                      G.{item.matchday}: {item.status === 'senza_voto' ? 'SV' : item.voto !== null ? `Voto ${item.voto} (Fanta ${item.fantaVoto})` : 'N.D.'}
+                      G.{item.matchday}: {isINF ? 'INF (Non ha giocato per infortunio)' : isSV ? 'SV (Senza voto)' : item.voto !== null ? `Voto ${item.voto} (Fanta ${item.fantaVoto})` : 'N.D.'}
                     </div>
 
-                    {/* SE SENZA VOTO (SV): NO ISTOGRAMMA, METTI LA SIGLA SV */}
-                    {isSV ? (
+                    {/* SE NON HA GIOCATO PER INFORTUNIO: SIGLA INF */}
+                    {isINF ? (
+                      <span className="text-[7.5px] font-black text-purple-400 font-mono mb-0.5 tracking-tighter" title="Non ha giocato per infortunio">
+                        INF
+                      </span>
+                    ) : isSV ? (
+                      /* SE SENZA VOTO (SV): NO ISTOGRAMMA, METTI LA SIGLA SV */
                       <span className="text-[8px] font-black text-amber-300 font-mono mb-0.5 tracking-tighter">
                         SV
                       </span>
@@ -278,7 +284,12 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
 
           <div className="flex items-center gap-1.5">
             <span className="w-2.5 h-2.5 rounded-sm bg-purple-500 border border-purple-400 flex-shrink-0" />
-            <span>Infortunio</span>
+            <span>Uscito per infortunio</span>
+          </div>
+
+          <div className="flex items-center gap-1.5">
+            <span className="text-[10px] font-black text-purple-400 font-mono">INF</span>
+            <span>Non ha giocato (infortunio)</span>
           </div>
         </div>
 
