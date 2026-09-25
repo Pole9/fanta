@@ -26,6 +26,8 @@ import {
   NEXT_SERIE_A_FIXTURES,
   cleanPlayerName
 } from '../data/matchdayData';
+import { PlayerPerformanceChart } from './PlayerPerformanceChart';
+import { getDiddiMatchdayYoutubeAdvice, getFantagazzettaConsigliatoStatus } from '../utils/matchdayAdviceProvider';
 import { 
   Sparkles, 
   Zap, 
@@ -1171,10 +1173,13 @@ ${benchText}
         const verdict = getTedPlayerVerdict(player, tedScore, evaluation);
         const matchInfo = evaluation.match;
         const diffBadge = matchInfo ? getDifficultyBadge(matchInfo.difficulty) : null;
+        const currentMatchdayNum = activeTab === 'next' ? NEXT_MATCHDAY_NUMBER : CURRENT_MATCHDAY_NUMBER;
+        const diddiYoutube = getDiddiMatchdayYoutubeAdvice(player, currentMatchdayNum, evaluation);
+        const fgConsigliato = getFantagazzettaConsigliatoStatus(player, evaluation);
 
         return (
-          <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-3 animate-in fade-in duration-150">
-            <div className="bg-slate-900 border-2 border-slate-700 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl space-y-3 p-4 select-none max-h-[95vh] overflow-y-auto scrollbar-thin">
+          <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-2 sm:p-3 animate-in fade-in duration-150">
+            <div className="bg-slate-900 border-2 border-slate-700 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl space-y-3 p-3.5 sm:p-4 select-none max-h-[95vh] overflow-y-auto scrollbar-thin">
               
               {/* TESTATA MODALE CALCIATORE */}
               <div className="flex items-start justify-between pb-2 border-b border-slate-800">
@@ -1192,8 +1197,6 @@ ${benchText}
                       <span>Qt: <strong className="text-white font-bold">{player.quotazione}</strong></span>
                       <span>•</span>
                       <span>FVM: <strong className="text-amber-400 font-black">{player.fvm}</strong></span>
-                      <span>•</span>
-                      <span>MV: <strong className="text-emerald-400 font-black">{player.seasons?.['2026/27']?.mv ? player.seasons['2026/27'].mv.toFixed(2) : (player.mv ? player.mv.toFixed(2) : '-')}</strong></span>
                     </div>
                   </div>
                 </div>
@@ -1211,7 +1214,10 @@ ${benchText}
                 </div>
               </div>
 
-              {/* BOX MATCH PREVISTO CON COEFFICIENTE DI DIFFICOLTÀ E FATTORE CAMPO */}
+              {/* 1. ALL'INIZIO DEL REPORT: GRAFICO VOTO E FANTAVOTO CON KPI (FANTACALCIO.IT) */}
+              <PlayerPerformanceChart player={player} />
+
+              {/* 2. BOX MATCH PREVISTO CON COEFFICIENTE DI DIFFICOLTÀ E FATTORE CAMPO */}
               {matchInfo && (
                 <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 space-y-1.5">
                   <div className="flex items-center justify-between text-xs">
@@ -1248,7 +1254,7 @@ ${benchText}
                 </div>
               )}
 
-              {/* CITAZIONE E VERDETTO DI TED LASSO */}
+              {/* 3. CITAZIONE E VERDETTO DI TED LASSO */}
               <div className="bg-amber-950/40 border border-amber-400/50 rounded-xl p-3 space-y-1">
                 <div className="flex items-center justify-between text-xs">
                   <span className="font-black text-amber-400 uppercase flex items-center gap-1">
@@ -1264,10 +1270,10 @@ ${benchText}
                 </p>
               </div>
 
-              {/* SEZIONI ANALITICHE INTEGRATE */}
+              {/* 4. SEZIONI ANALITICHE INTEGRATE */}
               <div className="space-y-2 text-xs">
                 
-                {/* 1. GAZZETTA DELLO SPORT */}
+                {/* A. GAZZETTA DELLO SPORT */}
                 <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
                   <div className="flex items-center justify-between">
                     <span className="font-black text-rose-400 uppercase flex items-center gap-1">
@@ -1288,7 +1294,7 @@ ${benchText}
                   )}
                 </div>
 
-                {/* 2. REDAZIONE FANTAGAZZETTA */}
+                {/* B. REDAZIONE FANTAGAZZETTA */}
                 <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
                   <div className="flex items-center justify-between">
                     <span className="font-black text-blue-400 uppercase flex items-center gap-1">
@@ -1304,20 +1310,44 @@ ${benchText}
                   </p>
                 </div>
 
-                {/* 3. IL TATTICO LUCA DIDDI */}
-                {evaluation.tatticoAdvice && (
-                  <div className="p-2.5 rounded-xl bg-slate-950 border border-amber-600/40 space-y-1">
-                    <div className="flex items-center justify-between">
-                      <span className="font-black text-amber-300 uppercase flex items-center gap-1">
-                        <span>🎖️</span>
-                        <span>Consiglio del Tattico Luca Diddi</span>
+                {/* C. ULTERIORE RIQUADRO FANTAGAZZETTA: CONSIGLIATO DI GIORNATA */}
+                {fgConsigliato.isConsigliato && (
+                  <div className="p-3 rounded-xl bg-blue-950/40 border border-blue-500/60 space-y-1 shadow-sm">
+                    <div className="flex items-center justify-between flex-wrap gap-1">
+                      <span className="font-black text-blue-300 uppercase flex items-center gap-1.5 text-xs">
+                        <span>🔥</span>
+                        <span>{fgConsigliato.titolo}</span>
+                      </span>
+                      <span className="px-2 py-0.5 rounded bg-blue-900/80 text-blue-200 text-[10px] font-mono font-bold">
+                        {fgConsigliato.rubrica}
                       </span>
                     </div>
-                    <p className="text-[11px] text-amber-200">
-                      {evaluation.tatticoAdvice}
+                    <p className="text-xs text-blue-100 font-medium">
+                      {fgConsigliato.motivo}
                     </p>
                   </div>
                 )}
+
+                {/* D. SUL FONDO: YOUTUBE LUCA DIDDI (CHI SCHIERARE ALLA Xª GIORNATA) */}
+                <div className="p-3 rounded-xl bg-slate-950 border border-amber-500/50 space-y-1.5 shadow-sm">
+                  <div className="flex items-center justify-between flex-wrap gap-1">
+                    <span className="font-black text-amber-400 uppercase flex items-center gap-1.5 text-xs">
+                      <span>📺</span>
+                      <span>{diddiYoutube.title}</span>
+                    </span>
+                    <span className={`px-2 py-0.5 rounded text-[10px] font-black border uppercase ${diddiYoutube.tagColor}`}>
+                      {diddiYoutube.tag}
+                    </span>
+                  </div>
+
+                  <div className="text-xs text-amber-200 font-bold">
+                    🎯 Verdetto Diddi: {diddiYoutube.verdict}
+                  </div>
+
+                  <p className="text-[11px] text-slate-200 leading-relaxed font-sans bg-slate-900/80 p-2 rounded-lg border border-slate-800">
+                    "{diddiYoutube.analysis}"
+                  </p>
+                </div>
 
               </div>
 

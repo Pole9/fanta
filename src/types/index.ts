@@ -51,6 +51,7 @@ export interface Player {
   assist?: number;
   amm?: number;
   esp?: number;
+  au?: number;
   titolarita?: number;
   rigorista?: boolean | number;
   consigliatoModificatore?: boolean;
