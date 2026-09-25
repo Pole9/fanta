@@ -51,6 +51,7 @@ export const Header: React.FC = () => {
   const totalSpent = teams.reduce((acc, t) => acc + (300 - t.currentBudget), 0);
   const totalBudget = teams.length * 300;
 
+
   return (
     <header className="bg-slate-900 border-b border-slate-800 px-2 py-0.5 shadow-md flex-shrink-0">
       <div className="w-full flex items-center justify-between gap-1 text-xs">

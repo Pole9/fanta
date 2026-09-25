@@ -23,7 +23,8 @@ import {
   CURRENT_SERIE_A_FIXTURES,
   NEXT_MATCHDAY_NUMBER,
   NEXT_MATCHDAY_TITLE,
-  NEXT_SERIE_A_FIXTURES 
+  NEXT_SERIE_A_FIXTURES,
+  cleanPlayerName
 } from '../data/matchdayData';
 import { 
   Sparkles, 
@@ -46,7 +47,9 @@ import {
   Check,
   MapPin,
   ChevronRight,
-  Info
+  Info,
+  Home,
+  Settings
 } from 'lucide-react';
 
 export const TedLassoView: React.FC = () => {
@@ -57,7 +60,8 @@ export const TedLassoView: React.FC = () => {
     syncedOnlineData, 
     isSyncingOnline, 
     lastOnlineSyncTime, 
-    syncOnlineData 
+    syncOnlineData,
+    setActiveView
   } = useAuction();
 
   // 1. SELEZIONE SEZIONE / TAB: 'next' (Schiera Prossima Gara) o 'current' (Partita in Corso)
@@ -221,6 +225,31 @@ export const TedLassoView: React.FC = () => {
     const trap = sorted.find(c => c.evaluation.fantagazzetta.fascia === 'Trappola da Evitare' || (c.evaluation.match && c.evaluation.match.difficulty >= 4 && c.tedScore < 65)) || sorted[sorted.length - 1] || null;
     return { topPick: top, scommessa: scomm, trappola: trap };
   }, [starters, bench]);
+
+  // Set normalizzato dei nomi dei calciatori appartenenti alla rosa dell'utente
+  const squadPlayerCleanNames = useMemo(() => {
+    return new Set(teamFullPlayers.map(p => cleanPlayerName(p.nome)));
+  }, [teamFullPlayers]);
+
+  // Ballottaggi live filtrati rigorosamente SOLO per i calciatori presenti nella rosa dell'utente
+  const squadBallottaggi = useMemo(() => {
+    if (!syncedOnlineData?.ballottaggi || teamFullPlayers.length === 0) return [];
+
+    const isMatch = (ballotName: string) => {
+      const cleanB = cleanPlayerName(ballotName);
+      if (!cleanB) return false;
+      for (const uName of squadPlayerCleanNames) {
+        if (uName === cleanB) return true;
+        const uParts = uName.split(' ');
+        const bParts = cleanB.split(' ');
+        if (uParts[0] === bParts[0] && uParts[0].length >= 4) return true;
+        if (cleanB.includes(uName) || uName.includes(cleanB)) return true;
+      }
+      return false;
+    };
+
+    return syncedOnlineData.ballottaggi.filter(b => isMatch(b.p1) || isMatch(b.p2));
+  }, [syncedOnlineData, teamFullPlayers, squadPlayerCleanNames]);
 
   // Auto-schiera con Ted (ripristina ottimale)
   const handleAskTed = () => {
@@ -416,8 +445,18 @@ ${benchText}
       {/* 1. TESTATA SUPERIORE CON SELETTORE DELLE 2 SEZIONI: PROSSIMA GARA VS PARTITA IN CORSO */}
       <div className="bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 flex items-center justify-between gap-2.5 shadow-sm flex-shrink-0 flex-wrap">
         
-        {/* PARTE SINISTRA: LOGO BELIEVE & TITOLO */}
-        <div className="flex items-center gap-2.5">
+        {/* PARTE SINISTRA: HOME & LOGO BELIEVE & TITOLO */}
+        <div className="flex items-center gap-2">
+          {/* Tasto Home per tornare alla Home / Dashboard principale */}
+          <button
+            onClick={() => setActiveView('home')}
+            className="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold text-xs sm:text-sm flex items-center gap-1.5 transition-all shadow-sm active:scale-95"
+            title="Torna al pannello Home"
+          >
+            <Home className="w-4 h-4 text-amber-400" />
+            <span className="hidden sm:inline">Home</span>
+          </button>
+
           {/* Cartello BELIEVE Iconico */}
           <div 
             onClick={() => setQuoteIndex(prev => (prev + 1) % TED_LASSO_QUOTES.length)}
@@ -485,28 +524,8 @@ ${benchText}
           </button>
         </div>
 
-        {/* PARTE DESTRA: SELETTORE SQUADRA & MODULO & PULSANTI AZIONE */}
+        {/* PARTE DESTRA: MODULO & PULSANTI AZIONE */}
         <div className="flex items-center gap-2 flex-wrap">
-          
-          {/* SELETTORE SQUADRA FANTACALCIO */}
-          <div className="flex items-center gap-1.5 bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1 text-xs sm:text-sm">
-            <span className="text-[11px] font-bold text-slate-400 uppercase">Rosa:</span>
-            <select
-              value={selectedTeamId}
-              onChange={(e) => {
-                setSelectedTeamId(e.target.value);
-                setLineupOverrides(null);
-                setSwappingPlayerId(null);
-              }}
-              className="bg-transparent font-black text-white focus:outline-none cursor-pointer text-xs sm:text-sm"
-            >
-              {teams.map(t => (
-                <option key={t.id} value={t.id} className="bg-slate-900 text-white">
-                  {t.name} ({t.players.length} cal.)
-                </option>
-              ))}
-            </select>
-          </div>
 
           {/* SELETTORE MODULO */}
           <div className="flex items-center gap-1.5 bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1 text-xs sm:text-sm">
@@ -580,6 +599,29 @@ ${benchText}
           >
             <RefreshCw className={`w-4 h-4 ${isSyncingOnline ? 'animate-spin' : ''}`} />
             <span className="hidden lg:inline">{isSyncingOnline ? 'Sync...' : 'Sync Live'}</span>
+          </button>
+
+          {/* PULSANTE GITHUB */}
+          <a
+            href="https://github.com/Pole9/fanta"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="h-8 w-8 rounded-lg flex items-center justify-center transition-all border border-slate-700 bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 hover:border-slate-500 shadow-sm active:scale-95"
+            title="Repository GitHub (Pole9/fanta)"
+          >
+            <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+              <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+            </svg>
+          </a>
+
+          {/* PULSANTE OPZIONI */}
+          <button
+            onClick={() => setActiveView('settings')}
+            className="px-2.5 py-1.5 rounded-lg text-xs sm:text-sm font-black flex items-center gap-1.5 transition-all border border-slate-700 bg-slate-800 text-slate-200 hover:text-white hover:bg-slate-700 hover:border-slate-500 shadow-sm active:scale-95"
+            title="Opzioni e Impostazioni"
+          >
+            <Settings className="w-4 h-4 text-amber-400" />
+            <span className="hidden sm:inline">Opzioni</span>
           </button>
         </div>
 
@@ -967,34 +1009,8 @@ ${benchText}
         {/* COLONNA 3: LA LAVAGNA TATTICA DI TED LASSO (A DESTRA - Lg: col-span-3) */}
         <div className="order-3 lg:order-3 lg:col-span-3 xl:col-span-3 2xl:col-span-3 flex flex-col gap-2.5 overflow-y-auto pr-1 scrollbar-thin min-h-0">
           
-          {/* 1. CITAZIONE ISPIRAZIONALE DI TED LASSO */}
-          <div className="bg-slate-900 border border-amber-400/40 rounded-xl p-3 sm:p-3.5 shadow-sm relative overflow-hidden">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <span className="text-xl">👨🏻‍💼</span>
-                <span className="text-xs sm:text-sm font-black uppercase text-amber-400 tracking-wider">
-                  Il Consiglio del Mister
-                </span>
-              </div>
-              <button
-                onClick={() => setQuoteIndex(prev => (prev + 1) % TED_LASSO_QUOTES.length)}
-                className="text-xs text-slate-400 hover:text-white font-bold px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 transition-colors"
-                title="Prossima perla di saggezza"
-              >
-                Cambia ❯
-              </button>
-            </div>
-
-            <p className="text-xs sm:text-sm text-slate-100 italic leading-relaxed font-sans">
-              "{TED_LASSO_QUOTES[quoteIndex]}"
-            </p>
-            <span className="text-xs text-amber-400 font-black block mt-2 text-right">
-              — Ted Lasso, AFC Richmond
-            </span>
-          </div>
-
-          {/* 2. VERDETTO MODIFICATORE DIFESA */}
-          <div className="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-3.5 shadow-sm space-y-1.5">
+          {/* 1. VERDETTO MODIFICATORE DIFESA */}
+          <div className="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-3.5 shadow-sm space-y-1.5 flex-shrink-0">
             <div className="flex items-center justify-between">
               <span className="text-xs sm:text-sm font-black text-white uppercase flex items-center gap-1.5">
                 <Shield className="w-4 h-4 text-blue-400" />
@@ -1011,7 +1027,7 @@ ${benchText}
             </p>
           </div>
 
-          {/* 3. LE SCELTE CHIAVE DI GIORNATA */}
+          {/* 2. LE SCELTE CHIAVE DI GIORNATA */}
           <div className="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-3.5 shadow-sm space-y-2.5 flex-1">
             <div className="flex items-center justify-between pb-1 border-b border-slate-800">
               <span className="text-xs sm:text-sm font-black text-white uppercase tracking-wider block">
@@ -1083,35 +1099,66 @@ ${benchText}
               </div>
             )}
 
-            {/* BALLOTTAGGI LIVE */}
-            {syncedOnlineData?.ballottaggi && syncedOnlineData.ballottaggi.length > 0 && (
-              <div className="pt-2 border-t border-slate-800 space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs sm:text-sm font-black uppercase text-amber-400 flex items-center gap-1.5">
-                    <span>⚔️</span>
-                    <span>Ballottaggi Live ({syncedOnlineData.ballottaggi.length})</span>
-                  </span>
-                  <span className="text-[10px] text-slate-400 font-mono">
-                    Fantacalcio / Gazzetta
-                  </span>
-                </div>
-                <div className="space-y-1.5 max-h-[160px] overflow-y-auto pr-1 scrollbar-thin">
-                  {syncedOnlineData.ballottaggi.slice(0, 6).map((b, idx) => (
-                    <div key={idx} className="p-2 rounded-lg bg-slate-950/90 border border-slate-800 text-xs flex items-center justify-between">
-                      <div className="flex items-center gap-1.5 truncate max-w-[45%]">
-                        <span className="font-bold text-white truncate">{b.p1}</span>
-                        <span className="px-1.5 py-0.5 rounded bg-emerald-950 text-emerald-400 font-mono font-bold text-[10px]">{b.perc1}%</span>
-                      </div>
-                      <span className="text-slate-500 font-bold text-xs">vs</span>
-                      <div className="flex items-center gap-1.5 truncate max-w-[45%] justify-end">
-                        <span className="px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 font-mono font-bold text-[10px]">{b.perc2}%</span>
-                        <span className="text-slate-300 truncate">{b.p2}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+            {/* BALLOTTAGGI LIVE (FILTRATI RIGOROSAMENTE PER I GIOCATORI DELLA PROPRIA ROSA) */}
+            <div className="pt-2 border-t border-slate-800 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs sm:text-sm font-black uppercase text-amber-400 flex items-center gap-1.5">
+                  <span>⚔️</span>
+                  <span>Ballottaggi Rosa ({squadBallottaggi.length})</span>
+                </span>
+                <span className="text-[10px] text-slate-400 font-mono">
+                  Gazzetta / Fantacalcio
+                </span>
               </div>
-            )}
+
+              {squadBallottaggi.length > 0 ? (
+                <div className="space-y-1.5 max-h-[190px] overflow-y-auto pr-1 scrollbar-thin">
+                  {squadBallottaggi.map((b, idx) => {
+                    const cleanP1 = cleanPlayerName(b.p1);
+                    const cleanP2 = cleanPlayerName(b.p2);
+                    const isP1InSquad = Array.from(squadPlayerCleanNames).some(u => 
+                      u === cleanP1 || cleanP1.includes(u) || u.includes(cleanP1) || (u.split(' ')[0] === cleanP1.split(' ')[0] && u.split(' ')[0].length >= 4)
+                    );
+                    const isP2InSquad = Array.from(squadPlayerCleanNames).some(u => 
+                      u === cleanP2 || cleanP2.includes(u) || u.includes(cleanP2) || (u.split(' ')[0] === cleanP2.split(' ')[0] && u.split(' ')[0].length >= 4)
+                    );
+
+                    return (
+                      <div key={idx} className="p-2 rounded-lg bg-slate-950/90 border border-slate-800 text-xs flex items-center justify-between gap-1 shadow-sm">
+                        <div className={`flex items-center gap-1.5 truncate max-w-[46%] px-1.5 py-0.5 rounded ${
+                          isP1InSquad ? 'bg-amber-950/70 border border-amber-500/40' : ''
+                        }`}>
+                          <span className={`font-black truncate ${isP1InSquad ? 'text-amber-300' : 'text-slate-200'}`}>
+                            {b.p1}
+                          </span>
+                          <span className="px-1.5 py-0.2 rounded bg-emerald-950 text-emerald-400 font-mono font-bold text-[10px]">
+                            {b.perc1}%
+                          </span>
+                        </div>
+
+                        <span className="text-slate-500 font-bold text-xs flex-shrink-0">vs</span>
+
+                        <div className={`flex items-center gap-1.5 truncate max-w-[46%] justify-end px-1.5 py-0.5 rounded ${
+                          isP2InSquad ? 'bg-amber-950/70 border border-amber-500/40' : ''
+                        }`}>
+                          <span className="px-1.5 py-0.2 rounded bg-slate-800 text-slate-300 font-mono font-bold text-[10px]">
+                            {b.perc2}%
+                          </span>
+                          <span className={`font-black truncate ${isP2InSquad ? 'text-amber-300' : 'text-slate-300'}`}>
+                            {b.p2}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="p-3 rounded-lg bg-slate-950/60 border border-slate-800/80 text-xs text-slate-400 text-center space-y-1">
+                  <span className="block font-bold text-emerald-400 text-xs">Nessun ballottaggio attivo</span>
+                  <span className="block text-[11px] text-slate-400 leading-tight">I calciatori della tua rosa hanno ruoli e titolarità delineati per questo turno.</span>
+                </div>
+              )}
+            </div>
           </div>
 
         </div>
