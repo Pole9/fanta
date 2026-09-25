@@ -226,14 +226,18 @@ export function generateTedLineup(
 }
 
 // Assegna coordinate grafiche per disegnare i calciatori sul prato verde
-function assignPitchCoordinates(starters: TedPlayerCard[], formation: TedFormationConfig) {
+export function assignPitchCoordinates(starters: TedPlayerCard[], formation?: TedFormationConfig) {
   const p = starters.filter(s => s.player.ruolo === 'P');
   const d = starters.filter(s => s.player.ruolo === 'D');
   const c = starters.filter(s => s.player.ruolo === 'C');
   const a = starters.filter(s => s.player.ruolo === 'A');
 
   // Portiere (in basso al centro)
-  if (p[0]) p[0].pitchPosition = { x: 50, y: 88 };
+  const pCount = p.length;
+  p.forEach((card, idx) => {
+    const xStep = 100 / (pCount + 1);
+    card.pitchPosition = { x: Math.round(xStep * (idx + 1)), y: 88 };
+  });
 
   // Linea Difensiva (y: 68)
   const dCount = d.length;

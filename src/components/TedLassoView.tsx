@@ -7,8 +7,16 @@ import {
   generateTedLineup, 
   getTedPlayerVerdict, 
   evaluateDefenseModifier,
+  assignPitchCoordinates,
   TED_LASSO_QUOTES 
 } from '../utils/tedLassoAdvisor';
+
+const ROLE_NAMES: Record<Role, string> = {
+  P: 'Portiere',
+  D: 'Difensore',
+  C: 'Centrocampista',
+  A: 'Attaccante'
+};
 import { 
   CURRENT_MATCHDAY_NUMBER,
   CURRENT_MATCHDAY_TITLE, 
@@ -60,6 +68,7 @@ export const TedLassoView: React.FC = () => {
   const [selectedFormationId, setSelectedFormationId] = useState<string>('3-4-3');
   const [selectedPlayerForReport, setSelectedPlayerForReport] = useState<TedPlayerCard | null>(null);
   const [swappingPlayerId, setSwappingPlayerId] = useState<number | null>(null);
+  const [swapWarning, setSwapWarning] = useState<string | null>(null);
   const [quoteIndex, setQuoteIndex] = useState<number>(0);
   const [lineupOverrides, setLineupOverrides] = useState<{ starters: number[]; bench: number[] } | null>(null);
   const [syncFeedback, setSyncFeedback] = useState<{ show: boolean; message: string; success: boolean } | null>(null);
@@ -83,29 +92,54 @@ export const TedLassoView: React.FC = () => {
     return generateTedLineup(teamFullPlayers, selectedFormationId, syncedOnlineData, activeTab);
   }, [teamFullPlayers, selectedFormationId, syncedOnlineData, activeTab]);
 
-  // Carica eventuale formazione salvata per il tab corrente
+  // Carica eventuale formazione salvata per il tab corrente validandone l'integrità dei ruoli
   useEffect(() => {
     const saved = localStorage.getItem(`fanta_lineup_${activeTab}_${selectedTeamId}`);
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
         if (parsed.starters && parsed.bench && parsed.formationId) {
-          setSelectedFormationId(parsed.formationId);
-          setLineupOverrides({ starters: parsed.starters, bench: parsed.bench });
+          const expectedSlots = (TED_FORMATIONS[parsed.formationId] || TED_FORMATIONS['3-4-3']).slots;
+          const startersIds = Array.isArray(parsed.starters) ? (parsed.starters as number[]) : [];
+          const starterCards = startersIds
+            .map((id: number) => teamFullPlayers.find((p: Player) => p.id === id))
+            .filter((p: Player | undefined): p is Player => p !== undefined);
+
+          const pCount = starterCards.filter((p: Player) => p.ruolo === 'P').length;
+          const dCount = starterCards.filter((p: Player) => p.ruolo === 'D').length;
+          const cCount = starterCards.filter((p: Player) => p.ruolo === 'C').length;
+          const aCount = starterCards.filter((p: Player) => p.ruolo === 'A').length;
+
+          const isValid = starterCards.length === 11 &&
+            pCount === expectedSlots.P &&
+            dCount === expectedSlots.D &&
+            cCount === expectedSlots.C &&
+            aCount === expectedSlots.A;
+
+          if (isValid) {
+            setSelectedFormationId(parsed.formationId);
+            setLineupOverrides({ starters: parsed.starters, bench: parsed.bench });
+          } else {
+            console.warn('Formazione salvata non coerente con i ruoli di formazione, ripristino default');
+            localStorage.removeItem(`fanta_lineup_${activeTab}_${selectedTeamId}`);
+            setLineupOverrides(null);
+          }
         }
       } catch (e) {
         console.warn('Errore lettura formazione salvata', e);
+        setLineupOverrides(null);
       }
     } else {
       setLineupOverrides(null);
     }
-  }, [activeTab, selectedTeamId]);
+  }, [activeTab, selectedTeamId, teamFullPlayers]);
 
   // Gestione Aggiornamento Dati Online
   const handleSyncOnline = async () => {
     const res = await syncOnlineData();
     setLineupOverrides(null);
     setSwappingPlayerId(null);
+    setSwapWarning(null);
     setSyncFeedback({
       show: true,
       message: res.message,
@@ -116,11 +150,15 @@ export const TedLassoView: React.FC = () => {
     }, 7000);
   };
 
-  // Gestione scambi manuali (Swap) tra titolari e panchina
+  // Gestione scambi manuali (Swap) tra titolari e panchina con ricalcolo esatto delle coordinate del campo
   const { starters, bench, formation } = useMemo(() => {
     if (!lineupOverrides) return baseLineup;
 
-    const allCards = [...baseLineup.starters, ...baseLineup.bench];
+    // Crea copie degli elementi senza coordinate pregresse per evitare salti o sovrapposizioni
+    const allCards = [...baseLineup.starters, ...baseLineup.bench].map(c => ({
+      ...c,
+      pitchPosition: undefined
+    }));
     const cardMap = new Map(allCards.map(c => [c.player.id, c]));
 
     const startersCards: TedPlayerCard[] = [];
@@ -133,21 +171,42 @@ export const TedLassoView: React.FC = () => {
     });
 
     const benchCards: TedPlayerCard[] = [];
-    lineupOverrides.bench.forEach((id, idx) => {
+    lineupOverrides.bench.forEach((id) => {
       const c = cardMap.get(id);
       if (c) {
         c.isStarter = false;
-        c.benchOrder = idx + 1;
         benchCards.push(c);
       }
     });
 
+    // Riordina la panchina nel classico ordine Fanta: 1 P, 2 D, 2 C, 2 A ordinati per score decrescente
+    const benchP = benchCards.filter(b => b.player.ruolo === 'P').sort((a, b) => b.tedScore - a.tedScore);
+    const benchD = benchCards.filter(b => b.player.ruolo === 'D').sort((a, b) => b.tedScore - a.tedScore);
+    const benchC = benchCards.filter(b => b.player.ruolo === 'C').sort((a, b) => b.tedScore - a.tedScore);
+    const benchA = benchCards.filter(b => b.player.ruolo === 'A').sort((a, b) => b.tedScore - a.tedScore);
+
+    const orderedBench: TedPlayerCard[] = [];
+    let benchIndex = 1;
+    [...benchP, ...benchD, ...benchC, ...benchA].forEach(card => {
+      card.benchOrder = benchIndex++;
+      orderedBench.push(card);
+    });
+
+    // Ricalcola SEMPRE le coordinate visive del campo tattico per i titolari in base al loro ruolo
+    assignPitchCoordinates(startersCards, baseLineup.formation);
+
     return {
       starters: startersCards,
-      bench: benchCards,
+      bench: orderedBench,
       formation: baseLineup.formation
     };
   }, [baseLineup, lineupOverrides]);
+
+  // Giocatore attualmente selezionato per la sostituzione (se presente)
+  const swappingPlayerCard = useMemo(() => {
+    if (!swappingPlayerId) return null;
+    return [...starters, ...bench].find(c => c.player.id === swappingPlayerId) || null;
+  }, [swappingPlayerId, starters, bench]);
 
   // Analisi Modificatore di Difesa
   const defenseModifier = useMemo(() => {
@@ -167,6 +226,7 @@ export const TedLassoView: React.FC = () => {
   const handleAskTed = () => {
     setLineupOverrides(null);
     setSwappingPlayerId(null);
+    setSwapWarning(null);
     setQuoteIndex(prev => (prev + 1) % TED_LASSO_QUOTES.length);
   };
 
@@ -214,8 +274,31 @@ ${benchText}
     setTimeout(() => setCopyFeedback(false), 3000);
   };
 
-  // Esegui scambio tra due giocatori
+  // Esegui scambio tra due giocatori con rigoroso controllo di compatibilità del ruolo (P con P, D con D, C con C, A con A)
   const handleSwap = (playerAId: number, playerBId: number) => {
+    if (playerAId === playerBId) {
+      setSwappingPlayerId(null);
+      return;
+    }
+
+    const allCards = [...starters, ...bench];
+    const cardA = allCards.find(c => c.player.id === playerAId);
+    const cardB = allCards.find(c => c.player.id === playerBId);
+
+    if (!cardA || !cardB) {
+      setSwappingPlayerId(null);
+      return;
+    }
+
+    // Regola imprescindibile del Fantacalcio: i cambi possono avvenire solo tra calciatori dello STESSO RUOLO!
+    if (cardA.player.ruolo !== cardB.player.ruolo) {
+      setSwapWarning(
+        `Scambio non valido: puoi sostituire un ${ROLE_NAMES[cardA.player.ruolo]} solo con un altro ${ROLE_NAMES[cardA.player.ruolo]}. Hai selezionato ${cardB.player.nome} (${ROLE_NAMES[cardB.player.ruolo]}).`
+      );
+      setTimeout(() => setSwapWarning(null), 4500);
+      return;
+    }
+
     const currentStarterIds = starters.map(s => s.player.id);
     const currentBenchIds = bench.map(b => b.player.id);
 
@@ -230,8 +313,20 @@ ${benchText}
       const newStarters = currentStarterIds.map(id => id === playerBId ? playerAId : id);
       const newBench = currentBenchIds.map(id => id === playerAId ? playerBId : id);
       setLineupOverrides({ starters: newStarters, bench: newBench });
+    } else if (isAStarter && isBStarter) {
+      // Due titolari dello stesso ruolo
+      const newStarters = [...currentStarterIds];
+      const idxA = newStarters.indexOf(playerAId);
+      const idxB = newStarters.indexOf(playerBId);
+      if (idxA !== -1 && idxB !== -1) {
+        newStarters[idxA] = playerBId;
+        newStarters[idxB] = playerAId;
+        setLineupOverrides({ starters: newStarters, bench: currentBenchIds });
+      }
     }
+
     setSwappingPlayerId(null);
+    setSwapWarning(null);
   };
 
   // Colore del badge Ted Score
@@ -533,10 +628,36 @@ ${benchText}
             <div className="absolute bottom-0 left-1/2 w-52 h-20 border-t border-x border-white/20 -translate-x-1/2 pointer-events-none" />
 
             {/* AVVISO DI SWAP ATTIVO */}
-            {swappingPlayerId && (
-              <div className="absolute top-2 left-1/2 -translate-x-1/2 px-3 py-1 bg-amber-400 text-slate-950 rounded-full text-xs font-black shadow-lg flex items-center gap-1.5 z-20 animate-bounce">
+            {swappingPlayerCard && (
+              <div className="absolute top-2 left-1/2 -translate-x-1/2 px-3 py-1 bg-amber-400 text-slate-950 rounded-full text-xs font-black shadow-lg flex items-center gap-2 z-30 animate-bounce">
                 <ArrowRightLeft className="w-3.5 h-3.5" />
-                <span>Clicca su un panchinaro per scambiarlo! (o clicca di nuovo per annullare)</span>
+                <span>
+                  {swappingPlayerCard.isStarter
+                    ? `Sostituzione: clicca su un ${ROLE_NAMES[swappingPlayerCard.player.ruolo]} in panchina per sostituire ${swappingPlayerCard.player.nome}`
+                    : `Inserimento: clicca sul ${ROLE_NAMES[swappingPlayerCard.player.ruolo]} titolare da sostituire con ${swappingPlayerCard.player.nome}`
+                  }
+                </span>
+                <button
+                  onClick={() => setSwappingPlayerId(null)}
+                  className="w-4 h-4 rounded-full bg-slate-950 text-white flex items-center justify-center hover:bg-slate-800 text-[10px] font-bold"
+                  title="Annulla sostituzione"
+                >
+                  ✕
+                </button>
+              </div>
+            )}
+
+            {/* AVVISO ERRORE RUOLO SWAP */}
+            {swapWarning && (
+              <div className="absolute top-11 left-1/2 -translate-x-1/2 px-3 py-1.5 bg-red-600 text-white rounded-lg text-xs font-bold shadow-xl flex items-center gap-2 z-30 border border-red-400">
+                <AlertTriangle className="w-4 h-4 text-amber-300 flex-shrink-0" />
+                <span>{swapWarning}</span>
+                <button
+                  onClick={() => setSwapWarning(null)}
+                  className="text-red-200 hover:text-white"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
               </div>
             )}
 
@@ -555,6 +676,11 @@ ${benchText}
               starters.map((card) => {
                 const pos = card.pitchPosition || { x: 50, y: 50 };
                 const isSelectedForSwap = swappingPlayerId === card.player.id;
+                const isTargetForSwap = swappingPlayerCard !== null && !swappingPlayerCard.isStarter && swappingPlayerCard.player.ruolo === card.player.ruolo;
+                const isIncompatibleForSwap = swappingPlayerCard !== null && (
+                  (!swappingPlayerCard.isStarter && swappingPlayerCard.player.ruolo !== card.player.ruolo) ||
+                  (swappingPlayerCard.isStarter && !isSelectedForSwap)
+                );
                 const matchInfo = card.evaluation.match;
                 const diffBadge = matchInfo ? getDifficultyBadge(matchInfo.difficulty) : null;
 
@@ -567,15 +693,27 @@ ${benchText}
                     <div
                       onClick={() => {
                         if (swappingPlayerId) {
-                          setSwappingPlayerId(null);
+                          if (isSelectedForSwap) {
+                            setSwappingPlayerId(null);
+                          } else if (isTargetForSwap) {
+                            handleSwap(swappingPlayerId, card.player.id);
+                          } else if (swappingPlayerCard && !swappingPlayerCard.isStarter) {
+                            handleSwap(swappingPlayerId, card.player.id);
+                          } else {
+                            setSwappingPlayerId(card.player.id);
+                          }
                         } else {
                           setSelectedPlayerForReport(card);
                         }
                       }}
                       className={`group cursor-pointer rounded-lg p-1.5 sm:p-2 bg-slate-950/92 hover:bg-slate-900 border transition-all duration-150 active:scale-95 flex flex-col items-center shadow-xl min-w-[82px] sm:min-w-[98px] max-w-[115px] ${
                         isSelectedForSwap
-                          ? 'border-amber-400 ring-2 ring-amber-400 scale-105'
-                          : 'border-slate-700/80 hover:border-amber-400/80'
+                          ? 'border-amber-400 ring-2 ring-amber-400 scale-105 bg-amber-950/30'
+                          : isTargetForSwap
+                            ? 'border-emerald-400 ring-2 ring-emerald-400 scale-105 bg-emerald-950/40 animate-pulse'
+                            : isIncompatibleForSwap
+                              ? 'border-slate-800 opacity-40 grayscale-[40%]'
+                              : 'border-slate-700/80 hover:border-amber-400/80'
                       }`}
                     >
                       {/* Top Bar: Ruolo + Ted Score */}
@@ -642,13 +780,25 @@ ${benchText}
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          setSwappingPlayerId(isSelectedForSwap ? null : card.player.id);
+                          if (isSelectedForSwap) {
+                            setSwappingPlayerId(null);
+                          } else if (isTargetForSwap) {
+                            handleSwap(swappingPlayerId!, card.player.id);
+                          } else {
+                            setSwappingPlayerId(card.player.id);
+                          }
                         }}
-                        className="mt-1 opacity-0 group-hover:opacity-100 transition-opacity text-[8px] font-bold text-slate-400 hover:text-amber-300 flex items-center gap-0.5"
-                        title="Scambia con un panchinaro"
+                        className={`mt-1 transition-all text-[8px] font-bold flex items-center gap-0.5 ${
+                          isSelectedForSwap
+                            ? 'opacity-100 text-amber-300'
+                            : isTargetForSwap
+                              ? 'opacity-100 text-emerald-300 animate-pulse'
+                              : 'opacity-0 group-hover:opacity-100 text-slate-400 hover:text-amber-300'
+                        }`}
+                        title={isSelectedForSwap ? "Annulla selezione" : isTargetForSwap ? "Sostituisci questo titolare" : "Scambia con un panchinaro"}
                       >
                         <ArrowRightLeft className="w-2.5 h-2.5" />
-                        <span>Scambia</span>
+                        <span>{isSelectedForSwap ? 'Annulla' : isTargetForSwap ? 'Sostituisci' : 'Scambia'}</span>
                       </button>
                     </div>
                   </div>
@@ -677,7 +827,12 @@ ${benchText}
             ) : (
               <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 scrollbar-thin">
                 {bench.map((card) => {
-                  const isTargetForSwap = swappingPlayerId !== null;
+                  const isSelectedForSwap = swappingPlayerId === card.player.id;
+                  const isTargetForSwap = swappingPlayerCard !== null && swappingPlayerCard.isStarter && swappingPlayerCard.player.ruolo === card.player.ruolo;
+                  const isIncompatibleForSwap = swappingPlayerCard !== null && (
+                    (swappingPlayerCard.isStarter && swappingPlayerCard.player.ruolo !== card.player.ruolo) ||
+                    (!swappingPlayerCard.isStarter && !isSelectedForSwap)
+                  );
                   const matchInfo = card.evaluation.match;
                   const diffBadge = matchInfo ? getDifficultyBadge(matchInfo.difficulty) : null;
 
@@ -686,17 +841,35 @@ ${benchText}
                       key={card.player.id}
                       onClick={() => {
                         if (swappingPlayerId) {
-                          handleSwap(swappingPlayerId, card.player.id);
+                          if (isSelectedForSwap) {
+                            setSwappingPlayerId(null);
+                          } else if (isTargetForSwap) {
+                            handleSwap(swappingPlayerId, card.player.id);
+                          } else if (swappingPlayerCard && swappingPlayerCard.isStarter) {
+                            handleSwap(swappingPlayerId, card.player.id);
+                          } else {
+                            setSwappingPlayerId(card.player.id);
+                          }
                         } else {
                           setSelectedPlayerForReport(card);
                         }
                       }}
                       className={`px-2 py-1 rounded-lg border text-left cursor-pointer transition-all flex items-center gap-1.5 flex-shrink-0 select-none ${
-                        isTargetForSwap
-                          ? 'bg-amber-950/40 border-amber-400/80 hover:bg-amber-900/50 scale-102'
-                          : 'bg-slate-900 border-slate-800 hover:border-slate-700'
+                        isSelectedForSwap
+                          ? 'bg-amber-950/60 border-amber-400 ring-2 ring-amber-400 scale-102'
+                          : isTargetForSwap
+                            ? 'bg-emerald-950/60 border-emerald-400 ring-2 ring-emerald-400 animate-pulse scale-102'
+                            : isIncompatibleForSwap
+                              ? 'bg-slate-900/40 border-slate-800/60 opacity-35 grayscale-[50%] cursor-not-allowed'
+                              : 'bg-slate-900 border-slate-800 hover:border-slate-700'
                       }`}
-                      title={isTargetForSwap ? `Clicca per inserire ${card.player.nome} tra i titolari` : `Vedi scheda di ${card.player.nome}`}
+                      title={
+                        isTargetForSwap 
+                          ? `Clicca per inserire ${card.player.nome} tra i titolari` 
+                          : isIncompatibleForSwap 
+                            ? `Ruolo ${card.player.ruolo} incompatibile con la selezione corrente` 
+                            : `Vedi scheda di ${card.player.nome}`
+                      }
                     >
                       <span className="text-[10px] font-mono text-slate-500 font-bold">
                         {card.benchOrder}°
@@ -728,6 +901,30 @@ ${benchText}
                       <span className={`px-1 py-0.2 rounded text-[8px] font-black ml-1 border ${getScoreColor(card.tedScore)}`}>
                         {card.tedScore}
                       </span>
+
+                      {/* Tasto rapido scambia su panchina */}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (isSelectedForSwap) {
+                            setSwappingPlayerId(null);
+                          } else if (isTargetForSwap) {
+                            handleSwap(swappingPlayerId!, card.player.id);
+                          } else {
+                            setSwappingPlayerId(card.player.id);
+                          }
+                        }}
+                        className={`p-1 rounded transition-colors ml-0.5 ${
+                          isSelectedForSwap
+                            ? 'text-amber-400 bg-amber-950'
+                            : isTargetForSwap
+                              ? 'text-emerald-400 bg-emerald-950 animate-pulse'
+                              : 'text-slate-500 hover:text-amber-300'
+                        }`}
+                        title={isSelectedForSwap ? "Annulla selezione" : isTargetForSwap ? `Inserisci ${card.player.nome}` : `Sostituisci un titolare con ${card.player.nome}`}
+                      >
+                        <ArrowRightLeft className="w-2.5 h-2.5" />
+                      </button>
                     </div>
                   );
                 })}
