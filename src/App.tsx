@@ -14,7 +14,7 @@ const MainContent: React.FC = () => {
   const { activeView } = useAuction();
 
   return (
-    <main className="max-w-[1700px] w-full mx-auto px-2 sm:px-3 py-1 flex-1 overflow-hidden flex flex-col min-h-0">
+    <main className="max-w-[1850px] w-full mx-auto px-2 sm:px-3 py-1 flex-1 overflow-hidden flex flex-col min-h-0">
       {activeView === 'home' && <HomeView />}
       {activeView === 'ted_lasso' && <TedLassoView />}
       {activeView === 'goalkeepers' && <GoalkeepersWarRoom />}
@@ -36,7 +36,7 @@ export const App: React.FC = () => {
 
         {/* FOOTER ULTRA-COMPATTO A 1 RIGA */}
         <footer className="border-t border-slate-900 bg-slate-950/90 py-0.5 px-3 text-[10px] text-slate-500 flex-shrink-0">
-          <div className="max-w-[1700px] mx-auto flex items-center justify-between gap-2">
+          <div className="max-w-[1850px] mx-auto flex items-center justify-between gap-2">
             <span>8 Squadre • 300 • Set 3-8-8-6 (25 slot) • Modificatore Difesa</span>
             <div className="hidden sm:flex items-center gap-2">
               <span>Tasti: <strong className="text-slate-400">1-8</strong> squadra</span>
