@@ -52,7 +52,8 @@ import {
   ChevronLeft,
   Info,
   Home,
-  Settings
+  Settings,
+  Smartphone
 } from 'lucide-react';
 
 export const TedLassoView: React.FC = () => {
@@ -643,6 +644,19 @@ ${benchText}
           >
             <RefreshCw className={`w-4 h-4 ${isSyncingOnline ? 'animate-spin' : ''}`} />
             <span className="hidden lg:inline">{isSyncingOnline ? 'Sync...' : 'Sync Live'}</span>
+          </button>
+
+          {/* PULSANTE VERSIONE MOBILE */}
+          <button
+            onClick={() => {
+              window.history.pushState(null, '', '/mobile');
+              window.dispatchEvent(new PopStateEvent('popstate'));
+            }}
+            className="px-2.5 py-1.5 rounded-lg text-xs sm:text-sm font-black flex items-center gap-1.5 transition-all border border-amber-500/40 bg-amber-950/60 text-amber-300 hover:text-white hover:bg-amber-900/60 shadow-sm active:scale-95"
+            title="Passa alla versione smartphone / mobile (fanta.poletti.page/mobile)"
+          >
+            <Smartphone className="w-4 h-4 text-amber-400" />
+            <span className="hidden xl:inline">Mobile</span>
           </button>
 
           {/* PULSANTE GITHUB */}

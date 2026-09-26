@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { AuctionProvider, useAuction } from './context/AuctionContext';
 import { Header } from './components/Header';
 import { AlphabeticalCaller } from './components/AlphabeticalCaller';
@@ -9,9 +9,37 @@ import { ListoneView } from './components/ListoneView';
 import { SettingsModal } from './components/SettingsModal';
 import { HomeView } from './components/HomeView';
 import { TedLassoView } from './components/TedLassoView';
+import { TedLassoMobileView } from './components/TedLassoMobileView';
+
+const checkIsMobilePath = () => {
+  if (typeof window === 'undefined') return false;
+  const path = window.location.pathname.toLowerCase();
+  const hash = window.location.hash.toLowerCase();
+  const search = window.location.search.toLowerCase();
+  return path.startsWith('/mobile') || hash.startsWith('#/mobile') || search.includes('mode=mobile');
+};
 
 const AppLayout: React.FC = () => {
   const { activeView } = useAuction();
+  const [isMobileRoute, setIsMobileRoute] = useState<boolean>(checkIsMobilePath);
+
+  useEffect(() => {
+    const handleLocationChange = () => {
+      setIsMobileRoute(checkIsMobilePath());
+    };
+
+    window.addEventListener('popstate', handleLocationChange);
+    window.addEventListener('hashchange', handleLocationChange);
+    return () => {
+      window.removeEventListener('popstate', handleLocationChange);
+      window.removeEventListener('hashchange', handleLocationChange);
+    };
+  }, []);
+
+  // Se siamo nella route mobile (/mobile o #/mobile): visualizza SOLO la sezione Ted Lasso da cellulare
+  if (isMobileRoute) {
+    return <TedLassoMobileView />;
+  }
 
   return (
     <div className="h-screen max-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between select-none overflow-hidden">
