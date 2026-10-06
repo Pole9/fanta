@@ -479,9 +479,11 @@ export const AuctionProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }
   }, [rolePlayers, activePlayer]);
 
-  // Navigazione globale da tastiera con freccia Sinistra e Destra nella lista alfabetica in ogni area dell'app
+  // Navigazione da tastiera con freccia Sinistra e Destra nella lista alfabetica SOLO quando ci si trova nell'area asta ('auction')
   useEffect(() => {
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      if (activeView !== 'auction') return;
+
       const target = e.target as HTMLElement | null;
       if (target && ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)) {
         return;
@@ -498,7 +500,7 @@ export const AuctionProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
     window.addEventListener('keydown', handleGlobalKeyDown);
     return () => window.removeEventListener('keydown', handleGlobalKeyDown);
-  }, [nextAlphabeticalPlayer, prevAlphabeticalPlayer]);
+  }, [activeView, nextAlphabeticalPlayer, prevAlphabeticalPlayer]);
 
   const jumpToPlayerLetter = useCallback((letter: string) => {
     const target = rolePlayers.find(p => p.nome.startsWith(letter.toUpperCase()));

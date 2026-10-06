@@ -185,9 +185,13 @@ export function getTatticoAdvice(nome: string): string | null {
   const upper = nome.toUpperCase().trim();
   if (TATTICO_ADVICE[upper]) return TATTICO_ADVICE[upper];
   
-  // Try matching by last name or partial
+  const nameTokens = upper.split(/[\s-]+/).filter(t => t.length > 2);
+  
+  // Match per cognome o token completo, evitando match parziali spuri come 'ROV' in altri nomi
   for (const [key, advice] of Object.entries(TATTICO_ADVICE)) {
-    if (upper === key || upper.includes(key) || key.includes(upper)) {
+    if (upper === key) return advice;
+    const keyTokens = key.split(/[\s-]+/).filter(t => t.length > 2);
+    if (keyTokens.length > 0 && keyTokens.every(kt => nameTokens.includes(kt))) {
       return advice;
     }
   }

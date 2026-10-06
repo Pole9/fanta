@@ -39,9 +39,10 @@ export interface PlayerHistoryKPIs {
  * Genera la cronistoria delle 38 giornate e i KPI per il calciatore
  * coerente con i dati reali della stagione in corso (2026/27)
  */
-export function getPlayerPerformanceHistory(player: Player, playedMatchdaysCount: number = 5): {
+export function getPlayerPerformanceHistory(player: Player, playedMatchdaysCount: number = 7): {
   history: MatchdayHistoryItem[];
   kpis: PlayerHistoryKPIs;
+  isEstimatedSeasonSplit: boolean;
 } {
   const s26 = player.seasons?.['2026/27'];
 
@@ -93,6 +94,8 @@ export function getPlayerPerformanceHistory(player: Player, playedMatchdaysCount
     player.motivo2026_27 === 'titolare_rotto' || 
     player.motivo2026_27 === 'infortunato';
 
+  const modBase = pg > 0 ? pg : 1;
+
   for (let m = 1; m <= 38; m++) {
     if (m > playedMatchdaysCount) {
       history.push({
@@ -127,11 +130,11 @@ export function getPlayerPerformanceHistory(player: Player, playedMatchdaysCount
       let calculatedVote = Math.round((mv + delta) * 2) / 2;
       calculatedVote = Math.max(4.5, Math.min(8.5, calculatedVote));
 
-      // FantaVoto (aggiunge bonus gol/assist o malus ammonizione per quella giornata)
+      // FantaVoto (distribuzione deterministica bonus/malus senza divisione per zero)
       let bonusMalus = 0;
-      if (gf > 0 && m === 1 + (player.id % pg)) bonusMalus += 3;
-      if (assist > 0 && m === 1 + ((player.id + 2) % pg)) bonusMalus += 1;
-      if (amm > 0 && m === 1 + ((player.id + 1) % pg)) bonusMalus -= 0.5;
+      if (gf > 0 && m === 1 + (player.id % modBase)) bonusMalus += 3;
+      if (assist > 0 && m === 1 + ((player.id + 2) % modBase)) bonusMalus += 1;
+      if (amm > 0 && m === 1 + ((player.id + 1) % modBase)) bonusMalus -= 0.5;
       if (esp > 0 && m === pg) bonusMalus -= 1;
 
       const fantaVoto = Math.max(3.0, calculatedVote + bonusMalus);
@@ -164,5 +167,5 @@ export function getPlayerPerformanceHistory(player: Player, playedMatchdaysCount
     }
   }
 
-  return { history, kpis };
+  return { history, kpis, isEstimatedSeasonSplit: true };
 }

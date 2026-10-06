@@ -8,7 +8,7 @@ interface Props {
 }
 
 export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
-  const { history, kpis } = getPlayerPerformanceHistory(player, 5);
+  const { history, kpis, isEstimatedSeasonSplit } = getPlayerPerformanceHistory(player, 7);
 
   const mv = kpis.mediaVoto;
   const fmv = kpis.fantaMediaVoto;
@@ -172,7 +172,7 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
               Voto e Fantavoto
             </span>
             <span className="text-[11px] text-slate-400 font-mono hidden sm:inline">
-              Stagione Serie A (38 Giornate)
+              Stagione Serie A (38 Giornate{isEstimatedSeasonSplit ? ' • Ripartizione voti stagionale' : ''})
             </span>
           </div>
         </div>

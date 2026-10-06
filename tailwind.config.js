@@ -13,7 +13,17 @@ export default {
           d: '#22c55e', // Difensore (Green)
           c: '#3b82f6', // Centrocampista (Blue)
           a: '#ef4444', // Attaccante (Red)
+        },
+        slate: {
+          750: '#293548',
+          850: '#151e2e',
+        },
+        emerald: {
+          850: '#064e3b',
         }
+      },
+      spacing: {
+        '0.2': '1px',
       }
     },
   },

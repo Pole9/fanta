@@ -51,118 +51,11 @@ export interface PlayerMatchdayEvaluation {
   } | null;
 }
 
-// 1. Calendario del turno in corso (6ª Giornata)
-export const CURRENT_MATCHDAY_NUMBER = 6;
-export const CURRENT_MATCHDAY_TITLE = "6ª Giornata Serie A (25-28 Settembre 2026)";
+// 1. Calendario del turno disputato (7ª Giornata Serie A, 2-5 Ottobre 2026)
+export const CURRENT_MATCHDAY_NUMBER = 7;
+export const CURRENT_MATCHDAY_TITLE = "7ª Giornata Serie A (2-5 Ottobre 2026)";
 
 export const CURRENT_SERIE_A_FIXTURES: SerieAMatch[] = [
-  {
-    id: "m-1",
-    homeTeam: "Lecce",
-    awayTeam: "Parma",
-    date: "Venerdì",
-    time: "20:45",
-    stadium: "Via del Mare (Lecce)",
-    homeDifficulty: 3,
-    awayDifficulty: 3
-  },
-  {
-    id: "m-2",
-    homeTeam: "Torino",
-    awayTeam: "Como",
-    date: "Sabato",
-    time: "15:00",
-    stadium: "Olimpico Grande Torino (Torino)",
-    homeDifficulty: 2,
-    awayDifficulty: 3
-  },
-  {
-    id: "m-3",
-    homeTeam: "Inter",
-    awayTeam: "Udinese",
-    date: "Sabato",
-    time: "18:00",
-    stadium: "San Siro (Milano)",
-    homeDifficulty: 2,
-    awayDifficulty: 4
-  },
-  {
-    id: "m-4",
-    homeTeam: "Napoli",
-    awayTeam: "Monza",
-    date: "Sabato",
-    time: "20:45",
-    stadium: "Diego Armando Maradona (Napoli)",
-    homeDifficulty: 1,
-    awayDifficulty: 5
-  },
-  {
-    id: "m-5",
-    homeTeam: "Sassuolo",
-    awayTeam: "Venezia",
-    date: "Domenica",
-    time: "12:30",
-    stadium: "Mapei Stadium (Reggio Emilia)",
-    homeDifficulty: 3,
-    awayDifficulty: 3
-  },
-  {
-    id: "m-6",
-    homeTeam: "Atalanta",
-    awayTeam: "Bologna",
-    date: "Domenica",
-    time: "15:00",
-    stadium: "Gewiss Stadium (Bergamo)",
-    homeDifficulty: 2,
-    awayDifficulty: 4
-  },
-  {
-    id: "m-7",
-    homeTeam: "Frosinone",
-    awayTeam: "Fiorentina",
-    date: "Domenica",
-    time: "15:00",
-    stadium: "Benito Stirpe (Frosinone)",
-    homeDifficulty: 4,
-    awayDifficulty: 2
-  },
-  {
-    id: "m-8",
-    homeTeam: "Roma",
-    awayTeam: "Juventus",
-    date: "Domenica",
-    time: "18:00",
-    stadium: "Olimpico (Roma)",
-    homeDifficulty: 3,
-    awayDifficulty: 3
-  },
-  {
-    id: "m-9",
-    homeTeam: "Lazio",
-    awayTeam: "Milan",
-    date: "Domenica",
-    time: "20:45",
-    stadium: "Olimpico (Roma)",
-    homeDifficulty: 3,
-    awayDifficulty: 3
-  },
-  {
-    id: "m-10",
-    homeTeam: "Cagliari",
-    awayTeam: "Genoa",
-    date: "Lunedì",
-    time: "20:45",
-    stadium: "Unipol Domus (Cagliari)",
-    homeDifficulty: 3,
-    awayDifficulty: 3
-  }
-];
-
-// 2. Calendario della PROSSIMA GARA (7ª Giornata Serie A, 2-5 Ottobre 2026)
-export const NEXT_MATCHDAY_NUMBER = 7;
-export const NEXT_MATCHDAY_TITLE = "7ª Giornata Serie A (2-5 Ottobre 2026)";
-
-export const NEXT_SERIE_A_FIXTURES: SerieAMatch[] = [
   {
     id: "m7-1",
     homeTeam: "Napoli",
@@ -170,8 +63,8 @@ export const NEXT_SERIE_A_FIXTURES: SerieAMatch[] = [
     date: "Venerdì",
     time: "20:45",
     stadium: "Diego Armando Maradona (Napoli)",
-    homeDifficulty: 1, // Napoli in casa vs Como: molto favorevole (1/5)
-    awayDifficulty: 5  // Como al Maradona: proibitiva (5/5)
+    homeDifficulty: 1,
+    awayDifficulty: 5
   },
   {
     id: "m7-2",
@@ -260,6 +153,113 @@ export const NEXT_SERIE_A_FIXTURES: SerieAMatch[] = [
     date: "Lunedì",
     time: "20:45",
     stadium: "Pier Luigi Penzo (Venezia)",
+    homeDifficulty: 3,
+    awayDifficulty: 3
+  }
+];
+
+// 2. Calendario della PROSSIMA GARA DA SCHIERARE (8ª Giornata Serie A, 17-19 Ottobre 2026)
+export const NEXT_MATCHDAY_NUMBER = 8;
+export const NEXT_MATCHDAY_TITLE = "8ª Giornata Serie A (17-19 Ottobre 2026)";
+
+export const NEXT_SERIE_A_FIXTURES: SerieAMatch[] = [
+  {
+    id: "m8-1",
+    homeTeam: "Como",
+    awayTeam: "Parma",
+    date: "Sabato",
+    time: "15:00",
+    stadium: "Giuseppe Sinigaglia (Como)",
+    homeDifficulty: 2,
+    awayDifficulty: 3
+  },
+  {
+    id: "m8-2",
+    homeTeam: "Genoa",
+    awayTeam: "Bologna",
+    date: "Sabato",
+    time: "15:00",
+    stadium: "Luigi Ferraris (Genova)",
+    homeDifficulty: 3,
+    awayDifficulty: 3
+  },
+  {
+    id: "m8-3",
+    homeTeam: "Milan",
+    awayTeam: "Udinese",
+    date: "Sabato",
+    time: "18:00",
+    stadium: "San Siro (Milano)",
+    homeDifficulty: 2,
+    awayDifficulty: 4
+  },
+  {
+    id: "m8-4",
+    homeTeam: "Juventus",
+    awayTeam: "Lazio",
+    date: "Sabato",
+    time: "20:45",
+    stadium: "Allianz Stadium (Torino)",
+    homeDifficulty: 2,
+    awayDifficulty: 4
+  },
+  {
+    id: "m8-5",
+    homeTeam: "Empoli",
+    awayTeam: "Napoli",
+    date: "Domenica",
+    time: "12:30",
+    stadium: "Carlo Castellani (Empoli)",
+    homeDifficulty: 4,
+    awayDifficulty: 2
+  },
+  {
+    id: "m8-6",
+    homeTeam: "Lecce",
+    awayTeam: "Fiorentina",
+    date: "Domenica",
+    time: "15:00",
+    stadium: "Via del Mare (Lecce)",
+    homeDifficulty: 3,
+    awayDifficulty: 2
+  },
+  {
+    id: "m8-7",
+    homeTeam: "Venezia",
+    awayTeam: "Atalanta",
+    date: "Domenica",
+    time: "15:00",
+    stadium: "Pier Luigi Penzo (Venezia)",
+    homeDifficulty: 4,
+    awayDifficulty: 2
+  },
+  {
+    id: "m8-8",
+    homeTeam: "Cagliari",
+    awayTeam: "Torino",
+    date: "Domenica",
+    time: "18:00",
+    stadium: "Unipol Domus (Cagliari)",
+    homeDifficulty: 3,
+    awayDifficulty: 3
+  },
+  {
+    id: "m8-9",
+    homeTeam: "Roma",
+    awayTeam: "Inter",
+    date: "Domenica",
+    time: "20:45",
+    stadium: "Olimpico (Roma)",
+    homeDifficulty: 3,
+    awayDifficulty: 3
+  },
+  {
+    id: "m8-10",
+    homeTeam: "Monza",
+    awayTeam: "Verona",
+    date: "Lunedì",
+    time: "20:45",
+    stadium: "U-Power Stadium (Monza)",
     homeDifficulty: 3,
     awayDifficulty: 3
   }
@@ -447,8 +447,19 @@ export function matchSyncedPlayer(
   const tokens = norm.split(' ').filter(t => t.length > 2);
   for (const [key, val] of Object.entries(syncedPlayers)) {
     if (key === norm) return val;
-    if (tokens.some(t => key === t || key.startsWith(t + ' ') || key.endsWith(' ' + t))) {
-      return val;
+    const keyTokens = key.split(' ').filter(t => t.length > 2);
+    // Se entrambi i nomi hanno più token, controlla corrispondenza completa
+    if (tokens.length >= 2 && keyTokens.length >= 2) {
+      if (tokens.every(t => keyTokens.includes(t)) || keyTokens.every(kt => tokens.includes(kt))) {
+        return val;
+      }
+    } else if (tokens.length === 1 && keyTokens.length === 1) {
+      if (tokens[0] === keyTokens[0]) return val;
+    } else if (tokens.length >= 2 && keyTokens.length === 1) {
+      // Es. norm = 'LAUTARO MARTINEZ', key = 'MARTINEZ' -> solo se cognome unico corrispondente
+      if (keyTokens[0] === tokens[tokens.length - 1] && !['MARTINEZ', 'ROSSI', 'ESPOSITO', 'SILVA'].includes(keyTokens[0])) {
+        return val;
+      }
     }
   }
   return null;

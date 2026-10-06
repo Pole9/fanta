@@ -1,0 +1,20 @@
+{
+  "id": "/mobile",
+  "name": "Ted Lasso Fantacalcio Advisor",
+  "short_name": "Ted Lasso",
+  "description": "Consigli tattici e probabili formazioni per il Fantacalcio",
+  "start_url": "/mobile",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#020617",
+  "theme_color": "#020617",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

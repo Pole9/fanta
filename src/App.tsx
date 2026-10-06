@@ -1,22 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { AuctionProvider, useAuction } from './context/AuctionContext';
 import { Header } from './components/Header';
-import { AlphabeticalCaller } from './components/AlphabeticalCaller';
-import { GoalkeepersWarRoom } from './components/GoalkeepersWarRoom';
-import { AttackersWarRoom } from './components/AttackersWarRoom';
-import { TeamsOverview } from './components/TeamsOverview';
-import { ListoneView } from './components/ListoneView';
-import { SettingsModal } from './components/SettingsModal';
-import { HomeView } from './components/HomeView';
-import { TedLassoView } from './components/TedLassoView';
-import { TedLassoMobileView } from './components/TedLassoMobileView';
+
+// Lazy loading per ottimizzare il bundle ed evitare il caricamento simultaneo di tutte le schermate
+const AlphabeticalCaller = lazy(() => import('./components/AlphabeticalCaller').then(m => ({ default: m.AlphabeticalCaller })));
+const GoalkeepersWarRoom = lazy(() => import('./components/GoalkeepersWarRoom').then(m => ({ default: m.GoalkeepersWarRoom })));
+const AttackersWarRoom = lazy(() => import('./components/AttackersWarRoom').then(m => ({ default: m.AttackersWarRoom })));
+const TeamsOverview = lazy(() => import('./components/TeamsOverview').then(m => ({ default: m.TeamsOverview })));
+const ListoneView = lazy(() => import('./components/ListoneView').then(m => ({ default: m.ListoneView })));
+const SettingsModal = lazy(() => import('./components/SettingsModal').then(m => ({ default: m.SettingsModal })));
+const HomeView = lazy(() => import('./components/HomeView').then(m => ({ default: m.HomeView })));
+const TedLassoView = lazy(() => import('./components/TedLassoView').then(m => ({ default: m.TedLassoView })));
+const TedLassoMobileView = lazy(() => import('./components/TedLassoMobileView').then(m => ({ default: m.TedLassoMobileView })));
+
+const LoadingFallback: React.FC = () => (
+  <div className="flex-1 flex items-center justify-center p-8 text-slate-400">
+    <div className="flex flex-col items-center gap-3">
+      <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
+      <span className="text-xs font-mono uppercase tracking-widest text-slate-400">Caricamento modulo...</span>
+    </div>
+  </div>
+);
 
 const checkIsMobilePath = () => {
   if (typeof window === 'undefined') return false;
   const path = window.location.pathname.toLowerCase();
   const hash = window.location.hash.toLowerCase();
   const search = window.location.search.toLowerCase();
-  return path.startsWith('/mobile') || hash.startsWith('#/mobile') || search.includes('mode=mobile');
+  return path.startsWith('/mobile') || hash.includes('mobile') || search.includes('mode=mobile');
 };
 
 const AppLayout: React.FC = () => {
@@ -24,6 +35,11 @@ const AppLayout: React.FC = () => {
   const [isMobileRoute, setIsMobileRoute] = useState<boolean>(checkIsMobilePath);
 
   useEffect(() => {
+    // Normalizza l'URL da #/mobile a /mobile pulito se necessario
+    if (window.location.hash.includes('mobile') && window.history.replaceState) {
+      window.history.replaceState(null, '', '/mobile');
+    }
+
     const handleLocationChange = () => {
       setIsMobileRoute(checkIsMobilePath());
     };
@@ -36,9 +52,13 @@ const AppLayout: React.FC = () => {
     };
   }, []);
 
-  // Se siamo nella route mobile (/mobile o #/mobile): visualizza SOLO la sezione Ted Lasso da cellulare
+  // Se siamo nella route mobile (/mobile): visualizza SOLO la sezione Ted Lasso da cellulare
   if (isMobileRoute) {
-    return <TedLassoMobileView />;
+    return (
+      <Suspense fallback={<LoadingFallback />}>
+        <TedLassoMobileView />
+      </Suspense>
+    );
   }
 
   return (
@@ -46,14 +66,16 @@ const AppLayout: React.FC = () => {
       {activeView !== 'ted_lasso' && <Header />}
       
       <main className="max-w-[1850px] w-full mx-auto px-2 sm:px-3 py-1 flex-1 overflow-hidden flex flex-col min-h-0">
-        {activeView === 'home' && <HomeView />}
-        {activeView === 'ted_lasso' && <TedLassoView />}
-        {activeView === 'goalkeepers' && <GoalkeepersWarRoom />}
-        {activeView === 'auction' && <AlphabeticalCaller />}
-        {activeView === 'attackers' && <AttackersWarRoom />}
-        {activeView === 'teams' && <TeamsOverview />}
-        {activeView === 'listone' && <ListoneView />}
-        {activeView === 'settings' && <SettingsModal />}
+        <Suspense fallback={<LoadingFallback />}>
+          {activeView === 'home' && <HomeView />}
+          {activeView === 'ted_lasso' && <TedLassoView />}
+          {activeView === 'goalkeepers' && <GoalkeepersWarRoom />}
+          {activeView === 'auction' && <AlphabeticalCaller />}
+          {activeView === 'attackers' && <AttackersWarRoom />}
+          {activeView === 'teams' && <TeamsOverview />}
+          {activeView === 'listone' && <ListoneView />}
+          {activeView === 'settings' && <SettingsModal />}
+        </Suspense>
       </main>
 
       {/* FOOTER ULTRA-COMPATTO A 1 RIGA */}

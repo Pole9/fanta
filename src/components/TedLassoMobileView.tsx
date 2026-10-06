@@ -143,8 +143,7 @@ export const TedLassoMobileView: React.FC = () => {
     lineupOverrides.starters.forEach(id => {
       const c = cardMap.get(id);
       if (c) {
-        c.isStarter = true;
-        startersCards.push(c);
+        startersCards.push({ ...c, isStarter: true });
       }
     });
 
@@ -152,8 +151,7 @@ export const TedLassoMobileView: React.FC = () => {
     lineupOverrides.bench.forEach((id) => {
       const c = cardMap.get(id);
       if (c) {
-        c.isStarter = false;
-        benchCards.push(c);
+        benchCards.push({ ...c, isStarter: false });
       }
     });
 
@@ -165,8 +163,7 @@ export const TedLassoMobileView: React.FC = () => {
     const orderedBench: TedPlayerCard[] = [];
     let benchIndex = 1;
     [...benchP, ...benchD, ...benchC, ...benchA].forEach(card => {
-      card.benchOrder = benchIndex++;
-      orderedBench.push(card);
+      orderedBench.push({ ...card, benchOrder: benchIndex++ });
     });
 
     assignPitchCoordinates(startersCards, baseLineup.formation);
@@ -210,10 +207,15 @@ export const TedLassoMobileView: React.FC = () => {
       if (!cleanB) return false;
       for (const uName of squadPlayerCleanNames) {
         if (uName === cleanB) return true;
-        const uParts = uName.split(' ');
-        const bParts = cleanB.split(' ');
-        if (uParts[0] === bParts[0] && uParts[0].length >= 4) return true;
-        if (cleanB.includes(uName) || uName.includes(cleanB)) return true;
+        const uParts = uName.split(' ').filter(p => p.length > 2);
+        const bParts = cleanB.split(' ').filter(p => p.length > 2);
+        if (uParts.length >= 2 && bParts.length >= 2) {
+          if (uParts.every(p => bParts.includes(p)) || bParts.every(p => uParts.includes(p))) return true;
+        } else if (uParts.length === 1 && bParts.length === 1 && uParts[0] === bParts[0]) {
+          return true;
+        } else if (uParts.length > 1 && bParts.length === 1) {
+          if (uParts[uParts.length - 1] === bParts[0]) return true;
+        }
       }
       return false;
     };

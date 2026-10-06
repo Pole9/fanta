@@ -171,23 +171,16 @@ export async function syncOnlineMatchdayData(): Promise<{
       // Proxy CORS non disponibile
     }
 
-    // 3. Fallback intelligente con snapshot live aggiornato (473 giocatori, 42 ballottaggi)
-    const now = new Date();
-    const timeStr = now.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
-    const dateStr = now.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric' });
-    const freshTimestamp = `${dateStr} ore ${timeStr}`;
-
+    // 3. Fallback con snapshot offline archivio
     const fallbackData: SyncedOnlineData = {
-      ...((liveSnapshot as unknown) as SyncedOnlineData),
-      timestamp: freshTimestamp,
-      syncedAt: Date.now()
+      ...((liveSnapshot as unknown) as SyncedOnlineData)
     };
 
     localStorage.setItem(SYNC_STORAGE_KEY, JSON.stringify(fallbackData));
     return {
       success: true,
       data: fallbackData,
-      message: `Dati di giornata aggiornati e ricalcolati con le ultime probabili formazioni alle ore ${timeStr}.`,
+      message: `Rete non raggiungibile: caricato snapshot locale delle probabili formazioni (aggiornato al ${fallbackData.timestamp || '25/09/2026'}).`,
       totalPlayers: fallbackData.totalPlayers,
       totalBallots: fallbackData.totalBallots
     };
