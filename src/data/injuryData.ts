@@ -5,10 +5,188 @@ export interface InjuryInfo {
   rientroPrevisto: string; // es. "Fine Novembre", "Inizio Ottobre", "Gennaio", ecc.
   meseRientro: string; // es. "Nov", "Gen", "Ott", "Inizio Ott", "In dubbio", "Squalificato"
   isSqualificato?: boolean;
+  isRecuperato?: boolean;
   note?: string;
 }
 
 export const INJURY_DATABASE: Record<string, InjuryInfo> = {
+  "estupinan": {
+    "playerName": "Estupinan",
+    "squadra": "Milan",
+    "infortunio": "Smaltito il fastidio al ginocchio accusato in Nazionale, tornato in gruppo.",
+    "rientroPrevisto": "Disponibile",
+    "meseRientro": "Disponibile",
+    "isRecuperato": true
+},
+
+  "adams": {
+    "playerName": "Adams",
+    "squadra": "Torino",
+    "infortunio": "Recuperato dal problema all'adduttore, a disposizione di mister Abate.",
+    "rientroPrevisto": "Disponibile",
+    "meseRientro": "Disponibile",
+    "isRecuperato": true
+},
+
+  "davis": {
+    "playerName": "Davis",
+    "squadra": "Udinese",
+    "infortunio": "Recuperato, titolare in attacco contro il Milan.",
+    "rientroPrevisto": "Disponibile",
+    "meseRientro": "Disponibile",
+    "isRecuperato": true
+},
+
+  "cambiaso": {
+    "playerName": "Cambiaso",
+    "squadra": "Juventus",
+    "infortunio": "Recuperato, si candida per partire dal 1' contro la Lazio.",
+    "rientroPrevisto": "Disponibile",
+    "meseRientro": "Disponibile",
+    "isRecuperato": true
+},
+
+  "kean": {
+    "playerName": "Kean",
+    "squadra": "Como",
+    "infortunio": "Recuperato, a disposizione per il match contro il Parma.",
+    "rientroPrevisto": "Disponibile",
+    "meseRientro": "Disponibile",
+    "isRecuperato": true
+},
+
+  "wesley": {
+    "playerName": "Wesley",
+    "squadra": "Roma",
+    "infortunio": "Recuperato dal problema fisico, titolare sulla corsia mancina.",
+    "rientroPrevisto": "Disponibile",
+    "meseRientro": "Disponibile",
+    "isRecuperato": true
+},
+
+  "malen": {
+    "playerName": "Malen",
+    "squadra": "Roma",
+    "infortunio": "Pienamente recuperato durante la sosta, guida l'attacco giallorosso.",
+    "rientroPrevisto": "Disponibile",
+    "meseRientro": "Disponibile",
+    "isRecuperato": true
+},
+
+  "mctominay": {
+    "playerName": "McTominay",
+    "squadra": "Napoli",
+    "infortunio": "Ottenuta idoneità sportiva, convocato e a disposizione.",
+    "rientroPrevisto": "Disponibile",
+    "meseRientro": "Disponibile",
+    "isRecuperato": true
+},
+
+  "dimarco": {
+    "playerName": "Dimarco",
+    "squadra": "Inter",
+    "infortunio": "Affaticamento muscolare superato, regolarmente dal 1' minuto.",
+    "rientroPrevisto": "Disponibile",
+    "meseRientro": "Disponibile",
+    "isRecuperato": true
+},
+
+  "muric": {
+    "playerName": "Muric",
+    "squadra": "Sassuolo",
+    "infortunio": "Forte contusione subita in Nazionale, in dubbio per la sfida contro il Verona.",
+    "rientroPrevisto": "In dubbio (8ª Giornata)",
+    "meseRientro": "In dubbio"
+},
+
+  "stulic": {
+    "playerName": "Stulic",
+    "squadra": "Lecce",
+    "infortunio": "Fastidio muscolare, allenamento a parte e in forte dubbio.",
+    "rientroPrevisto": "Metà Ottobre (in forte dubbio)",
+    "meseRientro": "In dubbio"
+},
+
+  "birligea": {
+    "playerName": "Birligea",
+    "squadra": "Frosinone",
+    "infortunio": "Problema muscolare ai flessori.",
+    "rientroPrevisto": "Fine Ottobre",
+    "meseRientro": "Fine Ott"
+},
+
+  "raimondo": {
+    "playerName": "Raimondo",
+    "squadra": "Frosinone",
+    "infortunio": "Distrazione muscolare al bicipite femorale.",
+    "rientroPrevisto": "Fine Ottobre",
+    "meseRientro": "Fine Ott"
+},
+
+  "zapata": {
+    "playerName": "Zapata",
+    "squadra": "Torino",
+    "infortunio": "Lesione del legamento crociato anteriore, menisco mediale e collaterale laterale.",
+    "rientroPrevisto": "Stagione Finita (Giugno 2027)",
+    "meseRientro": "Giu"
+},
+
+  "bremer": {
+    "playerName": "Bremer",
+    "squadra": "Juventus",
+    "infortunio": "Rottura del legamento crociato anteriore e menisco del ginocchio sinistro, operato.",
+    "rientroPrevisto": "Stagione Finita (Maggio 2027)",
+    "meseRientro": "Mag"
+},
+
+  "schingtienne": {
+    "playerName": "Schingtienne",
+    "squadra": "Venezia",
+    "infortunio": "Risentimento muscolare rimediato con la Nazionale, assente con l'Atalanta.",
+    "rientroPrevisto": "Fine Ottobre",
+    "meseRientro": "Fine Ott"
+},
+
+  "gudmundsson": {
+    "playerName": "Gudmundsson",
+    "squadra": "Lazio",
+    "infortunio": "Lesione muscolare di primo grado alla coscia, assente contro la Juventus.",
+    "rientroPrevisto": "Fine Ottobre",
+    "meseRientro": "Fine Ott"
+},
+
+  "kevin carlos": {
+    "playerName": "Kevin Carlos",
+    "squadra": "Cagliari",
+    "infortunio": "Problema muscolare alla gamba sinistra, forfait contro il Torino.",
+    "rientroPrevisto": "Fine Ottobre",
+    "meseRientro": "Fine Ott"
+},
+
+  "atta": {
+    "playerName": "Atta",
+    "squadra": "Fiorentina",
+    "infortunio": "Sovraccarico funzionale dell'addome, lavoro differenziato e in forte dubbio.",
+    "rientroPrevisto": "Metà Ottobre (in dubbio)",
+    "meseRientro": "In dubbio"
+},
+
+  "sow": {
+    "playerName": "Sow",
+    "squadra": "Genoa",
+    "infortunio": "Problema muscolare ai flessori in fase di valutazione, forfait alla prossima.",
+    "rientroPrevisto": "Fine Ottobre",
+    "meseRientro": "Fine Ott"
+},
+
+  "colombo": {
+    "playerName": "Colombo",
+    "squadra": "Genoa",
+    "infortunio": "Lesione muscolare al flessore accusata prima della sosta, assente contro il Bologna.",
+    "rientroPrevisto": "Fine Ottobre",
+    "meseRientro": "Fine Ott"
+},
+
   // --- ATALANTA ---
   "scamacca": {
     "playerName": "Scamacca",
@@ -57,10 +235,11 @@ export const INJURY_DATABASE: Record<string, InjuryInfo> = {
   "orsolini": {
     "playerName": "Orsolini",
     "squadra": "Bologna",
-    "infortunio": "Risentimento ai flessori della coscia sinistra pienamente smaltito: tornato in gruppo a pieno regime e a disposizione per la 6ª giornata.",
-    "rientroPrevisto": "Disponibile (6ª Giornata)",
-    "meseRientro": "Disponibile"
-  },
+    "infortunio": "Pienamente recuperato, titolare in attacco.",
+    "rientroPrevisto": "Disponibile",
+    "meseRientro": "Disponibile",
+    "isRecuperato": true
+},
   "ferguson": {
     "playerName": "Ferguson",
     "squadra": "Bologna",
@@ -179,10 +358,11 @@ export const INJURY_DATABASE: Record<string, InjuryInfo> = {
   "calhanoglu": {
     "playerName": "Calhanoglu",
     "squadra": "Inter",
-    "infortunio": "Risentimento agli adduttori in netto miglioramento: tornato parzialmente in gruppo, gestito cautelativamente per la sfida con l'Udinese.",
-    "rientroPrevisto": "In dubbio / Convocabile (6ª Giornata)",
-    "meseRientro": "In dubbio"
-  },
+    "infortunio": "Risentimento adduttore pienamente smaltito: tornato titolare.",
+    "rientroPrevisto": "Disponibile",
+    "meseRientro": "Disponibile",
+    "isRecuperato": true
+},
   "spence": {
     "playerName": "Spence",
     "squadra": "Inter",
@@ -290,10 +470,10 @@ export const INJURY_DATABASE: Record<string, InjuryInfo> = {
   "geubbels": {
     "playerName": "Geubbels",
     "squadra": "Lecce",
-    "infortunio": "Distorsione alla caviglia subita il 31 agosto nella sfida contro la Roma.",
-    "rientroPrevisto": "Inizio Ottobre",
-    "meseRientro": "Inizio Ott"
-  },
+    "infortunio": "Noie muscolari, lavoro differenziato.",
+    "rientroPrevisto": "Metà Ottobre (in forte dubbio)",
+    "meseRientro": "In dubbio"
+},
 
   // --- MONZA ---
   "ciurria": {
@@ -350,17 +530,19 @@ export const INJURY_DATABASE: Record<string, InjuryInfo> = {
   "spinazzola": {
     "playerName": "Spinazzola",
     "squadra": "Napoli",
-    "infortunio": "Lieve contrattura al bicipite femorale della coscia destra; gestione cautelativa verso la 6ª giornata.",
-    "rientroPrevisto": "Inizio Ottobre (6ª Giornata)",
-    "meseRientro": "Inizio Ott"
-  },
+    "infortunio": "Recuperato e a disposizione nell'11 titolare.",
+    "rientroPrevisto": "Disponibile",
+    "meseRientro": "Disponibile",
+    "isRecuperato": true
+},
   "meret": {
     "playerName": "Meret",
     "squadra": "Napoli",
-    "infortunio": "Lesione di basso grado al muscolo adduttore lungo della coscia sinistra accusata contro la Juventus. Stop di circa 3 settimane, rientro dopo la sosta.",
-    "rientroPrevisto": "Metà Ottobre (dopo la sosta)",
-    "meseRientro": "Metà Ott"
-  },
+    "infortunio": "Lesione adduttore superata, rilanciato titolare da Allegri.",
+    "rientroPrevisto": "Disponibile",
+    "meseRientro": "Disponibile",
+    "isRecuperato": true
+},
   "marianucci": {
     "playerName": "Marianucci",
     "squadra": "Napoli",
@@ -372,11 +554,11 @@ export const INJURY_DATABASE: Record<string, InjuryInfo> = {
   // --- ROMA ---
   "saelemaekers": {
     "playerName": "Saelemaekers",
-    "squadra": "Roma",
-    "infortunio": "Frattura composta del malleolo mediale della caviglia destra subita contro il Genoa. Sottoposto a intervento chirurgico con lungo stop.",
+    "squadra": "Milan",
+    "infortunio": "Frattura del malleolo mediale della caviglia destra, operato e lungo stop.",
     "rientroPrevisto": "Fine Novembre",
-    "meseRientro": "Fine Nov"
-  },
+    "meseRientro": "Nov"
+},
   "le fee": {
     "playerName": "Le Fée",
     "squadra": "Roma",
@@ -389,10 +571,11 @@ export const INJURY_DATABASE: Record<string, InjuryInfo> = {
   "bernabe": {
     "playerName": "Bernabè",
     "squadra": "Parma",
-    "infortunio": "Noie fisiche muscolari continue, non convocato a Genova. Monitorato in vista della 6ª giornata.",
-    "rientroPrevisto": "Inizio Ottobre (6ª Giornata)",
-    "meseRientro": "Inizio Ott"
-  },
+    "infortunio": "Recuperato dal problema muscolare, titolare sulla trequarti.",
+    "rientroPrevisto": "Disponibile",
+    "meseRientro": "Disponibile",
+    "isRecuperato": true
+},
   "nicolussi caviglia": {
     "playerName": "Nicolussi Caviglia",
     "squadra": "Parma",
@@ -578,9 +761,16 @@ export function getInjuryInfo(nome: string): InjuryInfo | null {
     .replace(/\s+/g, " ")
     .trim();
 
+  const checkInfo = (info: InjuryInfo | undefined | null): InjuryInfo | null => {
+    if (!info) return null;
+    if (info.isRecuperato) return null;
+    if (info.meseRientro === 'Disponibile' || info.rientroPrevisto?.toLowerCase().includes('disponibile')) return null;
+    return info;
+  };
+
   const normalized = clean(nome);
   if (INJURY_DATABASE[normalized]) {
-    return INJURY_DATABASE[normalized];
+    return checkInfo(INJURY_DATABASE[normalized]);
   }
 
   const normTokens = normalized.split(" ").filter(Boolean);
@@ -606,7 +796,7 @@ export function getInjuryInfo(nome: string): InjuryInfo | null {
       const hasInitialConflict = normInitials.some(ni => keyInitials.length > 0 && !keyInitials.includes(ni));
 
       if (allKeyTokensMatch && !hasInitialConflict) {
-        return info;
+        return checkInfo(info);
       }
     } else {
       const singleKey = keyTokens[0];
@@ -624,7 +814,7 @@ export function getInjuryInfo(nome: string): InjuryInfo | null {
         if (singleKey === 'thuram' && !normTokens.includes('k')) {
           return null;
         }
-        return info;
+        return checkInfo(info);
       }
     }
   }
