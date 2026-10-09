@@ -377,9 +377,9 @@ export const GAZZETTA_LINEUPS: Record<string, Partial<GazzettaPlayerStatus>> = {
     "noteGazzetta": "Affidabile braccetto di Spalletti allo Stadium contro la Lazio."
   },
   "BARELLA": {
-    "titolaritaPercent": 0,
-    "status": "infortunato",
-    "noteGazzetta": "Distrazione al retto femorale: rientro previsto fine ottobre. Al suo posto Frattesi."
+    "titolaritaPercent": 80,
+    "status": "titolare",
+    "noteGazzetta": "Rientrato pienamente a disposizione e in gruppo: perno del centrocampo nerazzurro."
   },
   "MERET": {
     "titolaritaPercent": 90,
@@ -514,7 +514,7 @@ export const FANTAGAZZETTA_ADVICE: Record<string, Partial<FantagazzettaRating>> 
   "ZAPATA": { stars: 1, fascia: 'Sconsigliato', commentoRedazione: "Lesione del legamento crociato e menisco: stagione finita." },
   "COLOMBO": { stars: 1, fascia: 'Sconsigliato', commentoRedazione: "Fermo per infortunio muscolare. Assente contro il Bologna." },
   "GUDMUNDSSON": { stars: 1, fascia: 'Sconsigliato', commentoRedazione: "Out per lesione muscolare per la sfida di Torino contro la Juventus." },
-  "BARELLA": { stars: 1, fascia: 'Sconsigliato', commentoRedazione: "Fermo per distrazione al retto femorale. Non convocato contro la Roma." },
+  "BARELLA": { stars: 4, fascia: 'Consigliato', commentoRedazione: "Rientrato dall'infortunio: certezza del centrocampo nerazzurro, da schierare." },
   "SAELEMAEKERS": { stars: 1, fascia: 'Sconsigliato', commentoRedazione: "Fuori per frattura al malleolo. Non disponibile." },
   "MALINOVSKYI": { stars: 1, fascia: 'Sconsigliato', commentoRedazione: "Grave frattura del perone, stagione finita. Non schierabile." },
   "CALHANOGLU": { stars: 4, fascia: 'Consigliato', commentoRedazione: "Ristabilito: all'Olimpico contro la Roma guiderà la manovra e calcerà i rigori." },

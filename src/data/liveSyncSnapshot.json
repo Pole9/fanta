@@ -1519,8 +1519,8 @@
     },
     "COLOMBO L": {
       "name": "Colombo L.",
-      "titolaritaPercent": 25,
-      "status": "panchina",
+      "titolaritaPercent": 0,
+      "status": "infortunato",
       "ballottaggioCon": null,
       "source": "Fantacalcio.it Live"
     },
@@ -2443,8 +2443,8 @@
     },
     "BREMER": {
       "name": "Bremer",
-      "titolaritaPercent": 90,
-      "status": "titolare",
+      "titolaritaPercent": 0,
+      "status": "infortunato",
       "ballottaggioCon": null,
       "source": "Fantacalcio.it Live"
     },
@@ -2597,8 +2597,8 @@
     },
     "SCALVINI": {
       "name": "Scalvini",
-      "titolaritaPercent": 90,
-      "status": "titolare",
+      "titolaritaPercent": 0,
+      "status": "infortunato",
       "ballottaggioCon": null,
       "source": "Fantacalcio.it Live"
     },
@@ -2639,9 +2639,9 @@
     },
     "SCAMACCA": {
       "name": "Scamacca",
-      "titolaritaPercent": 60,
-      "status": "ballottaggio",
-      "ballottaggioCon": "Scamacca 60% - Krstovic 40%",
+      "titolaritaPercent": 0,
+      "status": "infortunato",
+      "ballottaggioCon": null,
       "source": "Fantacalcio.it Live"
     },
     "ROWE": {
@@ -3038,8 +3038,8 @@
     },
     "ZAPATA D": {
       "name": "Zapata D.",
-      "titolaritaPercent": 40,
-      "status": "panchina",
+      "titolaritaPercent": 0,
+      "status": "infortunato",
       "ballottaggioCon": null,
       "source": "Fantacalcio.it Live"
     },
@@ -3545,12 +3545,6 @@
       "perc1": 55,
       "p2": "Gaetano",
       "perc2": 45
-    },
-    {
-      "p1": "Scamacca",
-      "perc1": 60,
-      "p2": "Krstovic",
-      "perc2": 40
     },
     {
       "p1": "Moreno M.",
