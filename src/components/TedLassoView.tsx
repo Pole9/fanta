@@ -874,11 +874,11 @@ ${benchText}
           )}
         </div>
 
-        {/* COLONNA 2: CAMPO DA CALCIO VERDE (AL CENTRO - Lg: col-span-6) */}
-        <div className="order-1 lg:order-2 lg:col-span-6 xl:col-span-6 2xl:col-span-6 flex flex-col justify-between overflow-hidden bg-slate-900 border border-slate-800 rounded-xl p-2 shadow-md min-h-0">
+        {/* COLONNA 2: CAMPO DA CALCIO VERDE E TABELLA TITOLARI (AL CENTRO - Lg: col-span-6) */}
+        <div className="order-1 lg:order-2 lg:col-span-6 xl:col-span-6 2xl:col-span-6 flex flex-col gap-2.5 overflow-y-auto pr-1 scrollbar-thin bg-slate-900 border border-slate-800 rounded-xl p-2 shadow-md min-h-0">
           
           {/* CAMPO DA CALCIO VERDE (GREEN PITCH) */}
-          <div className="fanta-pitch relative flex-1 rounded-xl bg-gradient-to-b from-emerald-900 via-emerald-850 to-emerald-950 border-2 border-emerald-600/40 shadow-inner overflow-hidden min-h-[480px] lg:min-h-0">
+          <div className="fanta-pitch relative rounded-xl bg-gradient-to-b from-emerald-900 via-emerald-850 to-emerald-950 border-2 border-emerald-600/40 shadow-inner overflow-hidden min-h-[480px] h-[520px] flex-shrink-0">
             
             {/* LINEE DEL CAMPO DA CALCIO */}
             <div className="absolute inset-2 border border-white/20 rounded pointer-events-none" />
@@ -1066,6 +1066,220 @@ ${benchText}
               })
             )}
 
+          </div>
+
+          {/* TABELLA SCHIERAMENTO 11 TITOLARI (DATI AD ALTA VISIBILITÀ) */}
+          <div className="bg-slate-950 border border-slate-800 rounded-xl p-3 shadow-xl space-y-2.5 flex-shrink-0">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-800 flex-wrap gap-2">
+              <div className="flex items-center gap-2">
+                <span className="px-2 py-0.5 rounded bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider">
+                  XI TITOLARI
+                </span>
+                <div>
+                  <h3 className="text-xs sm:text-sm font-black text-white uppercase tracking-wider flex items-center gap-1.5">
+                    <span>Tabella Schieramento</span>
+                    <span className="text-[11px] font-mono text-amber-400 font-bold">({formation.id})</span>
+                  </h3>
+                  <span className="text-[10px] sm:text-[11px] text-slate-400 font-mono block">
+                    Tutti i dati chiave dei titolari: Score, partita, titolarità Gazzetta e rating Fantacalcio
+                  </span>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 text-xs font-mono">
+                <span className="text-slate-400 font-bold">Ted Score Medio:</span>
+                <span className="px-2.5 py-1 rounded-lg bg-emerald-500 text-slate-950 font-black text-xs sm:text-sm shadow-sm">
+                  {starters.length > 0 ? (starters.reduce((acc, s) => acc + s.tedScore, 0) / starters.length).toFixed(1) : '0.0'}
+                </span>
+              </div>
+            </div>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr className="border-b border-slate-800 text-[10px] sm:text-[11px] font-black uppercase text-slate-400 tracking-wider bg-slate-900/60">
+                    <th className="py-2.5 px-2 text-center w-8">R</th>
+                    <th className="py-2.5 px-3">Calciatore</th>
+                    <th className="py-2.5 px-3">Partita Turno</th>
+                    <th className="py-2.5 px-2 text-center">Diff. FDR</th>
+                    <th className="py-2.5 px-2.5 text-center">Ted Score</th>
+                    <th className="py-2.5 px-2.5 text-center">Titolarità Gazzetta</th>
+                    <th className="py-2.5 px-2.5 text-center hidden md:table-cell">Rating Fanta</th>
+                    <th className="py-2.5 px-2.5 text-right">Azioni</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-800/60 font-sans">
+                  {starters.length === 0 ? (
+                    <tr>
+                      <td colSpan={8} className="py-6 text-center text-slate-400 italic">
+                        Nessun calciatore titolare schierato.
+                      </td>
+                    </tr>
+                  ) : (
+                    starters.map((card) => {
+                      const matchInfo = card.evaluation.match;
+                      const diffBadge = matchInfo ? getDifficultyBadge(matchInfo.difficulty) : null;
+                      const isSelectedForSwap = swappingPlayerId === card.player.id;
+                      const isTargetForSwap = swappingPlayerCard !== null && !swappingPlayerCard.isStarter && swappingPlayerCard.player.ruolo === card.player.ruolo;
+
+                      return (
+                        <tr
+                          key={card.player.id}
+                          onClick={() => setSelectedPlayerForReport(card)}
+                          className={`hover:bg-slate-900/90 transition-colors cursor-pointer group ${
+                            isSelectedForSwap 
+                              ? 'bg-amber-950/40 ring-1 ring-amber-400' 
+                              : isTargetForSwap 
+                                ? 'bg-emerald-950/40 ring-1 ring-emerald-400 animate-pulse' 
+                                : ''
+                          }`}
+                        >
+                          {/* Ruolo */}
+                          <td className="py-2.5 px-2 text-center">
+                            <span className={`w-6 h-6 rounded-md font-black text-xs inline-flex items-center justify-center shadow-sm ${getRoleBg(card.player.ruolo)}`}>
+                              {card.player.ruolo}
+                            </span>
+                          </td>
+
+                          {/* Calciatore e Squadra */}
+                          <td className="py-2.5 px-3">
+                            <div className="flex flex-col">
+                              <span className="font-black text-white text-xs sm:text-sm uppercase tracking-wide group-hover:text-amber-300 transition-colors">
+                                {card.player.nome}
+                              </span>
+                              <div className="flex items-center gap-1.5 text-[10px] sm:text-[11px] text-slate-400 font-mono">
+                                <span className="font-bold text-slate-300">{card.player.squadra}</span>
+                                <span>•</span>
+                                <span>Qt {card.player.quotazione}</span>
+                                {(card.evaluation.gazzetta.rigorista || card.player.rigorista) && (
+                                  <span className="text-amber-400 font-bold" title="Rigorista designato">⚽ Rig.</span>
+                                )}
+                                {card.evaluation.gazzetta.piazzati && (
+                                  <span className="text-blue-400 font-bold" title="Calci piazzati">🎯 Piaz.</span>
+                                )}
+                              </div>
+                            </div>
+                          </td>
+
+                          {/* Partita */}
+                          <td className="py-2.5 px-3">
+                            {matchInfo ? (
+                              <div className="flex flex-col">
+                                <div className="flex items-center gap-1.5 font-bold">
+                                  <span className={`px-1 py-0.2 rounded text-[9px] font-black uppercase ${
+                                    matchInfo.isHome 
+                                      ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/40' 
+                                      : 'bg-slate-900 text-slate-300 border border-slate-700'
+                                  }`}>
+                                    {matchInfo.isHome ? 'CASA' : 'FUORI'}
+                                  </span>
+                                  <span className="text-white font-black text-xs">
+                                    {matchInfo.isHome ? 'vs ' : '@ '}{matchInfo.opponent}
+                                  </span>
+                                </div>
+                                <span className="text-[10px] text-slate-400 font-mono mt-0.5">
+                                  {matchInfo.date} {matchInfo.time}
+                                </span>
+                              </div>
+                            ) : (
+                              <span className="text-slate-500 italic text-[11px]">-</span>
+                            )}
+                          </td>
+
+                          {/* Difficoltà FDR */}
+                          <td className="py-2.5 px-2 text-center">
+                            {diffBadge ? (
+                              <span className={`inline-block px-2 py-0.5 rounded-md font-bold text-[10px] sm:text-[11px] border leading-none shadow-sm ${diffBadge.color}`}>
+                                {diffBadge.label}
+                              </span>
+                            ) : (
+                              <span className="text-slate-500">-</span>
+                            )}
+                          </td>
+
+                          {/* Ted Score */}
+                          <td className="py-2.5 px-2.5 text-center">
+                            <span className={`inline-block px-2.5 py-1 rounded-lg font-black text-xs sm:text-sm border shadow-md min-w-[40px] ${getScoreColor(card.tedScore)}`}>
+                              {card.tedScore}
+                            </span>
+                          </td>
+
+                          {/* Titolarità Gazzetta */}
+                          <td className="py-2.5 px-2.5 text-center">
+                            <div className="flex flex-col items-center">
+                              <span className={`px-2 py-0.5 rounded-md font-bold text-[11px] sm:text-xs font-mono ${
+                                card.evaluation.gazzetta.titolaritaPercent >= 85 
+                                  ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/40' 
+                                  : card.evaluation.gazzetta.titolaritaPercent >= 60
+                                    ? 'bg-amber-950 text-amber-300 border border-amber-500/40'
+                                    : 'bg-red-950 text-red-300 border border-red-500/40'
+                              }`}>
+                                {card.evaluation.gazzetta.titolaritaPercent}%
+                              </span>
+                              {card.evaluation.gazzetta.ballottaggioCon ? (
+                                <span className="text-[9.5px] text-amber-400 font-bold mt-0.5 truncate max-w-[120px]" title={`Ballottaggio con ${card.evaluation.gazzetta.ballottaggioCon}`}>
+                                  ⚔️ {card.evaluation.gazzetta.ballottaggioCon}
+                                </span>
+                              ) : (
+                                <span className="text-[9.5px] text-slate-400 mt-0.5 capitalize">
+                                  {card.evaluation.gazzetta.status}
+                                </span>
+                              )}
+                            </div>
+                          </td>
+
+                          {/* Rating Fantacalcio */}
+                          <td className="py-2.5 px-2.5 text-center hidden md:table-cell">
+                            <div className="flex flex-col items-center">
+                              <span className="text-amber-400 font-black text-xs sm:text-sm tracking-wider">
+                                {'★'.repeat(card.evaluation.fantagazzetta.stars)}
+                              </span>
+                              <span className="text-[10px] text-slate-300 font-medium">
+                                {card.evaluation.fantagazzetta.fascia}
+                              </span>
+                            </div>
+                          </td>
+
+                          {/* Azioni */}
+                          <td className="py-2.5 px-2.5 text-right">
+                            <div className="flex items-center justify-end gap-1.5" onClick={(e) => e.stopPropagation()}>
+                              <button
+                                onClick={() => {
+                                  if (isSelectedForSwap) {
+                                    setSwappingPlayerId(null);
+                                  } else if (isTargetForSwap) {
+                                    handleSwap(swappingPlayerId!, card.player.id);
+                                  } else {
+                                    setSwappingPlayerId(card.player.id);
+                                  }
+                                }}
+                                className={`p-1.5 rounded-lg text-xs font-bold transition-all ${
+                                  isSelectedForSwap
+                                    ? 'bg-amber-400 text-slate-950 font-black'
+                                    : isTargetForSwap
+                                      ? 'bg-emerald-400 text-slate-950 font-black animate-pulse'
+                                      : 'bg-slate-800 text-slate-300 hover:text-amber-300 hover:bg-slate-700'
+                                }`}
+                                title={isSelectedForSwap ? "Annulla" : isTargetForSwap ? "Sostituisci" : "Scambia con panchina"}
+                              >
+                                <ArrowRightLeft className="w-3.5 h-3.5" />
+                              </button>
+                              <button
+                                onClick={() => setSelectedPlayerForReport(card)}
+                                className="px-2 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white text-[11px] font-bold flex items-center gap-1 transition-colors border border-slate-700"
+                                title="Vedi Match Report completo"
+                              >
+                                <span>Report</span>
+                                <ChevronRight className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
 
         </div>

@@ -189,6 +189,24 @@ export const TedLassoMobileView: React.FC = () => {
     return evaluateDefenseModifier(starters);
   }, [starters]);
 
+  // Media Ted Score degli 11 titolari
+  const avgStarterScore = useMemo(() => {
+    if (starters.length === 0) return 0;
+    const sum = starters.reduce((acc, c) => acc + c.tedScore, 0);
+    return Math.round(sum / starters.length);
+  }, [starters]);
+
+  // Ordinamento titolari per tabella: Ruolo (P -> D -> C -> A) poi per Ted Score decrescente
+  const sortedStartersForTable = useMemo(() => {
+    const roleOrder: Record<Role, number> = { P: 1, D: 2, C: 3, A: 4 };
+    return [...starters].sort((a, b) => {
+      const rA = roleOrder[a.player.ruolo] || 99;
+      const rB = roleOrder[b.player.ruolo] || 99;
+      if (rA !== rB) return rA - rB;
+      return b.tedScore - a.tedScore;
+    });
+  }, [starters]);
+
   const { topPick, scommessa, trappola } = useMemo(() => {
     const sorted = [...starters, ...bench].sort((a, b) => b.tedScore - a.tedScore);
     const top = sorted[0] || null;
@@ -676,6 +694,215 @@ ${benchText}
               }`}>
                 {defenseModifier.expectedBonus}
               </span>
+            </div>
+
+            {/* TABELLA 11 TITOLARI AD ALTA VISIBILITÀ DOPO IL CAMPO */}
+            <div className="bg-slate-900/95 border border-slate-800 rounded-2xl p-3 shadow-xl backdrop-blur-sm">
+              <div className="flex items-center justify-between mb-2.5 pb-2 border-b border-slate-800">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <h3 className="text-xs font-black text-white tracking-wide uppercase flex items-center gap-1.5">
+                    <span>11 Titolari Schierati</span>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 font-mono font-normal">
+                      {formation.id}
+                    </span>
+                  </h3>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[10px] text-slate-400 font-medium">Ted Score medio:</span>
+                  <span className={`px-1.5 py-0.5 rounded font-black text-[11px] border ${getScoreColor(avgStarterScore)}`}>
+                    {avgStarterScore}
+                  </span>
+                </div>
+              </div>
+
+              <div className="overflow-x-auto scrollbar-thin -mx-1 px-1">
+                <table className="w-full text-left border-collapse text-xs min-w-[560px]">
+                  <thead>
+                    <tr className="border-b border-slate-800 text-[10px] uppercase tracking-wider text-slate-400 font-bold bg-slate-950/70">
+                      <th className="py-2 px-1.5 text-center w-7">R</th>
+                      <th className="py-2 px-2.5">Calciatore</th>
+                      <th className="py-2 px-2.5">Partita Turno</th>
+                      <th className="py-2 px-1.5 text-center">Diff. FDR</th>
+                      <th className="py-2 px-2 text-center">Ted Score</th>
+                      <th className="py-2 px-2 text-center">Titolarità</th>
+                      <th className="py-2 px-2 text-center">Rating Fanta</th>
+                      <th className="py-2 px-2 text-right">Azioni</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-800/60">
+                    {sortedStartersForTable.length === 0 ? (
+                      <tr>
+                        <td colSpan={8} className="py-6 text-center text-slate-500 italic">
+                          Nessun titolare selezionato.
+                        </td>
+                      </tr>
+                    ) : (
+                      sortedStartersForTable.map((card) => {
+                        const isSelectedForSwap = swappingPlayerId === card.player.id;
+                        const isTargetForSwap = swappingPlayerCard !== null && !swappingPlayerCard.isStarter && swappingPlayerCard.player.ruolo === card.player.ruolo;
+                        const matchInfo = card.evaluation.match;
+                        const diffBadge = matchInfo ? getDifficultyBadge(matchInfo.difficulty) : null;
+
+                        return (
+                          <tr
+                            key={card.player.id}
+                            onClick={() => setSelectedPlayerForReport(card)}
+                            className={`transition-colors cursor-pointer group ${
+                              isSelectedForSwap 
+                                ? 'bg-amber-950/50 hover:bg-amber-950/70' 
+                                : isTargetForSwap
+                                  ? 'bg-emerald-950/50 hover:bg-emerald-950/70'
+                                  : 'hover:bg-slate-800/50'
+                            }`}
+                          >
+                            {/* Ruolo */}
+                            <td className="py-2 px-1.5 text-center">
+                              <span className={`inline-flex items-center justify-center w-5 h-5 rounded text-[10px] font-black shadow-sm ${getRoleBg(card.player.ruolo)}`}>
+                                {card.player.ruolo}
+                              </span>
+                            </td>
+
+                            {/* Nome + Squadra + Rigorista */}
+                            <td className="py-2 px-2.5">
+                              <div className="flex flex-col">
+                                <span className="font-black text-slate-100 group-hover:text-amber-300 transition-colors text-xs leading-tight">
+                                  {card.player.nome}
+                                </span>
+                                <div className="flex items-center gap-1.5 text-[9.5px] text-slate-400 font-mono mt-0.5">
+                                  <span className="font-semibold text-slate-300">{card.player.squadra}</span>
+                                  <span>•</span>
+                                  <span>Qt {card.player.quotazione}</span>
+                                  {(card.evaluation.gazzetta.rigorista || card.player.rigorista) && (
+                                    <span className="text-amber-400 font-bold" title="Rigorista designato">⚽ Rig.</span>
+                                  )}
+                                  {card.evaluation.gazzetta.piazzati && (
+                                    <span className="text-blue-400 font-bold" title="Calci piazzati">🎯 Piaz.</span>
+                                  )}
+                                </div>
+                              </div>
+                            </td>
+
+                            {/* Partita */}
+                            <td className="py-2 px-2.5">
+                              {matchInfo ? (
+                                <div className="flex flex-col">
+                                  <div className="flex items-center gap-1 font-bold">
+                                    <span className={`px-1 py-0.2 rounded text-[8.5px] font-black uppercase ${
+                                      matchInfo.isHome 
+                                        ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/40' 
+                                        : 'bg-slate-900 text-slate-300 border border-slate-700'
+                                    }`}>
+                                      {matchInfo.isHome ? 'CASA' : 'FUORI'}
+                                    </span>
+                                    <span className="text-white font-black text-[11px]">
+                                      {matchInfo.isHome ? 'vs ' : '@ '}{matchInfo.opponent}
+                                    </span>
+                                  </div>
+                                  <span className="text-[9.5px] text-slate-400 font-mono mt-0.5">
+                                    {matchInfo.date} {matchInfo.time}
+                                  </span>
+                                </div>
+                              ) : (
+                                <span className="text-slate-500 italic text-[10px]">-</span>
+                              )}
+                            </td>
+
+                            {/* Difficoltà FDR */}
+                            <td className="py-2 px-1.5 text-center">
+                              {diffBadge ? (
+                                <span className={`inline-block px-1.5 py-0.5 rounded font-bold text-[9.5px] border leading-none shadow-sm ${diffBadge.color}`}>
+                                  {diffBadge.label}
+                                </span>
+                              ) : (
+                                <span className="text-slate-500">-</span>
+                              )}
+                            </td>
+
+                            {/* Ted Score */}
+                            <td className="py-2 px-2 text-center">
+                              <span className={`inline-block px-2 py-0.5 rounded-md font-black text-xs border shadow-sm min-w-[34px] ${getScoreColor(card.tedScore)}`}>
+                                {card.tedScore}
+                              </span>
+                            </td>
+
+                            {/* Titolarità Gazzetta */}
+                            <td className="py-2 px-2 text-center">
+                              <div className="flex flex-col items-center">
+                                <span className={`px-1.5 py-0.5 rounded font-bold text-[10.5px] font-mono ${
+                                  card.evaluation.gazzetta.titolaritaPercent >= 85 
+                                    ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/40' 
+                                    : card.evaluation.gazzetta.titolaritaPercent >= 60
+                                      ? 'bg-amber-950 text-amber-300 border border-amber-500/40'
+                                      : 'bg-red-950 text-red-300 border border-red-500/40'
+                                }`}>
+                                  {card.evaluation.gazzetta.titolaritaPercent}%
+                                </span>
+                                {card.evaluation.gazzetta.ballottaggioCon ? (
+                                  <span className="text-[9px] text-amber-400 font-bold mt-0.5 truncate max-w-[100px]" title={`Ballottaggio con ${card.evaluation.gazzetta.ballottaggioCon}`}>
+                                    ⚔️ {card.evaluation.gazzetta.ballottaggioCon}
+                                  </span>
+                                ) : (
+                                  <span className="text-[9px] text-slate-400 mt-0.5 capitalize">
+                                    {card.evaluation.gazzetta.status}
+                                  </span>
+                                )}
+                              </div>
+                            </td>
+
+                            {/* Rating Fantacalcio */}
+                            <td className="py-2 px-2 text-center">
+                              <div className="flex flex-col items-center">
+                                <span className="text-amber-400 font-black text-xs tracking-wider">
+                                  {'★'.repeat(card.evaluation.fantagazzetta.stars)}
+                                </span>
+                                <span className="text-[9.5px] text-slate-300 font-medium">
+                                  {card.evaluation.fantagazzetta.fascia}
+                                </span>
+                              </div>
+                            </td>
+
+                            {/* Azioni */}
+                            <td className="py-2 px-2 text-right">
+                              <div className="flex items-center justify-end gap-1" onClick={(e) => e.stopPropagation()}>
+                                <button
+                                  onClick={() => {
+                                    if (isSelectedForSwap) {
+                                      setSwappingPlayerId(null);
+                                    } else if (isTargetForSwap) {
+                                      handleSwap(swappingPlayerId!, card.player.id);
+                                    } else {
+                                      setSwappingPlayerId(card.player.id);
+                                    }
+                                  }}
+                                  className={`p-1.5 rounded-lg text-xs font-bold transition-all ${
+                                    isSelectedForSwap
+                                      ? 'bg-amber-400 text-slate-950 font-black'
+                                      : isTargetForSwap
+                                        ? 'bg-emerald-400 text-slate-950 font-black animate-pulse'
+                                        : 'bg-slate-800 text-slate-300 hover:text-amber-300 hover:bg-slate-700'
+                                  }`}
+                                  title={isSelectedForSwap ? "Annulla" : isTargetForSwap ? "Sostituisci" : "Scambia con panchina"}
+                                >
+                                  <ArrowRightLeft className="w-3.5 h-3.5" />
+                                </button>
+                                <button
+                                  onClick={() => setSelectedPlayerForReport(card)}
+                                  className="px-2 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white text-[10px] font-bold flex items-center gap-0.5 transition-colors border border-slate-700"
+                                  title="Vedi Match Report completo"
+                                >
+                                  <span>Report</span>
+                                  <ChevronRight className="w-3 h-3" />
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         )}
