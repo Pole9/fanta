@@ -23,6 +23,7 @@ import {
   MatchdayType,
   getTeamUpcomingMatches
 } from '../data/matchdayData';
+import { SERIE_A_SHARED_SURNAMES } from '../data/injuryData';
 import { PlayerPerformanceChart } from './PlayerPerformanceChart';
 import { getDiddiMatchdayYoutubeAdvice, getFantagazzettaConsigliatoStatus } from '../utils/matchdayAdviceProvider';
 import { 
@@ -299,9 +300,9 @@ export const TedLassoView: React.FC = () => {
         if (uParts.length >= 2 && bParts.length >= 2) {
           if (uParts.every(p => bParts.includes(p)) || bParts.every(p => uParts.includes(p))) return true;
         } else if (uParts.length === 1 && bParts.length === 1 && uParts[0] === bParts[0]) {
-          return true;
+          if (!SERIE_A_SHARED_SURNAMES.has(uParts[0])) return true;
         } else if (uParts.length > 1 && bParts.length === 1) {
-          if (uParts[uParts.length - 1] === bParts[0]) return true;
+          if (uParts[uParts.length - 1] === bParts[0] && !SERIE_A_SHARED_SURNAMES.has(bParts[0])) return true;
         }
       }
       return false;
@@ -525,14 +526,21 @@ ${benchText}
             BELIEVE
           </div>
 
-          <div>
-            <h1 className="text-sm sm:text-base font-black text-white tracking-wide uppercase flex items-center gap-2">
-              <span>TED LASSO</span>
-              <span className="text-amber-400 text-xs sm:text-sm font-bold">Consigli Schieramento</span>
-            </h1>
-            <span className="text-xs text-slate-400 hidden sm:inline font-mono">
-              {currentTitle}
-            </span>
+          <div className="flex items-center gap-2">
+            <img 
+              src="/logo.png" 
+              alt="Logo Ted Lasso" 
+              className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl object-contain bg-slate-900 border border-amber-400/30 p-0.5 shadow-sm" 
+            />
+            <div>
+              <h1 className="text-sm sm:text-base font-black text-white tracking-wide uppercase flex items-center gap-2">
+                <span>TED LASSO</span>
+                <span className="text-amber-400 text-xs sm:text-sm font-bold">Consigli Schieramento</span>
+              </h1>
+              <span className="text-xs text-slate-400 hidden sm:inline font-mono">
+                {currentTitle}
+              </span>
+            </div>
           </div>
         </div>
 

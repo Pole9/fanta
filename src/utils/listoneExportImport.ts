@@ -84,7 +84,7 @@ function buildExportRows(
       ? `${redazioneAdvice.fascia || ''}: ${redazioneAdvice.commentoRedazione || ''}`.trim() 
       : '';
 
-    const tattico = getTatticoAdvice(p.nome) || '';
+    const tattico = getTatticoAdvice(p.nome, p.squadra) || '';
     const noteUtente = p.note || '';
 
     const titolaritaStr = s27?.titolaritaDettaglio || p.titolarita2026_27 || '';

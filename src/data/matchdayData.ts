@@ -1,5 +1,5 @@
 // Database Turno di Serie A, Probabili Formazioni Gazzetta dello Sport e Consigli Fantagazzetta/Fantacalcio.it
-import { INJURY_DATABASE, getInjuryInfo } from './injuryData';
+import { INJURY_DATABASE, getInjuryInfo, SERIE_A_SHARED_SURNAMES } from './injuryData';
 import { getTatticoAdvice } from './tatticoData';
 
 export interface SerieAMatch {
@@ -1565,12 +1565,12 @@ export function matchSyncedPlayer(
         return val;
       }
     } else if (tokens.length === 1 && keyTokens.length === 1) {
-      // Evita match su singoli cognomi di omonimi o fratelli
-      if (tokens[0] === keyTokens[0] && !['THURAM', 'ESPOSITO', 'CARBONI', 'KONE', 'SULEMANA', 'MARTINEZ', 'ROSSI', 'SILVA'].includes(tokens[0])) {
+      // Evita match su singoli cognomi di omonimi, fratelli e cognomi condivisi in Serie A
+      if (tokens[0] === keyTokens[0] && !SERIE_A_SHARED_SURNAMES.has(tokens[0])) {
         return val;
       }
     } else if (tokens.length >= 2 && keyTokens.length === 1) {
-      if (keyTokens[0] === tokens[tokens.length - 1] && !['THURAM', 'ESPOSITO', 'CARBONI', 'KONE', 'SULEMANA', 'MARTINEZ', 'ROSSI', 'SILVA'].includes(keyTokens[0])) {
+      if (keyTokens[0] === tokens[tokens.length - 1] && !SERIE_A_SHARED_SURNAMES.has(keyTokens[0])) {
         return val;
       }
     }
@@ -1707,7 +1707,7 @@ export function getPlayerMatchdayEvaluation(
   }
 
   // Tattico Luca Diddi
-  const tatticoAdvice = getTatticoAdvice(normName);
+  const tatticoAdvice = getTatticoAdvice(normName, teamName);
 
   return {
     match: fixture,

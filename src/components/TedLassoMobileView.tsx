@@ -16,6 +16,7 @@ import {
   MatchdayType,
   getTeamUpcomingMatches
 } from '../data/matchdayData';
+import { SERIE_A_SHARED_SURNAMES } from '../data/injuryData';
 import { PlayerPerformanceChart } from './PlayerPerformanceChart';
 import { getDiddiMatchdayYoutubeAdvice, getFantagazzettaConsigliatoStatus } from '../utils/matchdayAdviceProvider';
 import { 
@@ -239,9 +240,9 @@ export const TedLassoMobileView: React.FC = () => {
         if (uParts.length >= 2 && bParts.length >= 2) {
           if (uParts.every(p => bParts.includes(p)) || bParts.every(p => uParts.includes(p))) return true;
         } else if (uParts.length === 1 && bParts.length === 1 && uParts[0] === bParts[0]) {
-          return true;
+          if (!SERIE_A_SHARED_SURNAMES.has(uParts[0])) return true;
         } else if (uParts.length > 1 && bParts.length === 1) {
-          if (uParts[uParts.length - 1] === bParts[0]) return true;
+          if (uParts[uParts.length - 1] === bParts[0] && !SERIE_A_SHARED_SURNAMES.has(bParts[0])) return true;
         }
       }
       return false;
@@ -395,6 +396,11 @@ ${benchText}
       <header className="bg-slate-900 border-b border-slate-800 p-2.5 sticky top-0 z-40 shadow-md flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
+            <img 
+              src="/logo.png" 
+              alt="Logo Ted Lasso" 
+              className="w-7 h-7 rounded-lg object-contain bg-slate-900 border border-amber-400/30 p-0.5 shadow-sm" 
+            />
             <div 
               onClick={() => setQuoteIndex(prev => (prev + 1) % TED_LASSO_QUOTES.length)}
               className="px-2 py-0.5 rounded bg-amber-400 text-slate-950 font-black tracking-widest text-[10px] uppercase shadow -rotate-1 active:rotate-0 cursor-pointer"

@@ -483,7 +483,23 @@ export const INJURY_DATABASE: Record<string, InjuryInfo> = {
   }
 };
 
-// Funzione di lookup con verifica rigorosa di NOME, INIZIALE e SQUADRA per evitare scambi tra fratelli/omonimi
+// Elenco esaustivo di tutti i cognomi condivisi da più calciatori in Serie A (fratelli o omonimi)
+export const SERIE_A_SHARED_SURNAMES = new Set<string>([
+  'ADAMS', 'BERISHA', 'CARBONI', 'COLOMBO', 'CONCEICAO', 'DE BRUYNE', 'DE GEA', 'DE KETELAERE',
+  'DE WINTER', 'DI LORENZO', 'EL AZZOUZI', 'EL SHAARAWY', 'ESPOSITO', 'FERRARI', 'GONCALVES',
+  'GONZALEZ', 'GUDMUNDSSON', 'HERNANDEZ', 'JIMENEZ', 'KONE', 'KONÈ', 'LOPEZ', 'MARTINEZ',
+  'MIRANDA', 'NDIAYE', 'PELLEGRINI', 'PEREIRA', 'PESSINA', 'RICCI', 'RODRIGUEZ', 'ROMANO',
+  'ROSSI', 'RRAHMANI', 'SANCHEZ', 'SANTOS', 'SILVA', 'STANKOVIC', 'SULEMANA', 'TERRACCIANO',
+  'THURAM', 'TOURE', 'TOURÈ', 'TRAORE', 'ZAPATA'
+]);
+
+// Casi particolari di omonimia all'interno dello stesso club
+const SAME_CLUB_HOMONYMS = new Set<string>([
+  'MARTINEZ_INTER', // Josep Martinez (P) vs Lautaro Martinez (A)
+  'TERRACCIANO_MILAN'
+]);
+
+// Funzione di lookup con verifica rigorosa di NOME, INIZIALE e SQUADRA per evitare scambi tra fratelli e omonimi con lo stesso cognome
 export function getInjuryInfo(name: string, teamName?: string): InjuryInfo | null {
   if (!name) return null;
   
@@ -528,24 +544,27 @@ export function getInjuryInfo(name: string, teamName?: string): InjuryInfo | nul
       continue;
     }
 
-    // Se l'infortunato ha un'iniziale (es. K in Thuram K. o I in Konè I.)
-    if (infoInitial) {
-      if (initial) {
-        // Entrambi hanno iniziale: devono coincidere esattamente o avere prefisso comune (es. "FP" e "F")
+    // Se il cognome è condiviso in Serie A da più calciatori, o se uno dei due ha iniziali
+    const isShared = SERIE_A_SHARED_SURNAMES.has(surname) || infoInitial !== '' || initial !== '';
+
+    if (isShared) {
+      // 1. Senza squadra non facciamo MAI match alla cieca su cognomi condivisi
+      if (!cleanT) {
+        continue;
+      }
+      // 2. Se entrambi hanno iniziale, devono essere compatibili
+      if (infoInitial && initial) {
         if (initial !== infoInitial && !infoInitial.startsWith(initial) && !initial.startsWith(infoInitial)) {
           continue;
         }
-      } else {
-        // Il giocatore cercato NON ha iniziale (es. "THURAM"), ma l'infortunato ha un'iniziale (es. "THURAM K.")
-        // Se non abbiamo la squadra o la squadra non combacia, NON fare match per evitare scambi tra fratelli!
-        if (!cleanT || !isTeamMatch(cleanT, infoTeamClean)) {
+      }
+      // 3. Se l'infortunato ha iniziale e il cercato no, controlla se nel club ci sono omonimi
+      if (infoInitial && !initial) {
+        const clubKey = `${surname}_${infoTeamClean.toUpperCase()}`;
+        if (SAME_CLUB_HOMONYMS.has(clubKey)) {
+          // Ambiguità interna allo stesso club (es. Josep vs Lautaro all'Inter): iniziale obbligatoria!
           continue;
         }
-      }
-    } else {
-      // L'infortunato nel DB NON ha iniziale: se il giocatore cercato ha un'iniziale e non abbiamo la squadra, cautela
-      if (initial && !cleanT) {
-        continue;
       }
     }
 

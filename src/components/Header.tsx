@@ -57,7 +57,12 @@ export const Header: React.FC = () => {
       <div className="w-full flex items-center justify-between gap-1 text-xs">
         
         {/* FILTRI RUOLO E SQUADRA MASTER (COMPATTI, NESSUN OVERFLOW) */}
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1.5">
+          <img 
+            src="/logo.png" 
+            alt="Logo" 
+            className="w-5 h-5 rounded object-contain bg-slate-950 border border-slate-700/60 p-0.5" 
+          />
 
 
           {/* FILTRO SQUADRA GLOBALE (COMPATTO) */}

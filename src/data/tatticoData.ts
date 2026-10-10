@@ -180,18 +180,41 @@ export const TATTICO_ADVICE: Record<string, string> = {
   "HOJLUND": "Tattico: A 75 crediti (25%) FOLLIA! Non ha più di 10-12 gol con Allegri. Meglio Thuram a 72 cr, Ramos a 84 cr (28%), o risparmiare con Davis/Voltemade/Simeone."
 };
 
-export function getTatticoAdvice(nome: string): string | null {
+export function getTatticoAdvice(nome: string, teamName?: string): string | null {
   if (!nome) return null;
   const upper = nome.toUpperCase().trim();
   if (TATTICO_ADVICE[upper]) return TATTICO_ADVICE[upper];
   
-  const nameTokens = upper.split(/[\s-]+/).filter(t => t.length > 2);
+  // Alias esatti per omonimi e fratelli
+  if (upper === 'ESPOSITO F.P.' || upper === 'ESPOSITO FP') {
+    return TATTICO_ADVICE['ESPOSITO P.'] || null;
+  }
+  if (upper === 'THURAM M.' || upper === 'THURAM MARCUS') {
+    return TATTICO_ADVICE['THURAM'] || null;
+  }
   
-  // Match per cognome o token completo, evitando match parziali spuri come 'ROV' in altri nomi
+  const nameTokens = upper.split(/[\s-]+/).filter(t => t.length > 2);
+  const surname = nameTokens[0] || '';
+  
+  // Match per cognome o token completo, evitando match parziali spuri e verificando la squadra per omonimi
   for (const [key, advice] of Object.entries(TATTICO_ADVICE)) {
     if (upper === key) return advice;
     const keyTokens = key.split(/[\s-]+/).filter(t => t.length > 2);
     if (keyTokens.length > 0 && keyTokens.every(kt => nameTokens.includes(kt))) {
+      // Disambiguazione omonimi e fratelli tramite squadra
+      if (surname === 'ESPOSITO') {
+        if (teamName) {
+          const tNorm = teamName.toUpperCase();
+          if (tNorm.includes('INTER') && !key.includes('P.')) continue;
+          if (tNorm.includes('SASSUOLO') && !key.includes('SE.')) continue;
+        }
+      }
+      if (surname === 'THURAM') {
+        if (teamName) {
+          const tNorm = teamName.toUpperCase();
+          if (tNorm.includes('JUVENTUS')) continue; // Il Tattico consiglia Marcus Thuram dell'Inter
+        }
+      }
       return advice;
     }
   }
