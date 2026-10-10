@@ -378,7 +378,7 @@ export const AttackersWarRoom: React.FC = () => {
           <div className="space-y-1 flex-1 min-h-0 overflow-y-auto pr-1 scrollbar-thin">
             {availableAttackers.map(attacker => {
               const isSelected = playerInFocus?.id === attacker.id;
-              const injury = getInjuryInfo(attacker.nome);
+              const injury = getInjuryInfo(attacker.nome, attacker.squadra);
 
               return (
                 <div

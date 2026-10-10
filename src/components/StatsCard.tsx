@@ -34,8 +34,8 @@ export const StatsCard: React.FC<StatsCardProps> = ({ player }) => {
   // Informazioni infortunio e tempo di rientro previsto da Gazzetta / Fantacalcio
   const injury = useMemo(() => {
     if (!player) return null;
-    return getInjuryInfo(player.nome);
-  }, [player?.nome]);
+    return getInjuryInfo(player.nome, player.squadra);
+  }, [player?.nome, player?.squadra]);
 
   // Garanzia di unione con l'archivio ufficiale per statistiche e squadra precedente
   const sourcePlayer = useMemo(() => {

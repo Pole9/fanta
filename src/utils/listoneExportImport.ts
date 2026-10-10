@@ -74,7 +74,7 @@ function buildExportRows(
     const percInfo = percentilesMap?.get(p.id);
     const percentileStr = percInfo ? `${percInfo.percentile}% (${percInfo.comment})` : '';
 
-    const injury = getInjuryInfo(p.nome);
+    const injury = getInjuryInfo(p.nome, p.squadra);
     const injuryStr = injury 
       ? `${injury.isSqualificato ? '[SQUALIFICATO] ' : ''}${injury.infortunio}${injury.rientroPrevisto ? ` (Rientro: ${injury.rientroPrevisto})` : ''}` 
       : '';

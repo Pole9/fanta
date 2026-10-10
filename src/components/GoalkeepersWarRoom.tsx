@@ -777,7 +777,7 @@ export const GoalkeepersWarRoom: React.FC = () => {
               const isSelected = playerInFocus?.id === p.id;
               const isStarter = isTitolarissimo(p);
               const redazioneComment = FANTAGAZZETTA_ADVICE[p.nome.toUpperCase()]?.commentoRedazione;
-              const injury = getInjuryInfo(p.nome);
+              const injury = getInjuryInfo(p.nome, p.squadra);
 
               return (
                 <div

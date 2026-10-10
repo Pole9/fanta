@@ -146,7 +146,7 @@ export const ListoneView: React.FC = () => {
       const s26 = p.seasons?.["2025/26"] || off?.seasons?.["2025/26"];
       const pctInfo = percentilesMap.get(p.id);
       const pct = pctInfo ? pctInfo.percentile : 0;
-      const injury = getInjuryInfo(p.nome);
+      const injury = getInjuryInfo(p.nome, p.squadra);
       
       return {
         ...p,

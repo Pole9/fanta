@@ -1509,40 +1509,68 @@ export function cleanPlayerName(str: string): string {
 
 export function matchSyncedPlayer(
   playerName: string,
-  syncedPlayers: Record<string, SyncedOnlinePlayer>
+  syncedPlayers: Record<string, SyncedOnlinePlayer>,
+  teamName?: string
 ): SyncedOnlinePlayer | null {
-  if (!syncedPlayers) return null;
+  if (!syncedPlayers || !playerName) return null;
+
+  // 1. Chiave alfanumerica diretta (es. "ESPOSITO F.P." -> "ESPOSITOFP", "THURAM" -> "THURAM")
+  const alphaKey = playerName.toUpperCase().replace(/[^A-Z0-9]/g, '');
+  if (syncedPlayers[alphaKey]) {
+    const candidate = syncedPlayers[alphaKey];
+    // Se è specificata la squadra, assicurati che la fonte non indichi una squadra diversa
+    if (teamName) {
+      const tNorm = teamName.toUpperCase().replace(/[^A-Z0-9]/g, '');
+      const srcUpper = (candidate.source || '').toUpperCase();
+      const knownClubs = ['INTER', 'JUVENTUS', 'MILAN', 'NAPOLI', 'ROMA', 'LAZIO', 'ATALANTA', 'FIORENTINA', 'BOLOGNA', 'TORINO', 'GENOA', 'MONZA', 'CAGLIARI', 'LECCE', 'PARMA', 'VERONA', 'COMO', 'EMPOLI', 'VENEZIA', 'UDINESE', 'SASSUOLO'];
+      for (const club of knownClubs) {
+        if (srcUpper.includes(club)) {
+          if (!tNorm.includes(club) && !club.includes(tNorm)) {
+            // Mismatch di club tra giocatore cercato e candidato
+            return null;
+          }
+        }
+      }
+    }
+    return candidate;
+  }
+
   const norm = cleanPlayerName(playerName);
   if (syncedPlayers[norm]) return syncedPlayers[norm];
 
   // Alias comuni Fantacalcio / Gazzetta
   if (norm.includes('MARTINEZ L') || norm === 'LAUTARO') {
-    if (syncedPlayers['MARTINEZ L'] || syncedPlayers['MARTINEZ']) return syncedPlayers['MARTINEZ L'] || syncedPlayers['MARTINEZ'];
+    if (syncedPlayers['MARTINEZL'] || syncedPlayers['MARTINEZ L'] || syncedPlayers['MARTINEZ']) return syncedPlayers['MARTINEZL'] || syncedPlayers['MARTINEZ L'] || syncedPlayers['MARTINEZ'];
   }
   if (norm.includes('GONCALO RAMOS') || norm === 'RAMOS G') {
-    if (syncedPlayers['RAMOS G'] || syncedPlayers['RAMOS']) return syncedPlayers['RAMOS G'] || syncedPlayers['RAMOS'];
+    if (syncedPlayers['RAMOSG'] || syncedPlayers['RAMOS G'] || syncedPlayers['RAMOS']) return syncedPlayers['RAMOSG'] || syncedPlayers['RAMOS G'] || syncedPlayers['RAMOS'];
   }
   if (norm.includes('PEDRO GONCALVES') || norm === 'GONCALVES P') {
-    if (syncedPlayers['GONCALVES P'] || syncedPlayers['GONCALVES']) return syncedPlayers['GONCALVES P'] || syncedPlayers['GONCALVES'];
+    if (syncedPlayers['GONCALVESP'] || syncedPlayers['GONCALVES P'] || syncedPlayers['GONCALVES']) return syncedPlayers['GONCALVESP'] || syncedPlayers['GONCALVES P'] || syncedPlayers['GONCALVES'];
   }
   if (norm.includes('DAVIS') || norm === 'DAVIS K') {
-    if (syncedPlayers['DAVIS K'] || syncedPlayers['DAVIS']) return syncedPlayers['DAVIS K'] || syncedPlayers['DAVIS'];
+    if (syncedPlayers['DAVISK'] || syncedPlayers['DAVIS K'] || syncedPlayers['DAVIS']) return syncedPlayers['DAVISK'] || syncedPlayers['DAVIS K'] || syncedPlayers['DAVIS'];
   }
 
   const tokens = norm.split(' ').filter(t => t.length > 2);
   for (const [key, val] of Object.entries(syncedPlayers)) {
-    if (key === norm) return val;
-    const keyTokens = key.split(' ').filter(t => t.length > 2);
+    const keyAlpha = key.toUpperCase().replace(/[^A-Z0-9]/g, '');
+    if (keyAlpha === alphaKey) return val;
+
+    const valNorm = cleanPlayerName(val.name);
+    const keyTokens = valNorm.split(' ').filter(t => t.length > 2);
     // Se entrambi i nomi hanno più token, controlla corrispondenza completa
     if (tokens.length >= 2 && keyTokens.length >= 2) {
       if (tokens.every(t => keyTokens.includes(t)) || keyTokens.every(kt => tokens.includes(kt))) {
         return val;
       }
     } else if (tokens.length === 1 && keyTokens.length === 1) {
-      if (tokens[0] === keyTokens[0]) return val;
+      // Evita match su singoli cognomi di omonimi o fratelli
+      if (tokens[0] === keyTokens[0] && !['THURAM', 'ESPOSITO', 'CARBONI', 'KONE', 'SULEMANA', 'MARTINEZ', 'ROSSI', 'SILVA'].includes(tokens[0])) {
+        return val;
+      }
     } else if (tokens.length >= 2 && keyTokens.length === 1) {
-      // Es. norm = 'LAUTARO MARTINEZ', key = 'MARTINEZ' -> solo se cognome unico corrispondente
-      if (keyTokens[0] === tokens[tokens.length - 1] && !['MARTINEZ', 'ROSSI', 'ESPOSITO', 'SILVA'].includes(keyTokens[0])) {
+      if (keyTokens[0] === tokens[tokens.length - 1] && !['THURAM', 'ESPOSITO', 'CARBONI', 'KONE', 'SULEMANA', 'MARTINEZ', 'ROSSI', 'SILVA'].includes(keyTokens[0])) {
         return val;
       }
     }
@@ -1559,7 +1587,7 @@ export function getPlayerMatchdayEvaluation(
 ): PlayerMatchdayEvaluation {
   const normName = playerName.toUpperCase().trim();
   const fixture = getTeamFixture(teamName, matchdayType);
-  const injury = getInjuryInfo(normName);
+  const injury = getInjuryInfo(normName, teamName);
 
   // Gazzetta
   const gazzettaCustom = GAZZETTA_LINEUPS[normName];
@@ -1590,7 +1618,7 @@ export function getPlayerMatchdayEvaluation(
 
   // Integrazione dati freschi live da sincronizzazione online (se presenti)
   if (syncedData?.players && !injury) {
-    const synced = matchSyncedPlayer(normName, syncedData.players);
+    const synced = matchSyncedPlayer(normName, syncedData.players, teamName);
     if (synced) {
       gazzetta.titolaritaPercent = synced.titolaritaPercent;
       gazzetta.status = synced.status;
@@ -1666,7 +1694,7 @@ export function getPlayerMatchdayEvaluation(
 
   // Aggiustamento dinamico Fantagazzetta se da live sync emerge un ballottaggio rischioso o panchina certa
   if (syncedData?.players && !injury) {
-    const synced = matchSyncedPlayer(normName, syncedData.players);
+    const synced = matchSyncedPlayer(normName, syncedData.players, teamName);
     if (synced) {
       if (synced.titolaritaPercent <= 40 && fantagazzetta.stars > 2) {
         fantagazzetta.stars = 2;

@@ -88,7 +88,7 @@ export function getPlayerPerformanceHistory(player: Player, playedMatchdaysCount
   };
 
   // Se il calciatore ha subito infortuni recenti o è attualmente infortunato
-  const injuryInfo = getInjuryInfo(player.nome);
+  const injuryInfo = getInjuryInfo(player.nome, player.squadra);
   const hasInjury = !!injuryInfo || 
     (!!s26?.motivoTitolarita && (s26.motivoTitolarita === 'titolare_rotto' || s26.motivoTitolarita === 'infortunato')) || 
     player.motivo2026_27 === 'titolare_rotto' || 
