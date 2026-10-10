@@ -37,7 +37,11 @@ import {
   Monitor,
   AlertTriangle,
   HelpCircle,
-  Users
+  Users,
+  Sun,
+  Moon,
+  LayoutGrid,
+  List
 } from 'lucide-react';
 
 const ROLE_NAMES: Record<Role, string> = {
@@ -54,8 +58,13 @@ export const TedLassoMobileView: React.FC = () => {
     players, 
     syncedOnlineData, 
     isSyncingOnline, 
-    syncOnlineData 
+    syncOnlineData,
+    theme,
+    toggleTheme
   } = useAuction();
+
+  const isLight = theme === 'light';
+  const [startersViewMode, setStartersViewMode] = useState<'table' | 'cards'>('table');
 
   // Calcolo dinamico turno Serie A: fino a lunedì alle ore 22:00 propone la giornata in corso (attuale), poi scala a precedente
   const matchdaySchedule = useMemo(() => getActiveMatchdaySchedule(), []);
@@ -364,20 +373,45 @@ ${benchText}
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 80) return 'text-emerald-400 bg-emerald-950/80 border-emerald-500/50';
-    if (score >= 65) return 'text-blue-400 bg-blue-950/80 border-blue-500/50';
-    if (score >= 50) return 'text-amber-400 bg-amber-950/80 border-amber-500/50';
-    return 'text-rose-400 bg-rose-950/80 border-rose-500/50';
+    if (score >= 80) return isLight ? 'text-white bg-emerald-600 border-emerald-700 shadow-sm font-black' : 'text-emerald-400 bg-emerald-950/80 border-emerald-500/50 font-black';
+    if (score >= 65) return isLight ? 'text-white bg-blue-600 border-blue-700 shadow-sm font-black' : 'text-blue-400 bg-blue-950/80 border-blue-500/50 font-black';
+    if (score >= 50) return isLight ? 'text-slate-950 bg-amber-400 border-amber-500 shadow-sm font-black' : 'text-amber-400 bg-amber-950/80 border-amber-500/50 font-black';
+    return isLight ? 'text-white bg-rose-600 border-rose-700 shadow-sm font-black' : 'text-rose-400 bg-rose-950/80 border-rose-500/60 font-black';
   };
 
   const getDifficultyBadge = (diff: number) => {
     switch (diff) {
-      case 1: return { label: '1/5 Facile', tag: 'EASY', color: 'text-emerald-400 bg-emerald-950/80 border-emerald-500/50' };
-      case 2: return { label: '2/5 Abbordabile', tag: 'OK', color: 'text-emerald-300 bg-emerald-950/60 border-emerald-500/40' };
-      case 3: return { label: '3/5 Equilibrata', tag: 'EQUIL.', color: 'text-amber-300 bg-amber-950/70 border-amber-500/50' };
-      case 4: return { label: '4/5 Tosta', tag: 'DIFF.', color: 'text-orange-400 bg-orange-950/70 border-orange-500/50' };
+      case 1: 
+        return { 
+          label: '1/5 Facile', 
+          tag: 'FACILE', 
+          color: isLight ? 'text-emerald-900 bg-emerald-100 border-emerald-400 font-bold' : 'text-emerald-400 bg-emerald-950/80 border-emerald-500/50' 
+        };
+      case 2: 
+        return { 
+          label: '2/5 Abbordabile', 
+          tag: 'OK', 
+          color: isLight ? 'text-emerald-800 bg-emerald-50 border-emerald-300 font-bold' : 'text-emerald-300 bg-emerald-950/60 border-emerald-500/40' 
+        };
+      case 3: 
+        return { 
+          label: '3/5 Equilibrata', 
+          tag: 'EQUIL.', 
+          color: isLight ? 'text-amber-900 bg-amber-100 border-amber-400 font-bold' : 'text-amber-300 bg-amber-950/70 border-amber-500/50' 
+        };
+      case 4: 
+        return { 
+          label: '4/5 Tosta', 
+          tag: 'DIFF.', 
+          color: isLight ? 'text-orange-900 bg-orange-100 border-orange-400 font-bold' : 'text-orange-400 bg-orange-950/70 border-orange-500/50' 
+        };
       case 5:
-      default: return { label: '5/5 Proibitiva', tag: 'DURA', color: 'text-rose-400 bg-rose-950/80 border-rose-500/60' };
+      default: 
+        return { 
+          label: '5/5 Proibitiva', 
+          tag: 'DURA', 
+          color: isLight ? 'text-rose-900 bg-rose-100 border-rose-400 font-black' : 'text-rose-400 bg-rose-950/80 border-rose-500/60' 
+        };
     }
   };
 
@@ -760,236 +794,445 @@ ${benchText}
               </span>
             </div>
 
-            {/* TABELLA 11 TITOLARI AD ALTA VISIBILITÀ DOPO IL CAMPO */}
-            <div className="bg-slate-900/95 border border-slate-800 rounded-2xl p-3 shadow-xl backdrop-blur-sm">
-              <div className="flex items-center justify-between mb-2.5 pb-2 border-b border-slate-800">
+            {/* SEZIONE 11 TITOLARI (VISTA ORIZZONTALE, DOPPIO TEMA CHIARO/SCURO, DATI MAGGIORATI) */}
+            <div className={`rounded-2xl p-3 shadow-xl backdrop-blur-sm border transition-colors space-y-2.5 ${
+              isLight ? 'bg-white border-slate-300 text-slate-900 shadow-md' : 'bg-slate-900/95 border-slate-800 text-slate-100'
+            }`}>
+              <div className={`flex items-center justify-between pb-2 border-b flex-wrap gap-2 ${
+                isLight ? 'border-slate-200' : 'border-slate-800'
+              }`}>
                 <div className="flex items-center gap-1.5">
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                  <h3 className="text-xs font-black text-white tracking-wide uppercase flex items-center gap-1.5">
-                    <span>11 Titolari Schierati</span>
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-300 font-mono font-normal">
-                      {formation.id}
+                  <div>
+                    <h3 className={`text-xs font-black tracking-wide uppercase flex items-center gap-1.5 ${
+                      isLight ? 'text-slate-950' : 'text-white'
+                    }`}>
+                      <span>11 Titolari</span>
+                      <span className="text-[10px] px-1.5 py-0.2 rounded bg-amber-400 text-slate-950 font-black font-mono">
+                        {formation.id}
+                      </span>
+                    </h3>
+                    <span className={`text-[9.5px] font-mono block ${isLight ? 'text-slate-600' : 'text-slate-400'}`}>
+                      Scroll orizzontale • Dati e avversari
                     </span>
-                  </h3>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <span className="text-[10px] text-slate-400 font-medium">Ted Score medio:</span>
-                  <span className={`px-1.5 py-0.5 rounded font-black text-[11px] border ${getScoreColor(avgStarterScore)}`}>
-                    {avgStarterScore}
-                  </span>
+
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  {/* Ted Score Medio */}
+                  <div className="flex items-center gap-1 text-[11px] font-mono">
+                    <span className={isLight ? 'text-slate-600 font-bold' : 'text-slate-400 font-medium'}>Media:</span>
+                    <span className={`px-1.5 py-0.5 rounded font-black text-xs border ${getScoreColor(avgStarterScore)}`}>
+                      {avgStarterScore}
+                    </span>
+                  </div>
+
+                  {/* Switch Tabella / Card Slider */}
+                  <div className={`flex items-center p-0.5 rounded-lg border ${
+                    isLight ? 'bg-slate-100 border-slate-300' : 'bg-slate-950 border-slate-800'
+                  }`}>
+                    <button
+                      onClick={() => setStartersViewMode('table')}
+                      className={`p-1 rounded-md transition-all ${
+                        startersViewMode === 'table'
+                          ? (isLight ? 'bg-white text-slate-950 shadow-sm' : 'bg-slate-800 text-amber-400 shadow-sm')
+                          : (isLight ? 'text-slate-500' : 'text-slate-400')
+                      }`}
+                      title="Vista Tabella Orizzontale"
+                    >
+                      <List className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={() => setStartersViewMode('cards')}
+                      className={`p-1 rounded-md transition-all ${
+                        startersViewMode === 'cards'
+                          ? (isLight ? 'bg-white text-slate-950 shadow-sm' : 'bg-slate-800 text-amber-400 shadow-sm')
+                          : (isLight ? 'text-slate-500' : 'text-slate-400')
+                      }`}
+                      title="Vista Card Slider Orizzontale"
+                    >
+                      <LayoutGrid className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+
+                  {/* Toggle Tema Chiaro / Scuro */}
+                  <button
+                    onClick={toggleTheme}
+                    className={`p-1 rounded-lg border transition-all shadow-sm ${
+                      isLight 
+                        ? 'bg-slate-100 text-slate-800 border-slate-300 hover:bg-slate-200' 
+                        : 'bg-slate-950 text-slate-200 border-slate-700 hover:bg-slate-800'
+                    }`}
+                    title={isLight ? 'Tema Scuro' : 'Tema Chiaro'}
+                  >
+                    {isLight ? <Moon className="w-3.5 h-3.5 text-blue-600" /> : <Sun className="w-3.5 h-3.5 text-amber-400" />}
+                  </button>
                 </div>
               </div>
 
-              <div className="overflow-x-auto scrollbar-thin -mx-1 px-1">
-                <table className="w-full text-left border-collapse text-xs min-w-[560px]">
-                  <thead>
-                    <tr className="border-b border-slate-800 text-[10px] uppercase tracking-wider text-slate-400 font-bold bg-slate-950/70">
-                      <th className="py-2 px-1.5 text-center w-7">R</th>
-                      <th className="py-2 px-2.5">Calciatore</th>
-                      <th className="py-2 px-2.5">Partita Turno</th>
-                      <th className="py-2 px-1.5 text-center">Diff. FDR</th>
-                      <th className="py-2 px-2 text-center">Ted Score</th>
-                      <th className="py-2 px-2 text-center">Titolarità</th>
-                      <th className="py-2 px-2 text-center">Rating Fanta</th>
-                      <th className="py-2 px-2 text-right">Azioni</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-800/60">
-                    {sortedStartersForTable.length === 0 ? (
-                      <tr>
-                        <td colSpan={8} className="py-6 text-center text-slate-500 italic">
-                          Nessun titolare selezionato.
-                        </td>
+              {/* MODALITÀ 1: TABELLA ORIZZONTALE SCROLLABILE */}
+              {startersViewMode === 'table' ? (
+                <div className="overflow-x-auto scrollbar-thin -mx-1 px-1 pb-1">
+                  <table className="w-full text-left border-collapse text-xs min-w-[620px]">
+                    <thead>
+                      <tr className={`border-b text-[10px] uppercase tracking-wider font-black ${
+                        isLight ? 'border-slate-300 text-slate-700 bg-slate-100' : 'border-slate-800 text-slate-400 bg-slate-950/70'
+                      }`}>
+                        <th className="py-2 px-1.5 text-center w-8">R</th>
+                        <th className="py-2 px-2.5">Calciatore</th>
+                        <th className="py-2 px-2.5">Partita Turno</th>
+                        <th className="py-2 px-1.5 text-center">Diff. FDR</th>
+                        <th className="py-2 px-2 text-center">Ted Score</th>
+                        <th className="py-2 px-2 text-center">Titolarità</th>
+                        <th className="py-2 px-2 text-center">Rating</th>
+                        <th className="py-2 px-2 text-right">Azioni</th>
                       </tr>
-                    ) : (
-                      sortedStartersForTable.map((card) => {
-                        const isSelectedForSwap = swappingPlayerId === card.player.id;
-                        const isTargetForSwap = swappingPlayerCard !== null && !swappingPlayerCard.isStarter && swappingPlayerCard.player.ruolo === card.player.ruolo;
-                        const matchInfo = card.evaluation.match;
-                        const diffBadge = matchInfo ? getDifficultyBadge(matchInfo.difficulty) : null;
+                    </thead>
+                    <tbody className={`divide-y font-sans ${isLight ? 'divide-slate-200' : 'divide-slate-800/60'}`}>
+                      {sortedStartersForTable.length === 0 ? (
+                        <tr>
+                          <td colSpan={8} className="py-6 text-center text-slate-500 italic">
+                            Nessun titolare selezionato.
+                          </td>
+                        </tr>
+                      ) : (
+                        sortedStartersForTable.map((card) => {
+                          const isSelectedForSwap = swappingPlayerId === card.player.id;
+                          const isTargetForSwap = swappingPlayerCard !== null && !swappingPlayerCard.isStarter && swappingPlayerCard.player.ruolo === card.player.ruolo;
+                          const matchInfo = card.evaluation.match;
+                          const diffBadge = matchInfo ? getDifficultyBadge(matchInfo.difficulty) : null;
 
-                        return (
-                          <tr
-                            key={card.player.id}
-                            onClick={() => setSelectedPlayerForReport(card)}
-                            className={`transition-colors cursor-pointer group ${
-                              isSelectedForSwap 
-                                ? 'bg-amber-950/50 hover:bg-amber-950/70' 
-                                : isTargetForSwap
-                                  ? 'bg-emerald-950/50 hover:bg-emerald-950/70'
-                                  : 'hover:bg-slate-800/50'
-                            }`}
-                          >
-                            {/* Ruolo */}
-                            <td className="py-2 px-1.5 text-center">
-                              <span className={`inline-flex items-center justify-center w-5 h-5 rounded text-[10px] font-black shadow-sm ${getRoleBg(card.player.ruolo)}`}>
-                                {card.player.ruolo}
-                              </span>
-                            </td>
-
-                            {/* Nome + Squadra + Rigorista */}
-                            <td className="py-2 px-2.5">
-                              <div className="flex flex-col">
-                                <span className="font-black text-slate-100 group-hover:text-amber-300 transition-colors text-xs leading-tight">
-                                  {card.player.nome}
+                          return (
+                            <tr
+                              key={card.player.id}
+                              onClick={() => setSelectedPlayerForReport(card)}
+                              className={`transition-colors cursor-pointer group border-b ${
+                                isLight ? 'border-slate-100 hover:bg-slate-50' : 'border-slate-800/40 hover:bg-slate-800/50'
+                              } ${
+                                isSelectedForSwap 
+                                  ? (isLight ? 'bg-amber-100 ring-1 ring-amber-500' : 'bg-amber-950/50 ring-1 ring-amber-400')
+                                  : isTargetForSwap
+                                    ? (isLight ? 'bg-emerald-100 ring-1 ring-emerald-500 animate-pulse' : 'bg-emerald-950/50 ring-1 ring-emerald-400 animate-pulse')
+                                    : ''
+                              }`}
+                            >
+                              {/* Ruolo */}
+                              <td className="py-2.5 px-1.5 text-center">
+                                <span className={`inline-flex items-center justify-center w-6 h-6 rounded-md text-[11px] font-black shadow-sm ${getRoleBg(card.player.ruolo)}`}>
+                                  {card.player.ruolo}
                                 </span>
-                                <div className="flex items-center gap-1.5 text-[9.5px] text-slate-400 font-mono mt-0.5">
-                                  <span className="font-semibold text-slate-300">{card.player.squadra}</span>
-                                  <span>•</span>
-                                  <span>Qt {card.player.quotazione}</span>
-                                  {(card.evaluation.gazzetta.rigorista || card.player.rigorista) && (
-                                    <span className="text-amber-400 font-bold" title="Rigorista designato">⚽ Rig.</span>
-                                  )}
-                                  {card.evaluation.gazzetta.piazzati && (
-                                    <span className="text-blue-400 font-bold" title="Calci piazzati">🎯 Piaz.</span>
-                                  )}
-                                </div>
-                              </div>
-                            </td>
+                              </td>
 
-                            {/* Partita */}
-                            <td className="py-2 px-2.5">
-                              {matchInfo ? (
+                              {/* Nome + Squadra + Rigorista */}
+                              <td className="py-2.5 px-2.5">
                                 <div className="flex flex-col">
-                                  <div className="flex items-center gap-1 font-bold">
-                                    <span className={`px-1 py-0.2 rounded text-[8.5px] font-black uppercase ${
-                                      matchInfo.isHome 
-                                        ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/40' 
-                                        : 'bg-slate-900 text-slate-300 border border-slate-700'
-                                    }`}>
-                                      {matchInfo.isHome ? 'CASA' : 'FUORI'}
-                                    </span>
-                                    <span className="text-white font-black text-[11px]">
-                                      {matchInfo.isHome ? 'vs ' : '@ '}{matchInfo.opponent}
-                                    </span>
-                                  </div>
-                                  <span className="text-[9.5px] text-slate-400 font-mono mt-0.5">
-                                    {matchInfo.date} {matchInfo.time}
+                                  <span className={`font-black text-xs sm:text-sm uppercase tracking-wide leading-tight transition-colors ${
+                                    isLight ? 'text-slate-950 group-hover:text-blue-700' : 'text-slate-100 group-hover:text-amber-300'
+                                  }`}>
+                                    {card.player.nome}
                                   </span>
-
-                                  {/* Mini-badge Prossime 3 Gare con FDR */}
-                                  {(() => {
-                                    const upcoming = getTeamUpcomingMatches(card.player.squadra, 3);
-                                    if (upcoming.length === 0) return null;
-                                    return (
-                                      <div className="flex items-center gap-1 mt-0.5 flex-wrap" title="Prossime 3 giornate">
-                                        <span className="text-[8px] text-slate-500 font-black uppercase">3 G:</span>
-                                        {upcoming.map(u => {
-                                          const uBadge = getDifficultyBadge(u.difficulty);
-                                          return (
-                                            <span 
-                                              key={u.roundNumber} 
-                                              className={`px-0.5 py-0.2 rounded text-[7.5px] font-bold border font-mono ${uBadge.color}`}
-                                              title={`${u.shortLabel}: ${u.isHome ? 'Casa vs ' : 'Fuori @ '}${u.opponent} (${uBadge.label})`}
-                                            >
-                                              {u.isHome ? '' : '@'}{u.opponent.slice(0, 3)}
-                                            </span>
-                                          );
-                                        })}
-                                      </div>
-                                    );
-                                  })()}
+                                  <div className={`flex items-center gap-1.5 text-[10px] font-mono mt-0.5 ${
+                                    isLight ? 'text-slate-600' : 'text-slate-400'
+                                  }`}>
+                                    <span className={`font-black ${isLight ? 'text-slate-800' : 'text-slate-300'}`}>
+                                      {card.player.squadra}
+                                    </span>
+                                    <span>•</span>
+                                    <span className="font-bold">Qt {card.player.quotazione}</span>
+                                    {(card.evaluation.gazzetta.rigorista || card.player.rigorista) && (
+                                      <span className={isLight ? 'text-amber-700 font-black' : 'text-amber-400 font-bold'} title="Rigorista designato">⚽ Rig.</span>
+                                    )}
+                                    {card.evaluation.gazzetta.piazzati && (
+                                      <span className={isLight ? 'text-blue-700 font-black' : 'text-blue-400 font-bold'} title="Calci piazzati">🎯 Piaz.</span>
+                                    )}
+                                  </div>
                                 </div>
-                              ) : (
-                                <span className="text-slate-500 italic text-[10px]">-</span>
-                              )}
-                            </td>
+                              </td>
 
-                            {/* Difficoltà FDR */}
-                            <td className="py-2 px-1.5 text-center">
-                              {diffBadge ? (
-                                <span className={`inline-block px-1.5 py-0.5 rounded font-bold text-[9.5px] border leading-none shadow-sm ${diffBadge.color}`}>
-                                  {diffBadge.label}
-                                </span>
-                              ) : (
-                                <span className="text-slate-500">-</span>
-                              )}
-                            </td>
+                              {/* Partita (Senza data né ora) */}
+                              <td className="py-2.5 px-2.5">
+                                {matchInfo ? (
+                                  <div className="flex flex-col">
+                                    <div className="flex items-center gap-1 font-bold">
+                                      <span className={`px-1 py-0.2 rounded text-[9px] font-black uppercase ${
+                                        matchInfo.isHome 
+                                          ? (isLight ? 'bg-emerald-100 text-emerald-950 border border-emerald-400' : 'bg-emerald-950 text-emerald-300 border border-emerald-500/40')
+                                          : (isLight ? 'bg-slate-200 text-slate-800 border border-slate-300' : 'bg-slate-900 text-slate-300 border border-slate-700')
+                                      }`}>
+                                        {matchInfo.isHome ? 'CASA' : 'FUORI'}
+                                      </span>
+                                      <span className={`font-black text-xs ${isLight ? 'text-slate-950' : 'text-white'}`}>
+                                        {matchInfo.isHome ? 'vs ' : '@ '}{matchInfo.opponent}
+                                      </span>
+                                    </div>
 
-                            {/* Ted Score */}
-                            <td className="py-2 px-2 text-center">
-                              <span className={`inline-block px-2 py-0.5 rounded-md font-black text-xs border shadow-sm min-w-[34px] ${getScoreColor(card.tedScore)}`}>
-                                {card.tedScore}
-                              </span>
-                            </td>
+                                    {/* Mini-badge Prossime 3 Gare con FDR */}
+                                    {(() => {
+                                      const upcoming = getTeamUpcomingMatches(card.player.squadra, 3);
+                                      if (upcoming.length === 0) return null;
+                                      return (
+                                        <div className="flex items-center gap-1 mt-0.5 flex-wrap" title="Prossime 3 giornate">
+                                          <span className={`text-[8px] font-black uppercase ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>3 G:</span>
+                                          {upcoming.map(u => {
+                                            const uBadge = getDifficultyBadge(u.difficulty);
+                                            return (
+                                              <span 
+                                                key={u.roundNumber} 
+                                                className={`px-1 py-0.2 rounded text-[8px] font-black border font-mono ${uBadge.color}`}
+                                                title={`${u.shortLabel}: ${u.isHome ? 'Casa vs ' : 'Fuori @ '}${u.opponent} (${uBadge.label})`}
+                                              >
+                                                {u.isHome ? '' : '@'}{u.opponent.slice(0, 3)}
+                                              </span>
+                                            );
+                                          })}
+                                        </div>
+                                      );
+                                    })()}
+                                  </div>
+                                ) : (
+                                  <span className="text-slate-500 italic text-[10px]">-</span>
+                                )}
+                              </td>
 
-                            {/* Titolarità Gazzetta */}
-                            <td className="py-2 px-2 text-center">
-                              <div className="flex flex-col items-center">
-                                <span className={`px-1.5 py-0.5 rounded font-bold text-[10.5px] font-mono ${
-                                  card.evaluation.gazzetta.titolaritaPercent >= 85 
-                                    ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/40' 
-                                    : card.evaluation.gazzetta.titolaritaPercent >= 60
-                                      ? 'bg-amber-950 text-amber-300 border border-amber-500/40'
-                                      : 'bg-red-950 text-red-300 border border-red-500/40'
-                                }`}>
-                                  {card.evaluation.gazzetta.titolaritaPercent}%
-                                </span>
-                                {card.evaluation.gazzetta.ballottaggioCon ? (
-                                  <span className="text-[9px] text-amber-400 font-bold mt-0.5 truncate max-w-[100px]" title={`Ballottaggio con ${card.evaluation.gazzetta.ballottaggioCon}`}>
-                                    ⚔️ {card.evaluation.gazzetta.ballottaggioCon}
+                              {/* Difficoltà FDR */}
+                              <td className="py-2.5 px-1.5 text-center">
+                                {diffBadge ? (
+                                  <span className={`inline-block px-1.5 py-0.5 rounded font-black text-[10px] border leading-none shadow-sm ${diffBadge.color}`}>
+                                    {diffBadge.label}
                                   </span>
                                 ) : (
-                                  <span className="text-[9px] text-slate-400 mt-0.5 capitalize">
-                                    {card.evaluation.gazzetta.status}
-                                  </span>
+                                  <span className="text-slate-500">-</span>
                                 )}
-                              </div>
-                            </td>
+                              </td>
 
-                            {/* Rating Fantacalcio */}
-                            <td className="py-2 px-2 text-center">
-                              <div className="flex flex-col items-center">
-                                <span className="text-amber-400 font-black text-xs tracking-wider">
-                                  {'★'.repeat(card.evaluation.fantagazzetta.stars)}
+                              {/* Ted Score */}
+                              <td className="py-2.5 px-2 text-center">
+                                <span className={`inline-block px-2 py-1 rounded-md font-black text-xs sm:text-sm border shadow-sm min-w-[38px] ${getScoreColor(card.tedScore)}`}>
+                                  {card.tedScore}
                                 </span>
-                                <span className="text-[9.5px] text-slate-300 font-medium">
-                                  {card.evaluation.fantagazzetta.fascia}
-                                </span>
-                              </div>
-                            </td>
+                              </td>
 
-                            {/* Azioni */}
-                            <td className="py-2 px-2 text-right">
-                              <div className="flex items-center justify-end gap-1" onClick={(e) => e.stopPropagation()}>
-                                <button
-                                  onClick={() => {
-                                    if (isSelectedForSwap) {
-                                      setSwappingPlayerId(null);
-                                    } else if (isTargetForSwap) {
-                                      handleSwap(swappingPlayerId!, card.player.id);
-                                    } else {
-                                      setSwappingPlayerId(card.player.id);
-                                    }
-                                  }}
-                                  className={`p-1.5 rounded-lg text-xs font-bold transition-all ${
-                                    isSelectedForSwap
-                                      ? 'bg-amber-400 text-slate-950 font-black'
-                                      : isTargetForSwap
-                                        ? 'bg-emerald-400 text-slate-950 font-black animate-pulse'
-                                        : 'bg-slate-800 text-slate-300 hover:text-amber-300 hover:bg-slate-700'
-                                  }`}
-                                  title={isSelectedForSwap ? "Annulla" : isTargetForSwap ? "Sostituisci" : "Scambia con panchina"}
-                                >
-                                  <ArrowRightLeft className="w-3.5 h-3.5" />
-                                </button>
-                                <button
-                                  onClick={() => setSelectedPlayerForReport(card)}
-                                  className="px-2 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white text-[10px] font-bold flex items-center gap-0.5 transition-colors border border-slate-700"
-                                  title="Vedi Match Report completo"
-                                >
-                                  <span>Report</span>
-                                  <ChevronRight className="w-3 h-3" />
-                                </button>
+                              {/* Titolarità Gazzetta */}
+                              <td className="py-2.5 px-2 text-center">
+                                <div className="flex flex-col items-center">
+                                  <span className={`px-2 py-0.5 rounded-md font-black text-xs font-mono border ${
+                                    card.evaluation.gazzetta.titolaritaPercent >= 85 
+                                      ? (isLight ? 'bg-emerald-100 text-emerald-950 border-emerald-400' : 'bg-emerald-950 text-emerald-300 border border-emerald-500/40')
+                                      : card.evaluation.gazzetta.titolaritaPercent >= 60
+                                        ? (isLight ? 'bg-amber-100 text-amber-950 border-amber-400' : 'bg-amber-950 text-amber-300 border-amber-500/40')
+                                        : (isLight ? 'bg-rose-100 text-rose-950 border-rose-400' : 'bg-red-950 text-red-300 border-red-500/40')
+                                  }`}>
+                                    {card.evaluation.gazzetta.titolaritaPercent}%
+                                  </span>
+                                  {card.evaluation.gazzetta.ballottaggioCon ? (
+                                    <span className={`text-[9.5px] font-black mt-0.5 truncate max-w-[105px] ${
+                                      isLight ? 'text-amber-800' : 'text-amber-400'
+                                    }`} title={`Ballottaggio con ${card.evaluation.gazzetta.ballottaggioCon}`}>
+                                      ⚔️ {card.evaluation.gazzetta.ballottaggioCon}
+                                    </span>
+                                  ) : (
+                                    <span className={`text-[9.5px] mt-0.5 capitalize font-medium ${
+                                      isLight ? 'text-slate-600' : 'text-slate-400'
+                                    }`}>
+                                      {card.evaluation.gazzetta.status}
+                                    </span>
+                                  )}
+                                </div>
+                              </td>
+
+                              {/* Rating Fantacalcio */}
+                              <td className="py-2.5 px-2 text-center">
+                                <div className="flex flex-col items-center">
+                                  <span className="text-amber-500 font-black text-xs sm:text-sm tracking-wider">
+                                    {'★'.repeat(card.evaluation.fantagazzetta.stars)}
+                                  </span>
+                                  <span className={`text-[9.5px] font-bold ${isLight ? 'text-slate-700' : 'text-slate-300'}`}>
+                                    {card.evaluation.fantagazzetta.fascia}
+                                  </span>
+                                </div>
+                              </td>
+
+                              {/* Azioni */}
+                              <td className="py-2.5 px-2 text-right">
+                                <div className="flex items-center justify-end gap-1" onClick={(e) => e.stopPropagation()}>
+                                  <button
+                                    onClick={() => {
+                                      if (isSelectedForSwap) {
+                                        setSwappingPlayerId(null);
+                                      } else if (isTargetForSwap) {
+                                        handleSwap(swappingPlayerId!, card.player.id);
+                                      } else {
+                                        setSwappingPlayerId(card.player.id);
+                                      }
+                                    }}
+                                    className={`p-1.5 rounded-lg text-xs font-bold transition-all shadow-sm ${
+                                      isSelectedForSwap
+                                        ? 'bg-amber-400 text-slate-950 font-black'
+                                        : isTargetForSwap
+                                          ? 'bg-emerald-400 text-slate-950 font-black animate-pulse'
+                                          : (isLight ? 'bg-slate-200 text-slate-800 hover:bg-slate-300 border border-slate-300' : 'bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700')
+                                    }`}
+                                    title={isSelectedForSwap ? "Annulla" : isTargetForSwap ? "Sostituisci" : "Scambia con panchina"}
+                                  >
+                                    <ArrowRightLeft className="w-3.5 h-3.5" />
+                                  </button>
+                                  <button
+                                    onClick={() => setSelectedPlayerForReport(card)}
+                                    className={`px-2 py-1.5 rounded-lg text-[10px] font-black flex items-center gap-0.5 transition-colors border shadow-sm ${
+                                      isLight ? 'bg-slate-100 hover:bg-slate-200 text-slate-900 border-slate-300' : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700'
+                                    }`}
+                                    title="Vedi Match Report completo"
+                                  >
+                                    <span>Report</span>
+                                    <ChevronRight className="w-3 h-3" />
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          );
+                        })
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                /* MODALITÀ 2: CARD ORIZZONTALI SLIDER */
+                <div className="flex items-stretch gap-2.5 overflow-x-auto pb-2.5 pt-1 px-0.5 scrollbar-thin">
+                  {sortedStartersForTable.map((card) => {
+                    const isSelectedForSwap = swappingPlayerId === card.player.id;
+                    const isTargetForSwap = swappingPlayerCard !== null && !swappingPlayerCard.isStarter && swappingPlayerCard.player.ruolo === card.player.ruolo;
+                    const matchInfo = card.evaluation.match;
+                    const diffBadge = matchInfo ? getDifficultyBadge(matchInfo.difficulty) : null;
+
+                    return (
+                      <div
+                        key={card.player.id}
+                        onClick={() => setSelectedPlayerForReport(card)}
+                        className={`min-w-[230px] max-w-[245px] flex-shrink-0 rounded-xl p-2.5 border shadow-md flex flex-col justify-between transition-all cursor-pointer ${
+                          isLight ? 'bg-slate-50 border-slate-300 hover:border-blue-500' : 'bg-slate-950/80 border-slate-800 hover:border-amber-400/50'
+                        } ${
+                          isSelectedForSwap 
+                            ? (isLight ? 'ring-2 ring-amber-500 bg-amber-50' : 'ring-2 ring-amber-400 bg-amber-950/40')
+                            : isTargetForSwap 
+                              ? (isLight ? 'ring-2 ring-emerald-500 bg-emerald-50 animate-pulse' : 'ring-2 ring-emerald-400 bg-emerald-950/40 animate-pulse')
+                              : ''
+                        }`}
+                      >
+                        {/* Intestazione Card */}
+                        <div className="flex items-center justify-between pb-1.5 border-b border-slate-200 dark:border-slate-800">
+                          <div className="flex items-center gap-1.5">
+                            <span className={`w-6 h-6 rounded-md font-black text-[11px] inline-flex items-center justify-center shadow-sm ${getRoleBg(card.player.ruolo)}`}>
+                              {card.player.ruolo}
+                            </span>
+                            <span className={`px-2 py-0.5 rounded-md font-black text-xs border shadow-sm ${getScoreColor(card.tedScore)}`}>
+                              {card.tedScore}
+                            </span>
+                          </div>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (isSelectedForSwap) {
+                                setSwappingPlayerId(null);
+                              } else if (isTargetForSwap) {
+                                handleSwap(swappingPlayerId!, card.player.id);
+                              } else {
+                                setSwappingPlayerId(card.player.id);
+                              }
+                            }}
+                            className={`p-1.5 rounded-lg text-xs font-bold transition-all shadow-sm ${
+                              isSelectedForSwap
+                                ? 'bg-amber-400 text-slate-950 font-black'
+                                : isTargetForSwap
+                                  ? 'bg-emerald-400 text-slate-950 font-black animate-pulse'
+                                  : (isLight ? 'bg-slate-200 text-slate-800 hover:bg-slate-300' : 'bg-slate-800 text-slate-300 hover:text-white')
+                            }`}
+                          >
+                            <ArrowRightLeft className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+
+                        {/* Dati Calciatore */}
+                        <div className="py-2 space-y-1.5">
+                          <div>
+                            <div className={`font-black text-xs uppercase tracking-wide truncate ${isLight ? 'text-slate-950' : 'text-white'}`}>
+                              {card.player.nome}
+                            </div>
+                            <div className={`flex items-center gap-1 text-[10px] font-mono ${isLight ? 'text-slate-600' : 'text-slate-400'}`}>
+                              <span className="font-bold">{card.player.squadra}</span>
+                              <span>•</span>
+                              <span>Qt {card.player.quotazione}</span>
+                              {(card.evaluation.gazzetta.rigorista || card.player.rigorista) && (
+                                <span className={isLight ? 'text-amber-700 font-black' : 'text-amber-400 font-bold'}>⚽ Rig.</span>
+                              )}
+                              {card.evaluation.gazzetta.piazzati && (
+                                <span className={isLight ? 'text-blue-700 font-black' : 'text-blue-400 font-bold'}>🎯 Piaz.</span>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Partita senza data */}
+                          {matchInfo && (
+                            <div className={`p-1.5 rounded-lg border text-[11px] ${
+                              isLight ? 'bg-white border-slate-200' : 'bg-slate-900 border-slate-800'
+                            }`}>
+                              <div className="flex items-center justify-between">
+                                <span className={`px-1 py-0.2 rounded text-[8.5px] font-black uppercase ${
+                                  matchInfo.isHome 
+                                    ? (isLight ? 'bg-emerald-100 text-emerald-950 border border-emerald-400' : 'bg-emerald-950 text-emerald-300 border border-emerald-500/40')
+                                    : (isLight ? 'bg-slate-200 text-slate-800 border border-slate-300' : 'bg-slate-900 text-slate-300 border border-slate-700')
+                                }`}>
+                                  {matchInfo.isHome ? 'CASA' : 'FUORI'}
+                                </span>
+                                <span className={`font-black ${isLight ? 'text-slate-950' : 'text-white'}`}>
+                                  {matchInfo.isHome ? 'vs ' : '@ '}{matchInfo.opponent}
+                                </span>
                               </div>
-                            </td>
-                          </tr>
-                        );
-                      })
-                    )}
-                  </tbody>
-                </table>
-              </div>
+                              {diffBadge && (
+                                <div className="mt-1 flex items-center justify-between">
+                                  <span className={`text-[9.5px] font-bold ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>Difficoltà:</span>
+                                  <span className={`px-1.5 py-0.2 rounded text-[9.5px] font-black border ${diffBadge.color}`}>
+                                    {diffBadge.label}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                          )}
+
+                          {/* Titolarità Gazzetta */}
+                          <div className="flex items-center justify-between text-[11px]">
+                            <span className={`font-bold ${isLight ? 'text-slate-600' : 'text-slate-400'}`}>Titolarità:</span>
+                            <span className={`px-1.5 py-0.2 rounded font-black font-mono border ${
+                              card.evaluation.gazzetta.titolaritaPercent >= 85 
+                                ? (isLight ? 'bg-emerald-100 text-emerald-950 border-emerald-400' : 'bg-emerald-950 text-emerald-300 border border-emerald-500/40')
+                                : card.evaluation.gazzetta.titolaritaPercent >= 60
+                                  ? (isLight ? 'bg-amber-100 text-amber-950 border-amber-400' : 'bg-amber-950 text-amber-300 border-amber-500/40')
+                                  : (isLight ? 'bg-rose-100 text-rose-950 border-rose-400' : 'bg-red-950 text-red-300 border-red-500/40')
+                            }`}>
+                              {card.evaluation.gazzetta.titolaritaPercent}%
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Footer Card */}
+                        <div className="pt-1.5 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
+                          <span className="text-amber-500 font-black text-xs">
+                            {'★'.repeat(card.evaluation.fantagazzetta.stars)}
+                          </span>
+                          <button
+                            onClick={() => setSelectedPlayerForReport(card)}
+                            className={`px-2 py-1 rounded-md text-[10px] font-black flex items-center gap-0.5 border shadow-sm ${
+                              isLight ? 'bg-slate-100 hover:bg-slate-200 text-slate-900 border-slate-300' : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border-slate-700'
+                            }`}
+                          >
+                            <span>Report</span>
+                            <ChevronRight className="w-3 h-3" />
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </div>
         )}
