@@ -62,13 +62,221 @@ export interface MatchdayScheduleRound {
   fixtures: SerieAMatch[];
 }
 
-// 1. Calendario 7ª Giornata Serie A (2-5 Ottobre 2026)
+// 1. Calendario 5ª Giornata Serie A (2-5 Ottobre 2026 - Conclusa)
+export const ROUND_5_SERIE_A_FIXTURES: SerieAMatch[] = [
+  {
+    id: "m5-1",
+    homeTeam: "Inter",
+    awayTeam: "Milan",
+    date: "Domenica",
+    time: "20:45",
+    stadium: "San Siro (Milano)",
+    homeDifficulty: 3,
+    awayDifficulty: 3
+  },
+  {
+    id: "m5-2",
+    homeTeam: "Juventus",
+    awayTeam: "Napoli",
+    date: "Sabato",
+    time: "18:00",
+    stadium: "Allianz Stadium (Torino)",
+    homeDifficulty: 3,
+    awayDifficulty: 3
+  },
+  {
+    id: "m5-3",
+    homeTeam: "Fiorentina",
+    awayTeam: "Lazio",
+    date: "Domenica",
+    time: "12:30",
+    stadium: "Artemio Franchi (Firenze)",
+    homeDifficulty: 3,
+    awayDifficulty: 3
+  },
+  {
+    id: "m5-4",
+    homeTeam: "Roma",
+    awayTeam: "Udinese",
+    date: "Domenica",
+    time: "18:00",
+    stadium: "Stadio Olimpico (Roma)",
+    homeDifficulty: 2,
+    awayDifficulty: 4
+  },
+  {
+    id: "m5-5",
+    homeTeam: "Atalanta",
+    awayTeam: "Como",
+    date: "Lunedì",
+    time: "20:45",
+    stadium: "Gewiss Stadium (Bergamo)",
+    homeDifficulty: 1,
+    awayDifficulty: 5
+  },
+  {
+    id: "m5-6",
+    homeTeam: "Monza",
+    awayTeam: "Bologna",
+    date: "Domenica",
+    time: "15:00",
+    stadium: "U-Power Stadium (Monza)",
+    homeDifficulty: 3,
+    awayDifficulty: 3
+  },
+  {
+    id: "m5-7",
+    homeTeam: "Lecce",
+    awayTeam: "Parma",
+    date: "Sabato",
+    time: "20:45",
+    stadium: "Via del Mare (Lecce)",
+    homeDifficulty: 3,
+    awayDifficulty: 3
+  },
+  {
+    id: "m5-8",
+    homeTeam: "Cagliari",
+    awayTeam: "Sassuolo",
+    date: "Venerdì",
+    time: "18:30",
+    stadium: "Sardegna Arena (Cagliari)",
+    homeDifficulty: 3,
+    awayDifficulty: 3
+  },
+  {
+    id: "m5-9",
+    homeTeam: "Venezia",
+    awayTeam: "Genoa",
+    date: "Sabato",
+    time: "15:00",
+    stadium: "Pier Luigi Penzo (Venezia)",
+    homeDifficulty: 3,
+    awayDifficulty: 3
+  },
+  {
+    id: "m5-10",
+    homeTeam: "Torino",
+    awayTeam: "Frosinone",
+    date: "Venerdì",
+    time: "20:45",
+    stadium: "Stadio Olimpico Grande Torino (Torino)",
+    homeDifficulty: 2,
+    awayDifficulty: 4
+  }
+];
+
+// 2. Calendario 6ª Giornata Serie A (9-12 Ottobre 2026 - IN CORSO ORA)
+export const ROUND_6_SERIE_A_FIXTURES: SerieAMatch[] = [
+  {
+    id: "m6-1",
+    homeTeam: "Lecce",
+    awayTeam: "Parma",
+    date: "Venerdì 9 Ottobre",
+    time: "20:45",
+    stadium: "Via del Mare (Lecce)",
+    homeDifficulty: 3,
+    awayDifficulty: 3
+  },
+  {
+    id: "m6-2",
+    homeTeam: "Torino",
+    awayTeam: "Como",
+    date: "Sabato 10 Ottobre",
+    time: "15:00",
+    stadium: "Olimpico Grande Torino (Torino)",
+    homeDifficulty: 2,
+    awayDifficulty: 3
+  },
+  {
+    id: "m6-3",
+    homeTeam: "Inter",
+    awayTeam: "Udinese",
+    date: "Sabato 10 Ottobre",
+    time: "18:00",
+    stadium: "San Siro (Milano)",
+    homeDifficulty: 2,
+    awayDifficulty: 4
+  },
+  {
+    id: "m6-4",
+    homeTeam: "Napoli",
+    awayTeam: "Monza",
+    date: "Sabato 10 Ottobre",
+    time: "20:45",
+    stadium: "Diego Armando Maradona (Napoli)",
+    homeDifficulty: 1,
+    awayDifficulty: 5
+  },
+  {
+    id: "m6-5",
+    homeTeam: "Sassuolo",
+    awayTeam: "Venezia",
+    date: "Domenica 11 Ottobre",
+    time: "12:30",
+    stadium: "Mapei Stadium (Reggio Emilia)",
+    homeDifficulty: 3,
+    awayDifficulty: 3
+  },
+  {
+    id: "m6-6",
+    homeTeam: "Atalanta",
+    awayTeam: "Bologna",
+    date: "Domenica 11 Ottobre",
+    time: "15:00",
+    stadium: "Gewiss Stadium (Bergamo)",
+    homeDifficulty: 2,
+    awayDifficulty: 4
+  },
+  {
+    id: "m6-7",
+    homeTeam: "Frosinone",
+    awayTeam: "Fiorentina",
+    date: "Domenica 11 Ottobre",
+    time: "15:00",
+    stadium: "Benito Stirpe (Frosinone)",
+    homeDifficulty: 4,
+    awayDifficulty: 2
+  },
+  {
+    id: "m6-8",
+    homeTeam: "Roma",
+    awayTeam: "Juventus",
+    date: "Domenica 11 Ottobre",
+    time: "18:00",
+    stadium: "Olimpico (Roma)",
+    homeDifficulty: 3,
+    awayDifficulty: 3
+  },
+  {
+    id: "m6-9",
+    homeTeam: "Lazio",
+    awayTeam: "Milan",
+    date: "Domenica 11 Ottobre",
+    time: "20:45",
+    stadium: "Olimpico (Roma)",
+    homeDifficulty: 3,
+    awayDifficulty: 3
+  },
+  {
+    id: "m6-10",
+    homeTeam: "Cagliari",
+    awayTeam: "Genoa",
+    date: "Lunedì 12 Ottobre",
+    time: "20:45",
+    stadium: "Unipol Domus (Cagliari)",
+    homeDifficulty: 3,
+    awayDifficulty: 3
+  }
+];
+
+// 3. Calendario 7ª Giornata Serie A (16-19 Ottobre 2026 - PROSSIMO TURNO)
 export const ROUND_7_SERIE_A_FIXTURES: SerieAMatch[] = [
   {
     id: "m7-1",
     homeTeam: "Napoli",
     awayTeam: "Como",
-    date: "Venerdì",
+    date: "Venerdì 16 Ottobre",
     time: "20:45",
     stadium: "Diego Armando Maradona (Napoli)",
     homeDifficulty: 1,
@@ -78,7 +286,7 @@ export const ROUND_7_SERIE_A_FIXTURES: SerieAMatch[] = [
     id: "m7-2",
     homeTeam: "Udinese",
     awayTeam: "Lecce",
-    date: "Sabato",
+    date: "Sabato 17 Ottobre",
     time: "15:00",
     stadium: "Bluenergy Stadium (Udine)",
     homeDifficulty: 2,
@@ -88,7 +296,7 @@ export const ROUND_7_SERIE_A_FIXTURES: SerieAMatch[] = [
     id: "m7-3",
     homeTeam: "Atalanta",
     awayTeam: "Genoa",
-    date: "Sabato",
+    date: "Sabato 17 Ottobre",
     time: "18:00",
     stadium: "Gewiss Stadium (Bergamo)",
     homeDifficulty: 2,
@@ -98,7 +306,7 @@ export const ROUND_7_SERIE_A_FIXTURES: SerieAMatch[] = [
     id: "m7-4",
     homeTeam: "Inter",
     awayTeam: "Torino",
-    date: "Sabato",
+    date: "Sabato 17 Ottobre",
     time: "20:45",
     stadium: "San Siro (Milano)",
     homeDifficulty: 2,
@@ -108,7 +316,7 @@ export const ROUND_7_SERIE_A_FIXTURES: SerieAMatch[] = [
     id: "m7-5",
     homeTeam: "Juventus",
     awayTeam: "Cagliari",
-    date: "Domenica",
+    date: "Domenica 18 Ottobre",
     time: "12:30",
     stadium: "Allianz Stadium (Torino)",
     homeDifficulty: 1,
@@ -118,7 +326,7 @@ export const ROUND_7_SERIE_A_FIXTURES: SerieAMatch[] = [
     id: "m7-6",
     homeTeam: "Bologna",
     awayTeam: "Parma",
-    date: "Domenica",
+    date: "Domenica 18 Ottobre",
     time: "15:00",
     stadium: "Renato Dall'Ara (Bologna)",
     homeDifficulty: 2,
@@ -128,7 +336,7 @@ export const ROUND_7_SERIE_A_FIXTURES: SerieAMatch[] = [
     id: "m7-7",
     homeTeam: "Lazio",
     awayTeam: "Sassuolo",
-    date: "Domenica",
+    date: "Domenica 18 Ottobre",
     time: "15:00",
     stadium: "Olimpico (Roma)",
     homeDifficulty: 2,
@@ -138,7 +346,7 @@ export const ROUND_7_SERIE_A_FIXTURES: SerieAMatch[] = [
     id: "m7-8",
     homeTeam: "Monza",
     awayTeam: "Roma",
-    date: "Domenica",
+    date: "Domenica 18 Ottobre",
     time: "18:00",
     stadium: "U-Power Stadium (Monza)",
     homeDifficulty: 4,
@@ -148,7 +356,7 @@ export const ROUND_7_SERIE_A_FIXTURES: SerieAMatch[] = [
     id: "m7-9",
     homeTeam: "Fiorentina",
     awayTeam: "Milan",
-    date: "Domenica",
+    date: "Domenica 18 Ottobre",
     time: "20:45",
     stadium: "Artemio Franchi (Firenze)",
     homeDifficulty: 3,
@@ -158,7 +366,7 @@ export const ROUND_7_SERIE_A_FIXTURES: SerieAMatch[] = [
     id: "m7-10",
     homeTeam: "Venezia",
     awayTeam: "Frosinone",
-    date: "Lunedì",
+    date: "Lunedì 19 Ottobre",
     time: "20:45",
     stadium: "Pier Luigi Penzo (Venezia)",
     homeDifficulty: 3,
@@ -166,13 +374,13 @@ export const ROUND_7_SERIE_A_FIXTURES: SerieAMatch[] = [
   }
 ];
 
-// 2. Calendario 8ª Giornata Serie A (10-12 Ottobre 2026 - Fonte Fantacalcio.it & Gazzetta)
+// 4. Calendario 8ª Giornata Serie A (23-26 Ottobre 2026)
 export const ROUND_8_SERIE_A_FIXTURES: SerieAMatch[] = [
   {
     id: "m8-1",
     homeTeam: "Genoa",
     awayTeam: "Fiorentina",
-    date: "Sabato 10 Ottobre",
+    date: "Sabato 24 Ottobre",
     time: "15:00",
     stadium: "Luigi Ferraris (Genova)",
     homeDifficulty: 3,
@@ -182,7 +390,7 @@ export const ROUND_8_SERIE_A_FIXTURES: SerieAMatch[] = [
     id: "m8-2",
     homeTeam: "Inter",
     awayTeam: "Parma",
-    date: "Sabato 10 Ottobre",
+    date: "Sabato 24 Ottobre",
     time: "18:00",
     stadium: "Giuseppe Meazza (Milano)",
     homeDifficulty: 1,
@@ -192,7 +400,7 @@ export const ROUND_8_SERIE_A_FIXTURES: SerieAMatch[] = [
     id: "m8-3",
     homeTeam: "Napoli",
     awayTeam: "Frosinone",
-    date: "Sabato 10 Ottobre",
+    date: "Sabato 24 Ottobre",
     time: "20:45",
     stadium: "Diego Armando Maradona (Napoli)",
     homeDifficulty: 1,
@@ -202,7 +410,7 @@ export const ROUND_8_SERIE_A_FIXTURES: SerieAMatch[] = [
     id: "m8-4",
     homeTeam: "Como",
     awayTeam: "Roma",
-    date: "Domenica 11 Ottobre",
+    date: "Domenica 25 Ottobre",
     time: "12:30",
     stadium: "Giuseppe Sinigaglia (Como)",
     homeDifficulty: 4,
@@ -212,7 +420,7 @@ export const ROUND_8_SERIE_A_FIXTURES: SerieAMatch[] = [
     id: "m8-5",
     homeTeam: "Lazio",
     awayTeam: "Monza",
-    date: "Domenica 11 Ottobre",
+    date: "Domenica 25 Ottobre",
     time: "15:00",
     stadium: "Stadio Olimpico (Roma)",
     homeDifficulty: 2,
@@ -222,7 +430,7 @@ export const ROUND_8_SERIE_A_FIXTURES: SerieAMatch[] = [
     id: "m8-6",
     homeTeam: "Lecce",
     awayTeam: "Bologna",
-    date: "Domenica 11 Ottobre",
+    date: "Domenica 25 Ottobre",
     time: "15:00",
     stadium: "Via del Mare (Lecce)",
     homeDifficulty: 3,
@@ -232,7 +440,7 @@ export const ROUND_8_SERIE_A_FIXTURES: SerieAMatch[] = [
     id: "m8-7",
     homeTeam: "Sassuolo",
     awayTeam: "Milan",
-    date: "Domenica 11 Ottobre",
+    date: "Domenica 25 Ottobre",
     time: "18:00",
     stadium: "Mapei Stadium (Reggio Emilia)",
     homeDifficulty: 4,
@@ -242,7 +450,7 @@ export const ROUND_8_SERIE_A_FIXTURES: SerieAMatch[] = [
     id: "m8-8",
     homeTeam: "Cagliari",
     awayTeam: "Juventus",
-    date: "Domenica 11 Ottobre",
+    date: "Domenica 25 Ottobre",
     time: "20:45",
     stadium: "Sardegna Arena (Cagliari)",
     homeDifficulty: 4,
@@ -252,7 +460,7 @@ export const ROUND_8_SERIE_A_FIXTURES: SerieAMatch[] = [
     id: "m8-9",
     homeTeam: "Atalanta",
     awayTeam: "Venezia",
-    date: "Lunedì 12 Ottobre",
+    date: "Lunedì 26 Ottobre",
     time: "18:30",
     stadium: "Gewiss Stadium (Bergamo)",
     homeDifficulty: 1,
@@ -262,7 +470,7 @@ export const ROUND_8_SERIE_A_FIXTURES: SerieAMatch[] = [
     id: "m8-10",
     homeTeam: "Torino",
     awayTeam: "Udinese",
-    date: "Lunedì 12 Ottobre",
+    date: "Lunedì 26 Ottobre",
     time: "20:45",
     stadium: "Stadio Olimpico Grande Torino (Torino)",
     homeDifficulty: 3,
@@ -270,13 +478,13 @@ export const ROUND_8_SERIE_A_FIXTURES: SerieAMatch[] = [
   }
 ];
 
-// 3. Calendario 9ª Giornata Serie A (17-19 Ottobre 2026)
+// 5. Calendario 9ª Giornata Serie A (30 Ottobre - 2 Novembre 2026)
 export const ROUND_9_SERIE_A_FIXTURES: SerieAMatch[] = [
   {
     id: "m9-1",
     homeTeam: "Milan",
     awayTeam: "Udinese",
-    date: "Sabato 17 Ottobre",
+    date: "Sabato 31 Ottobre",
     time: "15:00",
     stadium: "San Siro (Milano)",
     homeDifficulty: 2,
@@ -286,7 +494,7 @@ export const ROUND_9_SERIE_A_FIXTURES: SerieAMatch[] = [
     id: "m9-2",
     homeTeam: "Juventus",
     awayTeam: "Lazio",
-    date: "Sabato 17 Ottobre",
+    date: "Sabato 31 Ottobre",
     time: "18:00",
     stadium: "Allianz Stadium (Torino)",
     homeDifficulty: 3,
@@ -296,7 +504,7 @@ export const ROUND_9_SERIE_A_FIXTURES: SerieAMatch[] = [
     id: "m9-3",
     homeTeam: "Roma",
     awayTeam: "Inter",
-    date: "Sabato 17 Ottobre",
+    date: "Sabato 31 Ottobre",
     time: "20:45",
     stadium: "Stadio Olimpico (Roma)",
     homeDifficulty: 4,
@@ -306,7 +514,7 @@ export const ROUND_9_SERIE_A_FIXTURES: SerieAMatch[] = [
     id: "m9-4",
     homeTeam: "Venezia",
     awayTeam: "Atalanta",
-    date: "Domenica 18 Ottobre",
+    date: "Domenica 1 Novembre",
     time: "12:30",
     stadium: "Pier Luigi Penzo (Venezia)",
     homeDifficulty: 5,
@@ -316,7 +524,7 @@ export const ROUND_9_SERIE_A_FIXTURES: SerieAMatch[] = [
     id: "m9-5",
     homeTeam: "Fiorentina",
     awayTeam: "Lecce",
-    date: "Domenica 18 Ottobre",
+    date: "Domenica 1 Novembre",
     time: "15:00",
     stadium: "Artemio Franchi (Firenze)",
     homeDifficulty: 2,
@@ -326,7 +534,7 @@ export const ROUND_9_SERIE_A_FIXTURES: SerieAMatch[] = [
     id: "m9-6",
     homeTeam: "Genoa",
     awayTeam: "Bologna",
-    date: "Domenica 18 Ottobre",
+    date: "Domenica 1 Novembre",
     time: "15:00",
     stadium: "Luigi Ferraris (Genova)",
     homeDifficulty: 3,
@@ -336,7 +544,7 @@ export const ROUND_9_SERIE_A_FIXTURES: SerieAMatch[] = [
     id: "m9-7",
     homeTeam: "Como",
     awayTeam: "Parma",
-    date: "Domenica 18 Ottobre",
+    date: "Domenica 1 Novembre",
     time: "18:00",
     stadium: "Giuseppe Sinigaglia (Como)",
     homeDifficulty: 3,
@@ -346,7 +554,7 @@ export const ROUND_9_SERIE_A_FIXTURES: SerieAMatch[] = [
     id: "m9-8",
     homeTeam: "Cagliari",
     awayTeam: "Torino",
-    date: "Domenica 18 Ottobre",
+    date: "Domenica 1 Novembre",
     time: "20:45",
     stadium: "Sardegna Arena (Cagliari)",
     homeDifficulty: 3,
@@ -356,7 +564,7 @@ export const ROUND_9_SERIE_A_FIXTURES: SerieAMatch[] = [
     id: "m9-9",
     homeTeam: "Napoli",
     awayTeam: "Sassuolo",
-    date: "Lunedì 19 Ottobre",
+    date: "Lunedì 2 Novembre",
     time: "18:30",
     stadium: "Diego Armando Maradona (Napoli)",
     homeDifficulty: 1,
@@ -366,7 +574,7 @@ export const ROUND_9_SERIE_A_FIXTURES: SerieAMatch[] = [
     id: "m9-10",
     homeTeam: "Monza",
     awayTeam: "Frosinone",
-    date: "Lunedì 19 Ottobre",
+    date: "Lunedì 2 Novembre",
     time: "20:45",
     stadium: "U-Power Stadium (Monza)",
     homeDifficulty: 2,
@@ -374,143 +582,47 @@ export const ROUND_9_SERIE_A_FIXTURES: SerieAMatch[] = [
   }
 ];
 
-// 4. Calendario 10ª Giornata Serie A (24-26 Ottobre 2026)
-export const ROUND_10_SERIE_A_FIXTURES: SerieAMatch[] = [
-  {
-    id: "m10-1",
-    homeTeam: "Atalanta",
-    awayTeam: "Monza",
-    date: "Sabato 24 Ottobre",
-    time: "15:00",
-    stadium: "Gewiss Stadium (Bergamo)",
-    homeDifficulty: 1,
-    awayDifficulty: 5
-  },
-  {
-    id: "m10-2",
-    homeTeam: "Lazio",
-    awayTeam: "Genoa",
-    date: "Sabato 24 Ottobre",
-    time: "18:00",
-    stadium: "Stadio Olimpico (Roma)",
-    homeDifficulty: 2,
-    awayDifficulty: 4
-  },
-  {
-    id: "m10-3",
-    homeTeam: "Inter",
-    awayTeam: "Juventus",
-    date: "Sabato 24 Ottobre",
-    time: "20:45",
-    stadium: "San Siro (Milano)",
-    homeDifficulty: 3,
-    awayDifficulty: 3
-  },
-  {
-    id: "m10-4",
-    homeTeam: "Bologna",
-    awayTeam: "Milan",
-    date: "Domenica 25 Ottobre",
-    time: "12:30",
-    stadium: "Renato Dall'Ara (Bologna)",
-    homeDifficulty: 4,
-    awayDifficulty: 2
-  },
-  {
-    id: "m10-5",
-    homeTeam: "Torino",
-    awayTeam: "Como",
-    date: "Domenica 25 Ottobre",
-    time: "15:00",
-    stadium: "Stadio Olimpico Grande Torino (Torino)",
-    homeDifficulty: 2,
-    awayDifficulty: 4
-  },
-  {
-    id: "m10-6",
-    homeTeam: "Udinese",
-    awayTeam: "Cagliari",
-    date: "Domenica 25 Ottobre",
-    time: "15:00",
-    stadium: "Bluenergy Stadium (Udine)",
-    homeDifficulty: 2,
-    awayDifficulty: 3
-  },
-  {
-    id: "m10-7",
-    homeTeam: "Sassuolo",
-    awayTeam: "Roma",
-    date: "Domenica 25 Ottobre",
-    time: "18:00",
-    stadium: "Mapei Stadium (Reggio Emilia)",
-    homeDifficulty: 4,
-    awayDifficulty: 2
-  },
-  {
-    id: "m10-8",
-    homeTeam: "Parma",
-    awayTeam: "Venezia",
-    date: "Domenica 25 Ottobre",
-    time: "20:45",
-    stadium: "Ennio Tardini (Parma)",
-    homeDifficulty: 2,
-    awayDifficulty: 4
-  },
-  {
-    id: "m10-9",
-    homeTeam: "Lecce",
-    awayTeam: "Napoli",
-    date: "Lunedì 26 Ottobre",
-    time: "18:30",
-    stadium: "Via del Mare (Lecce)",
-    homeDifficulty: 5,
-    awayDifficulty: 1
-  },
-  {
-    id: "m10-10",
-    homeTeam: "Frosinone",
-    awayTeam: "Fiorentina",
-    date: "Lunedì 26 Ottobre",
-    time: "20:45",
-    stadium: "Benito Stirpe (Frosinone)",
-    homeDifficulty: 4,
-    awayDifficulty: 2
-  }
-];
-
 // CALENDARIO COMPLETO DEI TURNI SERIE A CON CUTOFF RIGOROSO (Lunedì ore 22:00)
 export const SERIE_A_ROUNDS_CALENDAR: MatchdayScheduleRound[] = [
   {
-    roundNumber: 7,
-    title: "7ª Giornata Serie A (2-5 Ottobre 2026)",
-    shortLabel: "7ª G.",
+    roundNumber: 5,
+    title: "5ª Giornata Serie A (2-5 Ottobre 2026)",
+    shortLabel: "5ª G.",
     dateRangeLabel: "2-5 Ott",
     cutoffIso: "2026-10-05T22:00:00+02:00",
+    fixtures: ROUND_5_SERIE_A_FIXTURES
+  },
+  {
+    roundNumber: 6,
+    title: "6ª Giornata Serie A (9-12 Ottobre 2026)",
+    shortLabel: "6ª G.",
+    dateRangeLabel: "9-12 Ott",
+    cutoffIso: "2026-10-12T22:00:00+02:00",
+    fixtures: ROUND_6_SERIE_A_FIXTURES
+  },
+  {
+    roundNumber: 7,
+    title: "7ª Giornata Serie A (16-19 Ottobre 2026)",
+    shortLabel: "7ª G.",
+    dateRangeLabel: "16-19 Ott",
+    cutoffIso: "2026-10-19T22:00:00+02:00",
     fixtures: ROUND_7_SERIE_A_FIXTURES
   },
   {
     roundNumber: 8,
-    title: "8ª Giornata Serie A (10-12 Ottobre 2026)",
+    title: "8ª Giornata Serie A (23-26 Ottobre 2026)",
     shortLabel: "8ª G.",
-    dateRangeLabel: "10-12 Ott",
-    cutoffIso: "2026-10-12T22:00:00+02:00",
+    dateRangeLabel: "23-26 Ott",
+    cutoffIso: "2026-10-26T22:00:00+02:00",
     fixtures: ROUND_8_SERIE_A_FIXTURES
   },
   {
     roundNumber: 9,
-    title: "9ª Giornata Serie A (17-19 Ottobre 2026)",
+    title: "9ª Giornata Serie A (30 Ottobre - 2 Novembre 2026)",
     shortLabel: "9ª G.",
-    dateRangeLabel: "17-19 Ott",
-    cutoffIso: "2026-10-19T22:00:00+02:00",
+    dateRangeLabel: "30 Ott - 2 Nov",
+    cutoffIso: "2026-11-02T22:00:00+01:00",
     fixtures: ROUND_9_SERIE_A_FIXTURES
-  },
-  {
-    roundNumber: 10,
-    title: "10ª Giornata Serie A (24-26 Ottobre 2026)",
-    shortLabel: "10ª G.",
-    dateRangeLabel: "24-26 Ott",
-    cutoffIso: "2026-10-26T22:00:00+02:00",
-    fixtures: ROUND_10_SERIE_A_FIXTURES
   }
 ];
 
