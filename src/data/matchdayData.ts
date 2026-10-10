@@ -28,7 +28,7 @@ export interface FantagazzettaRating {
   commentoRedazione: string;
 }
 
-export type MatchdayType = 'current' | 'previous' | 'next';
+export type MatchdayType = 'current' | 'previous' | 'next' | 'next1' | 'next2' | 'next3';
 
 export interface PlayerMatchdayEvaluation {
   match: {
@@ -478,109 +478,528 @@ export const ROUND_8_SERIE_A_FIXTURES: SerieAMatch[] = [
   }
 ];
 
-// 5. Calendario 9ª Giornata Serie A (30 Ottobre - 2 Novembre 2026)
+
+
+// Calendario 9ª Giornata Serie A - Fonte ufficiale Fantacalcio.it
 export const ROUND_9_SERIE_A_FIXTURES: SerieAMatch[] = [
   {
     id: "m9-1",
-    homeTeam: "Milan",
-    awayTeam: "Udinese",
-    date: "Sabato 31 Ottobre",
-    time: "15:00",
-    stadium: "San Siro (Milano)",
-    homeDifficulty: 2,
-    awayDifficulty: 4
+    homeTeam: "Sassuolo",
+    awayTeam: "Lazio",
+    date: "Venerdì",
+    time: "20:45",
+    stadium: "Mapei Stadium (Reggio Emilia)",
+    homeDifficulty: 3,
+    awayDifficulty: 3
   },
   {
     id: "m9-2",
-    homeTeam: "Juventus",
-    awayTeam: "Lazio",
-    date: "Sabato 31 Ottobre",
-    time: "18:00",
-    stadium: "Allianz Stadium (Torino)",
-    homeDifficulty: 3,
+    homeTeam: "Roma",
+    awayTeam: "Cagliari",
+    date: "Sabato",
+    time: "15:00",
+    stadium: "Stadio Olimpico (Roma)",
+    homeDifficulty: 1,
     awayDifficulty: 4
   },
   {
     id: "m9-3",
-    homeTeam: "Roma",
-    awayTeam: "Inter",
-    date: "Sabato 31 Ottobre",
-    time: "20:45",
-    stadium: "Stadio Olimpico (Roma)",
-    homeDifficulty: 4,
+    homeTeam: "Torino",
+    awayTeam: "Como",
+    date: "Sabato",
+    time: "18:00",
+    stadium: "Olimpico Grande Torino (Torino)",
+    homeDifficulty: 3,
     awayDifficulty: 3
   },
   {
     id: "m9-4",
-    homeTeam: "Venezia",
-    awayTeam: "Atalanta",
-    date: "Domenica 1 Novembre",
-    time: "12:30",
-    stadium: "Pier Luigi Penzo (Venezia)",
-    homeDifficulty: 5,
-    awayDifficulty: 1
+    homeTeam: "Milan",
+    awayTeam: "Bologna",
+    date: "Sabato",
+    time: "20:45",
+    stadium: "San Siro (Milano)",
+    homeDifficulty: 3,
+    awayDifficulty: 5
   },
   {
     id: "m9-5",
-    homeTeam: "Fiorentina",
-    awayTeam: "Lecce",
-    date: "Domenica 1 Novembre",
-    time: "15:00",
-    stadium: "Artemio Franchi (Firenze)",
-    homeDifficulty: 2,
-    awayDifficulty: 4
-  },
-  {
-    id: "m9-6",
-    homeTeam: "Genoa",
-    awayTeam: "Bologna",
-    date: "Domenica 1 Novembre",
-    time: "15:00",
-    stadium: "Luigi Ferraris (Genova)",
+    homeTeam: "Parma",
+    awayTeam: "Udinese",
+    date: "Domenica",
+    time: "12:30",
+    stadium: "Ennio Tardini (Parma)",
     homeDifficulty: 3,
     awayDifficulty: 3
   },
   {
+    id: "m9-6",
+    homeTeam: "Venezia",
+    awayTeam: "Inter",
+    date: "Domenica",
+    time: "15:00",
+    stadium: "Pier Luigi Penzo (Venezia)",
+    homeDifficulty: 4,
+    awayDifficulty: 2
+  },
+  {
     id: "m9-7",
-    homeTeam: "Como",
-    awayTeam: "Parma",
-    date: "Domenica 1 Novembre",
-    time: "18:00",
-    stadium: "Giuseppe Sinigaglia (Como)",
-    homeDifficulty: 3,
+    homeTeam: "Genoa",
+    awayTeam: "Juventus",
+    date: "Domenica",
+    time: "15:00",
+    stadium: "Luigi Ferraris (Genova)",
+    homeDifficulty: 4,
     awayDifficulty: 3
   },
   {
     id: "m9-8",
-    homeTeam: "Cagliari",
-    awayTeam: "Torino",
-    date: "Domenica 1 Novembre",
+    homeTeam: "Monza",
+    awayTeam: "Napoli",
+    date: "Domenica",
+    time: "18:00",
+    stadium: "U-Power Stadium (Monza)",
+    homeDifficulty: 4,
+    awayDifficulty: 2
+  },
+  {
+    id: "m9-9",
+    homeTeam: "Frosinone",
+    awayTeam: "Lecce",
+    date: "Domenica",
     time: "20:45",
-    stadium: "Sardegna Arena (Cagliari)",
+    stadium: "Benito Stirpe (Frosinone)",
+    homeDifficulty: 1,
+    awayDifficulty: 3
+  },
+  {
+    id: "m9-10",
+    homeTeam: "Fiorentina",
+    awayTeam: "Atalanta",
+    date: "Lunedì",
+    time: "20:45",
+    stadium: "Artemio Franchi (Firenze)",
+    homeDifficulty: 4,
+    awayDifficulty: 4
+  }
+];
+
+// Calendario 10ª Giornata Serie A - Fonte ufficiale Fantacalcio.it
+export const ROUND_10_SERIE_A_FIXTURES: SerieAMatch[] = [
+  {
+    id: "m10-1",
+    homeTeam: "Bologna",
+    awayTeam: "Monza",
+    date: "Venerdì",
+    time: "20:45",
+    stadium: "Renato Dall'Ara (Bologna)",
+    homeDifficulty: 1,
+    awayDifficulty: 4
+  },
+  {
+    id: "m10-2",
+    homeTeam: "Udinese",
+    awayTeam: "Roma",
+    date: "Sabato",
+    time: "15:00",
+    stadium: "Bluenergy Stadium (Udine)",
     homeDifficulty: 3,
     awayDifficulty: 3
   },
   {
-    id: "m9-9",
-    homeTeam: "Napoli",
+    id: "m10-3",
+    homeTeam: "Milan",
+    awayTeam: "Inter",
+    date: "Sabato",
+    time: "18:00",
+    stadium: "San Siro (Milano)",
+    homeDifficulty: 4,
+    awayDifficulty: 5
+  },
+  {
+    id: "m10-4",
+    homeTeam: "Como",
+    awayTeam: "Venezia",
+    date: "Sabato",
+    time: "20:45",
+    stadium: "Giuseppe Sinigaglia (Como)",
+    homeDifficulty: 1,
+    awayDifficulty: 3
+  },
+  {
+    id: "m10-5",
+    homeTeam: "Frosinone",
+    awayTeam: "Torino",
+    date: "Domenica",
+    time: "12:30",
+    stadium: "Benito Stirpe (Frosinone)",
+    homeDifficulty: 3,
+    awayDifficulty: 3
+  },
+  {
+    id: "m10-6",
+    homeTeam: "Lazio",
+    awayTeam: "Cagliari",
+    date: "Domenica",
+    time: "15:00",
+    stadium: "Olimpico (Roma)",
+    homeDifficulty: 1,
+    awayDifficulty: 4
+  },
+  {
+    id: "m10-7",
+    homeTeam: "Lecce",
+    awayTeam: "Genoa",
+    date: "Domenica",
+    time: "15:00",
+    stadium: "Via del Mare (Lecce)",
+    homeDifficulty: 3,
+    awayDifficulty: 3
+  },
+  {
+    id: "m10-8",
+    homeTeam: "Juventus",
+    awayTeam: "Napoli",
+    date: "Domenica",
+    time: "18:00",
+    stadium: "Allianz Stadium (Torino)",
+    homeDifficulty: 4,
+    awayDifficulty: 5
+  },
+  {
+    id: "m10-9",
+    homeTeam: "Sassuolo",
+    awayTeam: "Fiorentina",
+    date: "Domenica",
+    time: "20:45",
+    stadium: "Mapei Stadium (Reggio Emilia)",
+    homeDifficulty: 3,
+    awayDifficulty: 3
+  },
+  {
+    id: "m10-10",
+    homeTeam: "Atalanta",
+    awayTeam: "Parma",
+    date: "Lunedì",
+    time: "20:45",
+    stadium: "Gewiss Stadium (Bergamo)",
+    homeDifficulty: 2,
+    awayDifficulty: 5
+  }
+];
+
+// Calendario 11ª Giornata Serie A - Fonte ufficiale Fantacalcio.it
+export const ROUND_11_SERIE_A_FIXTURES: SerieAMatch[] = [
+  {
+    id: "m11-1",
+    homeTeam: "Venezia",
+    awayTeam: "Udinese",
+    date: "Venerdì",
+    time: "20:45",
+    stadium: "Pier Luigi Penzo (Venezia)",
+    homeDifficulty: 3,
+    awayDifficulty: 3
+  },
+  {
+    id: "m11-2",
+    homeTeam: "Cagliari",
+    awayTeam: "Frosinone",
+    date: "Sabato",
+    time: "15:00",
+    stadium: "Unipol Domus (Cagliari)",
+    homeDifficulty: 1,
+    awayDifficulty: 3
+  },
+  {
+    id: "m11-3",
+    homeTeam: "Torino",
+    awayTeam: "Lecce",
+    date: "Sabato",
+    time: "18:00",
+    stadium: "Olimpico Grande Torino (Torino)",
+    homeDifficulty: 1,
+    awayDifficulty: 3
+  },
+  {
+    id: "m11-4",
+    homeTeam: "Parma",
+    awayTeam: "Bologna",
+    date: "Sabato",
+    time: "20:45",
+    stadium: "Ennio Tardini (Parma)",
+    homeDifficulty: 3,
+    awayDifficulty: 3
+  },
+  {
+    id: "m11-5",
+    homeTeam: "Roma",
     awayTeam: "Sassuolo",
-    date: "Lunedì 2 Novembre",
-    time: "18:30",
+    date: "Domenica",
+    time: "12:30",
+    stadium: "Stadio Olimpico (Roma)",
+    homeDifficulty: 2,
+    awayDifficulty: 4
+  },
+  {
+    id: "m11-6",
+    homeTeam: "Napoli",
+    awayTeam: "Lazio",
+    date: "Domenica",
+    time: "15:00",
     stadium: "Diego Armando Maradona (Napoli)",
+    homeDifficulty: 3,
+    awayDifficulty: 5
+  },
+  {
+    id: "m11-7",
+    homeTeam: "Genoa",
+    awayTeam: "Milan",
+    date: "Domenica",
+    time: "15:00",
+    stadium: "Luigi Ferraris (Genova)",
+    homeDifficulty: 4,
+    awayDifficulty: 3
+  },
+  {
+    id: "m11-8",
+    homeTeam: "Monza",
+    awayTeam: "Atalanta",
+    date: "Domenica",
+    time: "18:00",
+    stadium: "U-Power Stadium (Monza)",
+    homeDifficulty: 4,
+    awayDifficulty: 2
+  },
+  {
+    id: "m11-9",
+    homeTeam: "Inter",
+    awayTeam: "Como",
+    date: "Domenica",
+    time: "20:45",
+    stadium: "San Siro (Milano)",
+    homeDifficulty: 2,
+    awayDifficulty: 5
+  },
+  {
+    id: "m11-10",
+    homeTeam: "Fiorentina",
+    awayTeam: "Juventus",
+    date: "Lunedì",
+    time: "20:45",
+    stadium: "Artemio Franchi (Firenze)",
+    homeDifficulty: 4,
+    awayDifficulty: 4
+  }
+];
+
+// Calendario 12ª Giornata Serie A - Fonte ufficiale Fantacalcio.it
+export const ROUND_12_SERIE_A_FIXTURES: SerieAMatch[] = [
+  {
+    id: "m12-1",
+    homeTeam: "Como",
+    awayTeam: "Cagliari",
+    date: "Venerdì",
+    time: "20:45",
+    stadium: "Giuseppe Sinigaglia (Como)",
+    homeDifficulty: 1,
+    awayDifficulty: 3
+  },
+  {
+    id: "m12-2",
+    homeTeam: "Lazio",
+    awayTeam: "Lecce",
+    date: "Sabato",
+    time: "15:00",
+    stadium: "Olimpico (Roma)",
+    homeDifficulty: 1,
+    awayDifficulty: 4
+  },
+  {
+    id: "m12-3",
+    homeTeam: "Parma",
+    awayTeam: "Roma",
+    date: "Sabato",
+    time: "18:00",
+    stadium: "Ennio Tardini (Parma)",
+    homeDifficulty: 3,
+    awayDifficulty: 3
+  },
+  {
+    id: "m12-4",
+    homeTeam: "Napoli",
+    awayTeam: "Torino",
+    date: "Sabato",
+    time: "20:45",
+    stadium: "Diego Armando Maradona (Napoli)",
+    homeDifficulty: 2,
+    awayDifficulty: 5
+  },
+  {
+    id: "m12-5",
+    homeTeam: "Sassuolo",
+    awayTeam: "Genoa",
+    date: "Domenica",
+    time: "12:30",
+    stadium: "Mapei Stadium (Reggio Emilia)",
+    homeDifficulty: 3,
+    awayDifficulty: 3
+  },
+  {
+    id: "m12-6",
+    homeTeam: "Milan",
+    awayTeam: "Frosinone",
+    date: "Domenica",
+    time: "15:00",
+    stadium: "San Siro (Milano)",
     homeDifficulty: 1,
     awayDifficulty: 5
   },
   {
-    id: "m9-10",
+    id: "m12-7",
+    homeTeam: "Bologna",
+    awayTeam: "Udinese",
+    date: "Domenica",
+    time: "15:00",
+    stadium: "Renato Dall'Ara (Bologna)",
+    homeDifficulty: 2,
+    awayDifficulty: 4
+  },
+  {
+    id: "m12-8",
+    homeTeam: "Atalanta",
+    awayTeam: "Inter",
+    date: "Domenica",
+    time: "18:00",
+    stadium: "Gewiss Stadium (Bergamo)",
+    homeDifficulty: 4,
+    awayDifficulty: 5
+  },
+  {
+    id: "m12-9",
     homeTeam: "Monza",
-    awayTeam: "Frosinone",
-    date: "Lunedì 2 Novembre",
+    awayTeam: "Fiorentina",
+    date: "Domenica",
     time: "20:45",
     stadium: "U-Power Stadium (Monza)",
-    homeDifficulty: 2,
-    awayDifficulty: 3
+    homeDifficulty: 3,
+    awayDifficulty: 2
+  },
+  {
+    id: "m12-10",
+    homeTeam: "Juventus",
+    awayTeam: "Venezia",
+    date: "Lunedì",
+    time: "20:45",
+    stadium: "Allianz Stadium (Torino)",
+    homeDifficulty: 1,
+    awayDifficulty: 5
   }
 ];
+
+// Calendario 13ª Giornata Serie A - Fonte ufficiale Fantacalcio.it
+export const ROUND_13_SERIE_A_FIXTURES: SerieAMatch[] = [
+  {
+    id: "m13-1",
+    homeTeam: "Venezia",
+    awayTeam: "Bologna",
+    date: "Venerdì",
+    time: "20:45",
+    stadium: "Pier Luigi Penzo (Venezia)",
+    homeDifficulty: 3,
+    awayDifficulty: 2
+  },
+  {
+    id: "m13-2",
+    homeTeam: "Frosinone",
+    awayTeam: "Parma",
+    date: "Sabato",
+    time: "15:00",
+    stadium: "Benito Stirpe (Frosinone)",
+    homeDifficulty: 3,
+    awayDifficulty: 3
+  },
+  {
+    id: "m13-3",
+    homeTeam: "Torino",
+    awayTeam: "Lazio",
+    date: "Sabato",
+    time: "18:00",
+    stadium: "Olimpico Grande Torino (Torino)",
+    homeDifficulty: 3,
+    awayDifficulty: 3
+  },
+  {
+    id: "m13-4",
+    homeTeam: "Inter",
+    awayTeam: "Genoa",
+    date: "Sabato",
+    time: "20:45",
+    stadium: "San Siro (Milano)",
+    homeDifficulty: 2,
+    awayDifficulty: 5
+  },
+  {
+    id: "m13-5",
+    homeTeam: "Udinese",
+    awayTeam: "Fiorentina",
+    date: "Domenica",
+    time: "12:30",
+    stadium: "Bluenergy Stadium (Udine)",
+    homeDifficulty: 3,
+    awayDifficulty: 3
+  },
+  {
+    id: "m13-6",
+    homeTeam: "Sassuolo",
+    awayTeam: "Napoli",
+    date: "Domenica",
+    time: "15:00",
+    stadium: "Mapei Stadium (Reggio Emilia)",
+    homeDifficulty: 4,
+    awayDifficulty: 3
+  },
+  {
+    id: "m13-7",
+    homeTeam: "Roma",
+    awayTeam: "Monza",
+    date: "Domenica",
+    time: "15:00",
+    stadium: "Stadio Olimpico (Roma)",
+    homeDifficulty: 1,
+    awayDifficulty: 4
+  },
+  {
+    id: "m13-8",
+    homeTeam: "Como",
+    awayTeam: "Juventus",
+    date: "Domenica",
+    time: "18:00",
+    stadium: "Giuseppe Sinigaglia (Como)",
+    homeDifficulty: 4,
+    awayDifficulty: 3
+  },
+  {
+    id: "m13-9",
+    homeTeam: "Lecce",
+    awayTeam: "Atalanta",
+    date: "Domenica",
+    time: "20:45",
+    stadium: "Via del Mare (Lecce)",
+    homeDifficulty: 4,
+    awayDifficulty: 2
+  },
+  {
+    id: "m13-10",
+    homeTeam: "Cagliari",
+    awayTeam: "Milan",
+    date: "Lunedì",
+    time: "20:45",
+    stadium: "Unipol Domus (Cagliari)",
+    homeDifficulty: 4,
+    awayDifficulty: 2
+  }
+];
+
 
 // CALENDARIO COMPLETO DEI TURNI SERIE A CON CUTOFF RIGOROSO (Lunedì ore 22:00)
 export const SERIE_A_ROUNDS_CALENDAR: MatchdayScheduleRound[] = [
@@ -623,26 +1042,67 @@ export const SERIE_A_ROUNDS_CALENDAR: MatchdayScheduleRound[] = [
     dateRangeLabel: "30 Ott - 2 Nov",
     cutoffIso: "2026-11-02T22:00:00+01:00",
     fixtures: ROUND_9_SERIE_A_FIXTURES
+  },
+  {
+    roundNumber: 10,
+    title: "10ª Giornata Serie A (6-9 Novembre 2026)",
+    shortLabel: "10ª G.",
+    dateRangeLabel: "6-9 Nov",
+    cutoffIso: "2026-11-09T22:00:00+01:00",
+    fixtures: ROUND_10_SERIE_A_FIXTURES
+  },
+  {
+    roundNumber: 11,
+    title: "11ª Giornata Serie A (20-23 Novembre 2026)",
+    shortLabel: "11ª G.",
+    dateRangeLabel: "20-23 Nov",
+    cutoffIso: "2026-11-23T22:00:00+01:00",
+    fixtures: ROUND_11_SERIE_A_FIXTURES
+  },
+  {
+    roundNumber: 12,
+    title: "12ª Giornata Serie A (27-30 Novembre 2026)",
+    shortLabel: "12ª G.",
+    dateRangeLabel: "27-30 Nov",
+    cutoffIso: "2026-11-30T22:00:00+01:00",
+    fixtures: ROUND_12_SERIE_A_FIXTURES
+  },
+  {
+    roundNumber: 13,
+    title: "13ª Giornata Serie A (4-7 Dicembre 2026)",
+    shortLabel: "13ª G.",
+    dateRangeLabel: "4-7 Dic",
+    cutoffIso: "2026-12-07T22:00:00+01:00",
+    fixtures: ROUND_13_SERIE_A_FIXTURES
   }
 ];
 
-// Funzione di rotazione automatica del turno:
-// Fino a lunedì sera alle 22:00 propone la giornata in corso come "current".
-// Dalle 22:00 di lunedì la giornata giocata scala a "previous" e la successiva diventa "current".
-export function getActiveMatchdaySchedule(now: Date = new Date()): {
+export interface ActiveMatchdaySchedule {
   currentRound: MatchdayScheduleRound;
   previousRound: MatchdayScheduleRound;
-  nextRound: MatchdayScheduleRound;
-} {
+  nextRound: MatchdayScheduleRound; // retrocompatibile
+  nextRounds: MatchdayScheduleRound[]; // LE TRE GIORNATE SUCCESSIVE (es. N+1, N+2, N+3)
+  allRounds: MatchdayScheduleRound[];
+}
+
+// Funzione di rotazione automatica del turno:
+// Fino a lunedì sera alle 22:00 propone la giornata in corso come "current".
+// Dalle 22:00 di lunedì la giornata giocata scala a "previous", la successiva diventa "current",
+// e vengono caricate e rese disponibili le tre giornate successive (nextRounds).
+export function getActiveMatchdaySchedule(now: Date = new Date()): ActiveMatchdaySchedule {
   const nowMs = now.getTime();
   const currentIndex = SERIE_A_ROUNDS_CALENDAR.findIndex(r => new Date(r.cutoffIso).getTime() > nowMs);
 
   if (currentIndex === -1) {
     const lastIdx = SERIE_A_ROUNDS_CALENDAR.length - 1;
+    const cur = SERIE_A_ROUNDS_CALENDAR[lastIdx];
+    const prev = SERIE_A_ROUNDS_CALENDAR[Math.max(0, lastIdx - 1)];
     return {
-      currentRound: SERIE_A_ROUNDS_CALENDAR[lastIdx],
-      previousRound: SERIE_A_ROUNDS_CALENDAR[Math.max(0, lastIdx - 1)],
-      nextRound: SERIE_A_ROUNDS_CALENDAR[lastIdx]
+      currentRound: cur,
+      previousRound: prev,
+      nextRound: cur,
+      nextRounds: [cur, cur, cur],
+      allRounds: SERIE_A_ROUNDS_CALENDAR
     };
   }
 
@@ -650,14 +1110,26 @@ export function getActiveMatchdaySchedule(now: Date = new Date()): {
   const previousRound = currentIndex > 0 
     ? SERIE_A_ROUNDS_CALENDAR[currentIndex - 1] 
     : SERIE_A_ROUNDS_CALENDAR[0];
-  const nextRound = currentIndex + 1 < SERIE_A_ROUNDS_CALENDAR.length
-    ? SERIE_A_ROUNDS_CALENDAR[currentIndex + 1]
-    : SERIE_A_ROUNDS_CALENDAR[currentIndex];
+
+  // Le tre giornate successive (es. se cur è 6 -> [7, 8, 9])
+  const nextRounds: MatchdayScheduleRound[] = [];
+  for (let i = 1; i <= 3; i++) {
+    const idx = currentIndex + i;
+    if (idx < SERIE_A_ROUNDS_CALENDAR.length) {
+      nextRounds.push(SERIE_A_ROUNDS_CALENDAR[idx]);
+    } else {
+      nextRounds.push(SERIE_A_ROUNDS_CALENDAR[SERIE_A_ROUNDS_CALENDAR.length - 1]);
+    }
+  }
+
+  const nextRound = nextRounds[0];
 
   return {
     currentRound,
     previousRound,
-    nextRound
+    nextRound,
+    nextRounds,
+    allRounds: SERIE_A_ROUNDS_CALENDAR
   };
 }
 
@@ -672,15 +1144,21 @@ export const NEXT_MATCHDAY_NUMBER = DEFAULT_ACTIVE_SCHEDULE.nextRound.roundNumbe
 export const NEXT_MATCHDAY_TITLE = DEFAULT_ACTIVE_SCHEDULE.nextRound.title;
 export const NEXT_SERIE_A_FIXTURES = DEFAULT_ACTIVE_SCHEDULE.nextRound.fixtures;
 
-// Helper per ottenere il match di una squadra per turno corrente, precedente o prossimo
+// Helper per ottenere il match di una squadra per qualsiasi tipo di turno o indice
 export function getTeamFixture(teamName: string, matchdayType: MatchdayType = 'current') {
   if (!teamName) return null;
   const schedule = getActiveMatchdaySchedule();
-  const round = matchdayType === 'previous'
-    ? schedule.previousRound
-    : matchdayType === 'next'
-      ? schedule.nextRound
-      : schedule.currentRound;
+  
+  let round = schedule.currentRound;
+  if (matchdayType === 'previous') {
+    round = schedule.previousRound;
+  } else if (matchdayType === 'next' || matchdayType === 'next1') {
+    round = schedule.nextRounds[0];
+  } else if (matchdayType === 'next2') {
+    round = schedule.nextRounds[1];
+  } else if (matchdayType === 'next3') {
+    round = schedule.nextRounds[2];
+  }
 
   const fixtures = round.fixtures;
   const match = fixtures.find(
@@ -702,6 +1180,48 @@ export function getTeamFixture(teamName: string, matchdayType: MatchdayType = 'c
     description: `${isHome ? 'IN CASA vs ' + match.awayTeam : 'TRASFERTA @ ' + match.homeTeam} (${match.date} ${match.time})`
   };
 }
+
+export interface UpcomingMatchInfo {
+  roundNumber: number;
+  roundTitle: string;
+  shortLabel: string;
+  opponent: string;
+  isHome: boolean;
+  difficulty: number;
+  stadium: string;
+  date: string;
+  time: string;
+}
+
+// Restituisce le prossime 3 partite in programma per qualsiasi squadra
+export function getTeamUpcomingMatches(teamName: string, count: number = 3): UpcomingMatchInfo[] {
+  if (!teamName) return [];
+  const schedule = getActiveMatchdaySchedule();
+  const results: UpcomingMatchInfo[] = [];
+  const targetRounds = schedule.nextRounds.slice(0, count);
+
+  for (const r of targetRounds) {
+    const match = r.fixtures.find(
+      m => m.homeTeam.toLowerCase() === teamName.toLowerCase() || m.awayTeam.toLowerCase() === teamName.toLowerCase()
+    );
+    if (match) {
+      const isHome = match.homeTeam.toLowerCase() === teamName.toLowerCase();
+      results.push({
+        roundNumber: r.roundNumber,
+        roundTitle: r.title,
+        shortLabel: r.shortLabel,
+        opponent: isHome ? match.awayTeam : match.homeTeam,
+        isHome,
+        difficulty: isHome ? match.homeDifficulty : match.awayDifficulty,
+        stadium: match.stadium,
+        date: match.date,
+        time: match.time
+      });
+    }
+  }
+  return results;
+}
+
 
 // 2. Probabili Formazioni Gazzetta dello Sport (Aggiornate 6ª Giornata)
 export const GAZZETTA_LINEUPS: Record<string, Partial<GazzettaPlayerStatus>> = {

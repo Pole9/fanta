@@ -12,7 +12,9 @@ import {
 } from '../utils/tedLassoAdvisor';
 import { 
   getActiveMatchdaySchedule,
-  cleanPlayerName
+  cleanPlayerName,
+  MatchdayType,
+  getTeamUpcomingMatches
 } from '../data/matchdayData';
 import { PlayerPerformanceChart } from './PlayerPerformanceChart';
 import { getDiddiMatchdayYoutubeAdvice, getFantagazzettaConsigliatoStatus } from '../utils/matchdayAdviceProvider';
@@ -56,11 +58,17 @@ export const TedLassoMobileView: React.FC = () => {
 
   // Calcolo dinamico turno Serie A: fino a lunedì alle ore 22:00 propone la giornata in corso (attuale), poi scala a precedente
   const matchdaySchedule = useMemo(() => getActiveMatchdaySchedule(), []);
-  const { currentRound, previousRound } = matchdaySchedule;
+  const { currentRound, previousRound, nextRounds, allRounds } = matchdaySchedule;
 
-  // Tab Giornata: 'current' (Giornata Attuale in Corso, DEFAULT) o 'previous' (Giornata Precedente Conclusa)
-  const [activeTab, setActiveTab] = useState<'current' | 'previous'>('current');
-  const selectedRound = activeTab === 'current' ? currentRound : previousRound;
+  // Tab Giornata: 'current' (Attuale, DEFAULT), 'previous' (Precedente), o 'next1' / 'next2' / 'next3' (Tre giornate successive)
+  const [activeTab, setActiveTab] = useState<MatchdayType>('current');
+  const selectedRound = useMemo(() => {
+    if (activeTab === 'previous') return previousRound;
+    if (activeTab === 'next' || activeTab === 'next1') return nextRounds[0];
+    if (activeTab === 'next2') return nextRounds[1];
+    if (activeTab === 'next3') return nextRounds[2];
+    return currentRound;
+  }, [activeTab, previousRound, currentRound, nextRounds]);
 
   // Tab di navigazione mobile: 'pitch' (Campo) | 'bench' (Panchina) | 'tactics' (Lavagna) | 'fixtures' (Calendario)
   const [mobileSection, setMobileSection] = useState<'pitch' | 'bench' | 'tactics' | 'fixtures'>('pitch');
@@ -417,43 +425,93 @@ ${benchText}
           </div>
         </div>
 
-        {/* SELETTORE GIORNATA (ATTUALE IN CORSO VS PRECEDENTE CONCLUSA) */}
-        <div className="grid grid-cols-2 gap-1.5 bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs">
-          <button
-            onClick={() => {
-              setActiveTab('current');
-              setSwappingPlayerId(null);
-            }}
-            className={`py-1.5 rounded-lg font-black flex items-center justify-center gap-1.5 transition-all ${
-              activeTab === 'current'
-                ? 'bg-emerald-500 text-slate-950 shadow-md font-black'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            <Activity className="w-3.5 h-3.5" />
-            <span>{currentRound.shortLabel} Attuale</span>
-            <span className={`text-[9px] px-1 rounded font-mono ${activeTab === 'current' ? 'bg-slate-950 text-emerald-300 animate-pulse' : 'bg-slate-800'}`}>
-              {currentRound.dateRangeLabel}
-            </span>
-          </button>
-
+        {/* SELETTORE DEI TURNI MOBILE: PRECEDENTE, ATTUALE (IN CORSO), E LE TRE GIORNATE SUCCESSIVE */}
+        <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs overflow-x-auto scrollbar-none">
+          {/* TAB PRECEDENTE */}
           <button
             onClick={() => {
               setActiveTab('previous');
               setSwappingPlayerId(null);
             }}
-            className={`py-1.5 rounded-lg font-black flex items-center justify-center gap-1.5 transition-all ${
+            className={`py-1.5 px-2 rounded-lg font-black flex items-center justify-center gap-1 transition-all whitespace-nowrap flex-shrink-0 ${
               activeTab === 'previous'
                 ? 'bg-amber-400 text-slate-950 shadow-md font-black'
                 : 'text-slate-400 hover:text-white'
             }`}
           >
-            <Calendar className="w-3.5 h-3.5" />
-            <span>{previousRound.shortLabel} Precedente</span>
-            <span className={`text-[9px] px-1 rounded font-mono ${activeTab === 'previous' ? 'bg-slate-950 text-amber-300' : 'bg-slate-800'}`}>
-              CONCLUSA
+            <Calendar className="w-3 h-3" />
+            <span>{previousRound.shortLabel} Prec.</span>
+          </button>
+
+          {/* TAB ATTUALE IN CORSO (DEFAULT) */}
+          <button
+            onClick={() => {
+              setActiveTab('current');
+              setSwappingPlayerId(null);
+            }}
+            className={`py-1.5 px-2.5 rounded-lg font-black flex items-center justify-center gap-1 transition-all whitespace-nowrap flex-shrink-0 ${
+              activeTab === 'current'
+                ? 'bg-emerald-500 text-slate-950 shadow-md font-black'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            <Activity className="w-3 h-3" />
+            <span>{currentRound.shortLabel} Attuale</span>
+            <span className={`text-[8.5px] px-1 rounded font-mono ${activeTab === 'current' ? 'bg-slate-950 text-emerald-300 animate-pulse' : 'bg-slate-800'}`}>
+              {currentRound.dateRangeLabel}
             </span>
           </button>
+
+          {/* TAB +1 */}
+          {nextRounds[0] && (
+            <button
+              onClick={() => {
+                setActiveTab('next1');
+                setSwappingPlayerId(null);
+              }}
+              className={`py-1.5 px-2 rounded-lg font-black flex items-center justify-center gap-1 transition-all whitespace-nowrap flex-shrink-0 ${
+                activeTab === 'next1' || activeTab === 'next'
+                  ? 'bg-blue-500 text-white shadow-md font-black'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <span>{nextRounds[0].shortLabel} (+1)</span>
+            </button>
+          )}
+
+          {/* TAB +2 */}
+          {nextRounds[1] && (
+            <button
+              onClick={() => {
+                setActiveTab('next2');
+                setSwappingPlayerId(null);
+              }}
+              className={`py-1.5 px-2 rounded-lg font-black flex items-center justify-center gap-1 transition-all whitespace-nowrap flex-shrink-0 ${
+                activeTab === 'next2'
+                  ? 'bg-indigo-500 text-white shadow-md font-black'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <span>{nextRounds[1].shortLabel} (+2)</span>
+            </button>
+          )}
+
+          {/* TAB +3 */}
+          {nextRounds[2] && (
+            <button
+              onClick={() => {
+                setActiveTab('next3');
+                setSwappingPlayerId(null);
+              }}
+              className={`py-1.5 px-2 rounded-lg font-black flex items-center justify-center gap-1 transition-all whitespace-nowrap flex-shrink-0 ${
+                activeTab === 'next3'
+                  ? 'bg-purple-500 text-white shadow-md font-black'
+                  : 'text-slate-400 hover:text-white'
+              }`}
+            >
+              <span>{nextRounds[2].shortLabel} (+3)</span>
+            </button>
+          )}
         </div>
 
         {/* BARRA COMANDI RAPIDI MOBILE: MODULO, AUTO-11, SALVA, WHATSAPP, SYNC */}
@@ -802,6 +860,29 @@ ${benchText}
                                   <span className="text-[9.5px] text-slate-400 font-mono mt-0.5">
                                     {matchInfo.date} {matchInfo.time}
                                   </span>
+
+                                  {/* Mini-badge Prossime 3 Gare con FDR */}
+                                  {(() => {
+                                    const upcoming = getTeamUpcomingMatches(card.player.squadra, 3);
+                                    if (upcoming.length === 0) return null;
+                                    return (
+                                      <div className="flex items-center gap-1 mt-0.5 flex-wrap" title="Prossime 3 giornate">
+                                        <span className="text-[8px] text-slate-500 font-black uppercase">3 G:</span>
+                                        {upcoming.map(u => {
+                                          const uBadge = getDifficultyBadge(u.difficulty);
+                                          return (
+                                            <span 
+                                              key={u.roundNumber} 
+                                              className={`px-0.5 py-0.2 rounded text-[7.5px] font-bold border font-mono ${uBadge.color}`}
+                                              title={`${u.shortLabel}: ${u.isHome ? 'Casa vs ' : 'Fuori @ '}${u.opponent} (${uBadge.label})`}
+                                            >
+                                              {u.isHome ? '' : '@'}{u.opponent.slice(0, 3)}
+                                            </span>
+                                          );
+                                        })}
+                                      </div>
+                                    );
+                                  })()}
                                 </div>
                               ) : (
                                 <span className="text-slate-500 italic text-[10px]">-</span>
@@ -1159,13 +1240,50 @@ ${benchText}
           </div>
         )}
 
-        {/* SEZIONE 4: CALENDARIO TURNO COMPLETO */}
+        {/* SEZIONE 4: CALENDARIO TURNO COMPLETO CON SCELTA GIORNATA */}
         {mobileSection === 'fixtures' && (
-          <div className="space-y-2">
-            <span className="text-xs font-black text-amber-400 uppercase flex items-center gap-1 px-1">
-              <Calendar className="w-3.5 h-3.5" />
-              <span>{currentTitle}</span>
-            </span>
+          <div className="space-y-2.5">
+            <div className="flex items-center justify-between px-1">
+              <span className="text-xs font-black text-amber-400 uppercase flex items-center gap-1">
+                <Calendar className="w-3.5 h-3.5" />
+                <span>{currentTitle}</span>
+              </span>
+            </div>
+
+            {/* CHIP SELEZIONE GIORNATA */}
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none px-0.5">
+              <button
+                onClick={() => setActiveTab('previous')}
+                className={`px-2 py-1 rounded-lg text-[11px] font-bold transition-all whitespace-nowrap flex-shrink-0 ${
+                  activeTab === 'previous' ? 'bg-amber-400 text-slate-950 font-black' : 'bg-slate-900 border border-slate-800 text-slate-400'
+                }`}
+              >
+                {previousRound.shortLabel} Prec.
+              </button>
+              <button
+                onClick={() => setActiveTab('current')}
+                className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all whitespace-nowrap flex-shrink-0 ${
+                  activeTab === 'current' ? 'bg-emerald-500 text-slate-950 font-black' : 'bg-slate-900 border border-slate-800 text-slate-400'
+                }`}
+              >
+                {currentRound.shortLabel} Attuale
+              </button>
+              {nextRounds.map((nr, idx) => {
+                const tabKey = (`next${idx+1}` as MatchdayType);
+                const isSelected = activeTab === tabKey || (idx === 0 && activeTab === 'next');
+                return (
+                  <button
+                    key={nr.roundNumber}
+                    onClick={() => setActiveTab(tabKey)}
+                    className={`px-2 py-1 rounded-lg text-[11px] font-bold transition-all whitespace-nowrap flex-shrink-0 ${
+                      isSelected ? 'bg-blue-500 text-white font-black' : 'bg-slate-900 border border-slate-800 text-slate-400'
+                    }`}
+                  >
+                    {nr.shortLabel} (+{idx+1})
+                  </button>
+                );
+              })}
+            </div>
 
             <div className="space-y-1.5">
               {currentFixtures.map(m => (
