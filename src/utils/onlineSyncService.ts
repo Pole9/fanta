@@ -107,7 +107,31 @@ export function parseHtmlData(html: string): SyncedOnlineData {
     }
   }
 
-  // 6. Annotazione ballottaggi sui profili dei calciatori
+  // 6. Infortunati ufficiali da sezione Infermeria (<section class="injureds"> collegata a /infortunati-serie-a)
+  const injRegex = /<section class=\"injureds\"[\s\S]*?<\/section>/gi;
+  let im: RegExpExecArray | null;
+  while ((im = injRegex.exec(html)) !== null) {
+    const block = im[0];
+    const itemRegex = /<a class=\"player-name[^\"]*\"[^>]*>[\s\S]*?<span>([^<]+)<\/span>[\s\S]*?<\/a>[\s\S]*?<p class=\"description\">([\s\S]*?)<\/p>/gi;
+    let pm: RegExpExecArray | null;
+    while ((pm = itemRegex.exec(block)) !== null) {
+      const raw = pm[1].trim();
+      const desc = pm[2].replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+      const clean = cleanPlayerName(raw);
+      if (clean && clean.length > 2) {
+        players[clean] = {
+          name: raw,
+          titolaritaPercent: 0,
+          status: 'infortunato',
+          ballottaggioCon: null,
+          note: desc,
+          source: 'Fantacalcio.it (Infermeria / Infortunati)'
+        };
+      }
+    }
+  }
+
+  // 7. Annotazione ballottaggi sui profili dei calciatori
   for (const b of ballottaggi) {
     const c1 = cleanPlayerName(b.p1);
     const c2 = cleanPlayerName(b.p2);

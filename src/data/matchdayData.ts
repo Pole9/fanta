@@ -545,6 +545,7 @@ export interface SyncedOnlinePlayer {
   status: 'titolare' | 'ballottaggio' | 'panchina' | 'infortunato' | 'squalificato';
   ballottaggioCon?: string | null;
   source: string;
+  note?: string;
 }
 
 export interface SyncedOnlineData {
@@ -661,7 +662,11 @@ export function getPlayerMatchdayEvaluation(
     if (synced) {
       gazzetta.titolaritaPercent = synced.titolaritaPercent;
       gazzetta.status = synced.status;
-      if (synced.ballottaggioCon) {
+      if (synced.status === 'infortunato') {
+        gazzetta.noteGazzetta = `🏥 Infortunato (Fantacalcio.it Infermeria): ${synced.note || 'Indisponibile'}`;
+      } else if (synced.status === 'squalificato') {
+        gazzetta.noteGazzetta = `🟥 Squalificato (Fantacalcio.it): Non disponibile per questo turno.`;
+      } else if (synced.ballottaggioCon) {
         gazzetta.ballottaggioCon = synced.ballottaggioCon;
         gazzetta.noteGazzetta = `⚡ Ballottaggio live: ${synced.ballottaggioCon}`;
       } else if (synced.status === 'titolare') {

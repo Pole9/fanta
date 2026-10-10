@@ -62,6 +62,7 @@ Applicazione web ultra-reattiva progettata specificamente per lo svolgimento rap
 
 ### 7. Fonti Ufficiali Probabili Formazioni & Infortuni
 
-- **Fonte Primaria:** [Fantacalcio.it Probabili Formazioni](https://www.fantacalcio.it/probabili-formazioni-serie-a)
+- **Fonte Primaria Formazioni:** [Fantacalcio.it Probabili Formazioni](https://www.fantacalcio.it/probabili-formazioni-serie-a)
+- **Fonte Primaria Infortuni:** [Fantacalcio.it Infortunati Serie A](https://www.fantacalcio.it/infortunati-serie-a)
 - **Fonte Secondaria:** [La Gazzetta dello Sport Probabili Formazioni](https://www.gazzetta.it/Calcio/prob_form/)
 - **Regola:** Esclusione tassativa di qualsiasi altra fonte non autorizzata.

@@ -144,6 +144,30 @@ export async function onRequest(context: any) {
       }
     }
 
+    // Infortunati ufficiali da sezione Infermeria (<section class="injureds"> collegata a /infortunati-serie-a)
+    const injRegex = /<section class="injureds"[\s\S]*?<\/section>/gi;
+    let im;
+    while ((im = injRegex.exec(html)) !== null) {
+      const block = im[0];
+      const itemRegex = /<a class="player-name[^"]*"[^>]*>[\s\S]*?<span>([^<]+)<\/span>[\s\S]*?<\/a>[\s\S]*?<p class="description">([\s\S]*?)<\/p>/gi;
+      let pm;
+      while ((pm = itemRegex.exec(block)) !== null) {
+        const raw = pm[1].trim();
+        const desc = pm[2].replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+        const clean = raw.toUpperCase().replace(/[^A-Z0-9\s]/gi, ' ').replace(/\s+/g, ' ').trim();
+        if (clean && clean.length > 2) {
+          players[clean] = {
+            name: raw,
+            titolaritaPercent: 0,
+            status: 'infortunato',
+            ballottaggioCon: null,
+            note: desc,
+            source: `${usedSource} (Infermeria / Infortunati)`
+          };
+        }
+      }
+    }
+
     // Assegnazione ballottaggi ai calciatori
     for (const b of ballottaggi) {
       const c1 = b.p1.toUpperCase().replace(/[^A-Z0-9\s]/gi, ' ').replace(/\s+/g, ' ').trim();
