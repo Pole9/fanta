@@ -1,5 +1,5 @@
 import { Player, Role } from '../types';
-import { PlayerMatchdayEvaluation, getPlayerMatchdayEvaluation, SyncedOnlineData } from '../data/matchdayData';
+import { PlayerMatchdayEvaluation, getPlayerMatchdayEvaluation, SyncedOnlineData, MatchdayType } from '../data/matchdayData';
 
 export interface TedPlayerCard {
   player: Player;
@@ -163,7 +163,7 @@ export function generateTedLineup(
   players: Player[],
   formationId: string = '3-4-3',
   syncedData?: SyncedOnlineData | null,
-  matchdayType: 'current' | 'next' = 'next'
+  matchdayType: MatchdayType = 'current'
 ): { starters: TedPlayerCard[]; bench: TedPlayerCard[]; formation: TedFormationConfig } {
   const formation = TED_FORMATIONS[formationId] || TED_FORMATIONS['3-4-3'];
 

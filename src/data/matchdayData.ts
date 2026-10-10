@@ -28,6 +28,8 @@ export interface FantagazzettaRating {
   commentoRedazione: string;
 }
 
+export type MatchdayType = 'current' | 'previous' | 'next';
+
 export interface PlayerMatchdayEvaluation {
   match: {
     opponent: string;
@@ -40,7 +42,7 @@ export interface PlayerMatchdayEvaluation {
     matchdayTitle: string;
     description: string;
   } | null;
-  matchdayType: 'current' | 'next';
+  matchdayType: MatchdayType;
   gazzetta: GazzettaPlayerStatus;
   fantagazzetta: FantagazzettaRating;
   tatticoAdvice: string | null;
@@ -51,11 +53,17 @@ export interface PlayerMatchdayEvaluation {
   } | null;
 }
 
-// 1. Calendario del turno disputato (7ª Giornata Serie A, 2-5 Ottobre 2026)
-export const CURRENT_MATCHDAY_NUMBER = 7;
-export const CURRENT_MATCHDAY_TITLE = "7ª Giornata Serie A (2-5 Ottobre 2026)";
+export interface MatchdayScheduleRound {
+  roundNumber: number;
+  title: string;
+  shortLabel: string;
+  dateRangeLabel: string;
+  cutoffIso: string; // ISO string rappresentante Lunedì ore 22:00:00 (es. 2026-10-12T22:00:00+02:00)
+  fixtures: SerieAMatch[];
+}
 
-export const CURRENT_SERIE_A_FIXTURES: SerieAMatch[] = [
+// 1. Calendario 7ª Giornata Serie A (2-5 Ottobre 2026)
+export const ROUND_7_SERIE_A_FIXTURES: SerieAMatch[] = [
   {
     id: "m7-1",
     homeTeam: "Napoli",
@@ -158,13 +166,10 @@ export const CURRENT_SERIE_A_FIXTURES: SerieAMatch[] = [
   }
 ];
 
-// 2. Calendario della PROSSIMA GARA DA SCHIERARE (10-12 Ottobre 2026 - Fonte Fantacalcio.it & Gazzetta)
-export const NEXT_MATCHDAY_NUMBER = 8;
-export const NEXT_MATCHDAY_TITLE = "Prossimo Turno Serie A (10-12 Ottobre 2026)";
-
-export const NEXT_SERIE_A_FIXTURES: SerieAMatch[] = [
+// 2. Calendario 8ª Giornata Serie A (10-12 Ottobre 2026 - Fonte Fantacalcio.it & Gazzetta)
+export const ROUND_8_SERIE_A_FIXTURES: SerieAMatch[] = [
   {
-    id: "m-1",
+    id: "m8-1",
     homeTeam: "Genoa",
     awayTeam: "Fiorentina",
     date: "Sabato 10 Ottobre",
@@ -174,7 +179,7 @@ export const NEXT_SERIE_A_FIXTURES: SerieAMatch[] = [
     awayDifficulty: 2
   },
   {
-    id: "m-2",
+    id: "m8-2",
     homeTeam: "Inter",
     awayTeam: "Parma",
     date: "Sabato 10 Ottobre",
@@ -184,7 +189,7 @@ export const NEXT_SERIE_A_FIXTURES: SerieAMatch[] = [
     awayDifficulty: 5
   },
   {
-    id: "m-3",
+    id: "m8-3",
     homeTeam: "Napoli",
     awayTeam: "Frosinone",
     date: "Sabato 10 Ottobre",
@@ -194,7 +199,7 @@ export const NEXT_SERIE_A_FIXTURES: SerieAMatch[] = [
     awayDifficulty: 5
   },
   {
-    id: "m-4",
+    id: "m8-4",
     homeTeam: "Como",
     awayTeam: "Roma",
     date: "Domenica 11 Ottobre",
@@ -204,7 +209,7 @@ export const NEXT_SERIE_A_FIXTURES: SerieAMatch[] = [
     awayDifficulty: 2
   },
   {
-    id: "m-5",
+    id: "m8-5",
     homeTeam: "Lazio",
     awayTeam: "Monza",
     date: "Domenica 11 Ottobre",
@@ -214,7 +219,7 @@ export const NEXT_SERIE_A_FIXTURES: SerieAMatch[] = [
     awayDifficulty: 4
   },
   {
-    id: "m-6",
+    id: "m8-6",
     homeTeam: "Lecce",
     awayTeam: "Bologna",
     date: "Domenica 11 Ottobre",
@@ -224,7 +229,7 @@ export const NEXT_SERIE_A_FIXTURES: SerieAMatch[] = [
     awayDifficulty: 3
   },
   {
-    id: "m-7",
+    id: "m8-7",
     homeTeam: "Sassuolo",
     awayTeam: "Milan",
     date: "Domenica 11 Ottobre",
@@ -234,7 +239,7 @@ export const NEXT_SERIE_A_FIXTURES: SerieAMatch[] = [
     awayDifficulty: 2
   },
   {
-    id: "m-8",
+    id: "m8-8",
     homeTeam: "Cagliari",
     awayTeam: "Juventus",
     date: "Domenica 11 Ottobre",
@@ -244,7 +249,7 @@ export const NEXT_SERIE_A_FIXTURES: SerieAMatch[] = [
     awayDifficulty: 2
   },
   {
-    id: "m-9",
+    id: "m8-9",
     homeTeam: "Atalanta",
     awayTeam: "Venezia",
     date: "Lunedì 12 Ottobre",
@@ -254,7 +259,7 @@ export const NEXT_SERIE_A_FIXTURES: SerieAMatch[] = [
     awayDifficulty: 5
   },
   {
-    id: "m-10",
+    id: "m8-10",
     homeTeam: "Torino",
     awayTeam: "Udinese",
     date: "Lunedì 12 Ottobre",
@@ -265,18 +270,313 @@ export const NEXT_SERIE_A_FIXTURES: SerieAMatch[] = [
   }
 ];
 
-// Helper per ottenere il match di una squadra per turno in corso o prossimo
-export function getTeamFixture(teamName: string, matchdayType: 'current' | 'next' = 'next') {
+// 3. Calendario 9ª Giornata Serie A (17-19 Ottobre 2026)
+export const ROUND_9_SERIE_A_FIXTURES: SerieAMatch[] = [
+  {
+    id: "m9-1",
+    homeTeam: "Milan",
+    awayTeam: "Udinese",
+    date: "Sabato 17 Ottobre",
+    time: "15:00",
+    stadium: "San Siro (Milano)",
+    homeDifficulty: 2,
+    awayDifficulty: 4
+  },
+  {
+    id: "m9-2",
+    homeTeam: "Juventus",
+    awayTeam: "Lazio",
+    date: "Sabato 17 Ottobre",
+    time: "18:00",
+    stadium: "Allianz Stadium (Torino)",
+    homeDifficulty: 3,
+    awayDifficulty: 4
+  },
+  {
+    id: "m9-3",
+    homeTeam: "Roma",
+    awayTeam: "Inter",
+    date: "Sabato 17 Ottobre",
+    time: "20:45",
+    stadium: "Stadio Olimpico (Roma)",
+    homeDifficulty: 4,
+    awayDifficulty: 3
+  },
+  {
+    id: "m9-4",
+    homeTeam: "Venezia",
+    awayTeam: "Atalanta",
+    date: "Domenica 18 Ottobre",
+    time: "12:30",
+    stadium: "Pier Luigi Penzo (Venezia)",
+    homeDifficulty: 5,
+    awayDifficulty: 1
+  },
+  {
+    id: "m9-5",
+    homeTeam: "Fiorentina",
+    awayTeam: "Lecce",
+    date: "Domenica 18 Ottobre",
+    time: "15:00",
+    stadium: "Artemio Franchi (Firenze)",
+    homeDifficulty: 2,
+    awayDifficulty: 4
+  },
+  {
+    id: "m9-6",
+    homeTeam: "Genoa",
+    awayTeam: "Bologna",
+    date: "Domenica 18 Ottobre",
+    time: "15:00",
+    stadium: "Luigi Ferraris (Genova)",
+    homeDifficulty: 3,
+    awayDifficulty: 3
+  },
+  {
+    id: "m9-7",
+    homeTeam: "Como",
+    awayTeam: "Parma",
+    date: "Domenica 18 Ottobre",
+    time: "18:00",
+    stadium: "Giuseppe Sinigaglia (Como)",
+    homeDifficulty: 3,
+    awayDifficulty: 3
+  },
+  {
+    id: "m9-8",
+    homeTeam: "Cagliari",
+    awayTeam: "Torino",
+    date: "Domenica 18 Ottobre",
+    time: "20:45",
+    stadium: "Sardegna Arena (Cagliari)",
+    homeDifficulty: 3,
+    awayDifficulty: 3
+  },
+  {
+    id: "m9-9",
+    homeTeam: "Napoli",
+    awayTeam: "Sassuolo",
+    date: "Lunedì 19 Ottobre",
+    time: "18:30",
+    stadium: "Diego Armando Maradona (Napoli)",
+    homeDifficulty: 1,
+    awayDifficulty: 5
+  },
+  {
+    id: "m9-10",
+    homeTeam: "Monza",
+    awayTeam: "Frosinone",
+    date: "Lunedì 19 Ottobre",
+    time: "20:45",
+    stadium: "U-Power Stadium (Monza)",
+    homeDifficulty: 2,
+    awayDifficulty: 3
+  }
+];
+
+// 4. Calendario 10ª Giornata Serie A (24-26 Ottobre 2026)
+export const ROUND_10_SERIE_A_FIXTURES: SerieAMatch[] = [
+  {
+    id: "m10-1",
+    homeTeam: "Atalanta",
+    awayTeam: "Monza",
+    date: "Sabato 24 Ottobre",
+    time: "15:00",
+    stadium: "Gewiss Stadium (Bergamo)",
+    homeDifficulty: 1,
+    awayDifficulty: 5
+  },
+  {
+    id: "m10-2",
+    homeTeam: "Lazio",
+    awayTeam: "Genoa",
+    date: "Sabato 24 Ottobre",
+    time: "18:00",
+    stadium: "Stadio Olimpico (Roma)",
+    homeDifficulty: 2,
+    awayDifficulty: 4
+  },
+  {
+    id: "m10-3",
+    homeTeam: "Inter",
+    awayTeam: "Juventus",
+    date: "Sabato 24 Ottobre",
+    time: "20:45",
+    stadium: "San Siro (Milano)",
+    homeDifficulty: 3,
+    awayDifficulty: 3
+  },
+  {
+    id: "m10-4",
+    homeTeam: "Bologna",
+    awayTeam: "Milan",
+    date: "Domenica 25 Ottobre",
+    time: "12:30",
+    stadium: "Renato Dall'Ara (Bologna)",
+    homeDifficulty: 4,
+    awayDifficulty: 2
+  },
+  {
+    id: "m10-5",
+    homeTeam: "Torino",
+    awayTeam: "Como",
+    date: "Domenica 25 Ottobre",
+    time: "15:00",
+    stadium: "Stadio Olimpico Grande Torino (Torino)",
+    homeDifficulty: 2,
+    awayDifficulty: 4
+  },
+  {
+    id: "m10-6",
+    homeTeam: "Udinese",
+    awayTeam: "Cagliari",
+    date: "Domenica 25 Ottobre",
+    time: "15:00",
+    stadium: "Bluenergy Stadium (Udine)",
+    homeDifficulty: 2,
+    awayDifficulty: 3
+  },
+  {
+    id: "m10-7",
+    homeTeam: "Sassuolo",
+    awayTeam: "Roma",
+    date: "Domenica 25 Ottobre",
+    time: "18:00",
+    stadium: "Mapei Stadium (Reggio Emilia)",
+    homeDifficulty: 4,
+    awayDifficulty: 2
+  },
+  {
+    id: "m10-8",
+    homeTeam: "Parma",
+    awayTeam: "Venezia",
+    date: "Domenica 25 Ottobre",
+    time: "20:45",
+    stadium: "Ennio Tardini (Parma)",
+    homeDifficulty: 2,
+    awayDifficulty: 4
+  },
+  {
+    id: "m10-9",
+    homeTeam: "Lecce",
+    awayTeam: "Napoli",
+    date: "Lunedì 26 Ottobre",
+    time: "18:30",
+    stadium: "Via del Mare (Lecce)",
+    homeDifficulty: 5,
+    awayDifficulty: 1
+  },
+  {
+    id: "m10-10",
+    homeTeam: "Frosinone",
+    awayTeam: "Fiorentina",
+    date: "Lunedì 26 Ottobre",
+    time: "20:45",
+    stadium: "Benito Stirpe (Frosinone)",
+    homeDifficulty: 4,
+    awayDifficulty: 2
+  }
+];
+
+// CALENDARIO COMPLETO DEI TURNI SERIE A CON CUTOFF RIGOROSO (Lunedì ore 22:00)
+export const SERIE_A_ROUNDS_CALENDAR: MatchdayScheduleRound[] = [
+  {
+    roundNumber: 7,
+    title: "7ª Giornata Serie A (2-5 Ottobre 2026)",
+    shortLabel: "7ª G.",
+    dateRangeLabel: "2-5 Ott",
+    cutoffIso: "2026-10-05T22:00:00+02:00",
+    fixtures: ROUND_7_SERIE_A_FIXTURES
+  },
+  {
+    roundNumber: 8,
+    title: "8ª Giornata Serie A (10-12 Ottobre 2026)",
+    shortLabel: "8ª G.",
+    dateRangeLabel: "10-12 Ott",
+    cutoffIso: "2026-10-12T22:00:00+02:00",
+    fixtures: ROUND_8_SERIE_A_FIXTURES
+  },
+  {
+    roundNumber: 9,
+    title: "9ª Giornata Serie A (17-19 Ottobre 2026)",
+    shortLabel: "9ª G.",
+    dateRangeLabel: "17-19 Ott",
+    cutoffIso: "2026-10-19T22:00:00+02:00",
+    fixtures: ROUND_9_SERIE_A_FIXTURES
+  },
+  {
+    roundNumber: 10,
+    title: "10ª Giornata Serie A (24-26 Ottobre 2026)",
+    shortLabel: "10ª G.",
+    dateRangeLabel: "24-26 Ott",
+    cutoffIso: "2026-10-26T22:00:00+02:00",
+    fixtures: ROUND_10_SERIE_A_FIXTURES
+  }
+];
+
+// Funzione di rotazione automatica del turno:
+// Fino a lunedì sera alle 22:00 propone la giornata in corso come "current".
+// Dalle 22:00 di lunedì la giornata giocata scala a "previous" e la successiva diventa "current".
+export function getActiveMatchdaySchedule(now: Date = new Date()): {
+  currentRound: MatchdayScheduleRound;
+  previousRound: MatchdayScheduleRound;
+  nextRound: MatchdayScheduleRound;
+} {
+  const nowMs = now.getTime();
+  const currentIndex = SERIE_A_ROUNDS_CALENDAR.findIndex(r => new Date(r.cutoffIso).getTime() > nowMs);
+
+  if (currentIndex === -1) {
+    const lastIdx = SERIE_A_ROUNDS_CALENDAR.length - 1;
+    return {
+      currentRound: SERIE_A_ROUNDS_CALENDAR[lastIdx],
+      previousRound: SERIE_A_ROUNDS_CALENDAR[Math.max(0, lastIdx - 1)],
+      nextRound: SERIE_A_ROUNDS_CALENDAR[lastIdx]
+    };
+  }
+
+  const currentRound = SERIE_A_ROUNDS_CALENDAR[currentIndex];
+  const previousRound = currentIndex > 0 
+    ? SERIE_A_ROUNDS_CALENDAR[currentIndex - 1] 
+    : SERIE_A_ROUNDS_CALENDAR[0];
+  const nextRound = currentIndex + 1 < SERIE_A_ROUNDS_CALENDAR.length
+    ? SERIE_A_ROUNDS_CALENDAR[currentIndex + 1]
+    : SERIE_A_ROUNDS_CALENDAR[currentIndex];
+
+  return {
+    currentRound,
+    previousRound,
+    nextRound
+  };
+}
+
+// Stato di default calcolato al caricamento
+export const DEFAULT_ACTIVE_SCHEDULE = getActiveMatchdaySchedule();
+
+// Costanti retrocompatibili
+export const CURRENT_MATCHDAY_NUMBER = DEFAULT_ACTIVE_SCHEDULE.currentRound.roundNumber;
+export const CURRENT_MATCHDAY_TITLE = DEFAULT_ACTIVE_SCHEDULE.currentRound.title;
+export const CURRENT_SERIE_A_FIXTURES = DEFAULT_ACTIVE_SCHEDULE.currentRound.fixtures;
+export const NEXT_MATCHDAY_NUMBER = DEFAULT_ACTIVE_SCHEDULE.nextRound.roundNumber;
+export const NEXT_MATCHDAY_TITLE = DEFAULT_ACTIVE_SCHEDULE.nextRound.title;
+export const NEXT_SERIE_A_FIXTURES = DEFAULT_ACTIVE_SCHEDULE.nextRound.fixtures;
+
+// Helper per ottenere il match di una squadra per turno corrente, precedente o prossimo
+export function getTeamFixture(teamName: string, matchdayType: MatchdayType = 'current') {
   if (!teamName) return null;
-  const fixtures = matchdayType === 'current' ? CURRENT_SERIE_A_FIXTURES : NEXT_SERIE_A_FIXTURES;
+  const schedule = getActiveMatchdaySchedule();
+  const round = matchdayType === 'previous'
+    ? schedule.previousRound
+    : matchdayType === 'next'
+      ? schedule.nextRound
+      : schedule.currentRound;
+
+  const fixtures = round.fixtures;
   const match = fixtures.find(
     m => m.homeTeam.toLowerCase() === teamName.toLowerCase() || m.awayTeam.toLowerCase() === teamName.toLowerCase()
   );
   if (!match) return null;
   const isHome = match.homeTeam.toLowerCase() === teamName.toLowerCase();
   const difficulty = isHome ? match.homeDifficulty : match.awayDifficulty;
-  const matchdayNumber = matchdayType === 'current' ? CURRENT_MATCHDAY_NUMBER : NEXT_MATCHDAY_NUMBER;
-  const matchdayTitle = matchdayType === 'current' ? CURRENT_MATCHDAY_TITLE : NEXT_MATCHDAY_TITLE;
 
   return {
     opponent: isHome ? match.awayTeam : match.homeTeam,
@@ -285,8 +585,8 @@ export function getTeamFixture(teamName: string, matchdayType: 'current' | 'next
     stadium: match.stadium,
     date: match.date,
     time: match.time,
-    matchdayNumber,
-    matchdayTitle,
+    matchdayNumber: round.roundNumber,
+    matchdayTitle: round.title,
     description: `${isHome ? 'IN CASA vs ' + match.awayTeam : 'TRASFERTA @ ' + match.homeTeam} (${match.date} ${match.time})`
   };
 }
@@ -618,12 +918,12 @@ export function matchSyncedPlayer(
   return null;
 }
 
-// Funzione principale che raccoglie tutti i dati per un calciatore per il turno specificato (in corso o prossimo)
+// Funzione principale che raccoglie tutti i dati per un calciatore per il turno specificato (in corso, precedente o prossimo)
 export function getPlayerMatchdayEvaluation(
   playerName: string, 
   teamName: string,
   syncedData?: SyncedOnlineData | null,
-  matchdayType: 'current' | 'next' = 'next'
+  matchdayType: MatchdayType = 'current'
 ): PlayerMatchdayEvaluation {
   const normName = playerName.toUpperCase().trim();
   const fixture = getTeamFixture(teamName, matchdayType);

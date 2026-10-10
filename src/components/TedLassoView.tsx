@@ -18,12 +18,7 @@ const ROLE_NAMES: Record<Role, string> = {
   A: 'Attaccante'
 };
 import { 
-  CURRENT_MATCHDAY_NUMBER,
-  CURRENT_MATCHDAY_TITLE, 
-  CURRENT_SERIE_A_FIXTURES,
-  NEXT_MATCHDAY_NUMBER,
-  NEXT_MATCHDAY_TITLE,
-  NEXT_SERIE_A_FIXTURES,
+  getActiveMatchdaySchedule,
   cleanPlayerName
 } from '../data/matchdayData';
 import { PlayerPerformanceChart } from './PlayerPerformanceChart';
@@ -68,8 +63,13 @@ export const TedLassoView: React.FC = () => {
     setActiveView
   } = useAuction();
 
-  // 1. SELEZIONE SEZIONE / TAB: 'next' (Schiera Prossima Gara) o 'current' (Partita in Corso)
-  const [activeTab, setActiveTab] = useState<'next' | 'current'>('next');
+  // Calcolo dinamico turno Serie A: fino a lunedì alle ore 22:00 propone la giornata in corso (attuale), poi scala a precedente
+  const matchdaySchedule = useMemo(() => getActiveMatchdaySchedule(), []);
+  const { currentRound, previousRound } = matchdaySchedule;
+
+  // 1. SELEZIONE SEZIONE / TAB: 'current' (Giornata in Corso / Attuale, DEFAULT) o 'previous' (Giornata Precedente Conclusa)
+  const [activeTab, setActiveTab] = useState<'current' | 'previous'>('current');
+  const selectedRound = activeTab === 'current' ? currentRound : previousRound;
 
   // Squadra selezionata (default: Scarsenal / myTeamId)
   const [selectedTeamId, setSelectedTeamId] = useState<string>(myTeamId || 'team-1');
@@ -102,7 +102,8 @@ export const TedLassoView: React.FC = () => {
 
   // Carica eventuale formazione salvata per il tab corrente validandone l'integrità dei ruoli
   useEffect(() => {
-    const saved = localStorage.getItem(`fanta_lineup_${activeTab}_${selectedTeamId}`);
+    const saved = localStorage.getItem(`fanta_lineup_${activeTab}_${selectedTeamId}`) ||
+      (activeTab === 'current' ? localStorage.getItem(`fanta_lineup_next_${selectedTeamId}`) : null);
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
@@ -325,7 +326,7 @@ export const TedLassoView: React.FC = () => {
 
   // Copia Formazione formattata per WhatsApp / Gruppo Fantacalcio
   const handleCopyLineup = () => {
-    const title = activeTab === 'next' ? NEXT_MATCHDAY_TITLE : CURRENT_MATCHDAY_TITLE;
+    const title = selectedRound.title;
     const p = starters.filter(s => s.player.ruolo === 'P').map(s => `${s.player.nome} (${s.evaluation.match ? (s.evaluation.match.isHome ? 'vs ' : '@ ') + s.evaluation.match.opponent : s.player.squadra})`).join(', ');
     const d = starters.filter(s => s.player.ruolo === 'D').map(s => `${s.player.nome} (${s.evaluation.match ? (s.evaluation.match.isHome ? 'vs ' : '@ ') + s.evaluation.match.opponent : s.player.squadra})`).join(', ');
     const c = starters.filter(s => s.player.ruolo === 'C').map(s => `${s.player.nome} (${s.evaluation.match ? (s.evaluation.match.isHome ? 'vs ' : '@ ') + s.evaluation.match.opponent : s.player.squadra})`).join(', ');
@@ -467,8 +468,8 @@ ${benchText}
     }
   };
 
-  const currentFixtures = activeTab === 'next' ? NEXT_SERIE_A_FIXTURES : CURRENT_SERIE_A_FIXTURES;
-  const currentTitle = activeTab === 'next' ? NEXT_MATCHDAY_TITLE : CURRENT_MATCHDAY_TITLE;
+  const currentFixtures = selectedRound.fixtures;
+  const currentTitle = selectedRound.title;
 
   return (
     <div className="h-full w-full flex flex-col justify-between overflow-hidden select-none space-y-1 relative">
@@ -527,31 +528,9 @@ ${benchText}
           </div>
         </div>
 
-        {/* 2 GRANDI TAB DI SELEZIONE: PROSSIMA GARA VS PARTITA IN CORSO */}
+        {/* 2 GRANDI TAB DI SELEZIONE: GIORNATA IN CORSO (ATTUALE) VS GIORNATA PRECEDENTE (CONCLUSA) */}
         <div className="flex items-center bg-slate-950 p-1 rounded-xl border border-slate-800 shadow-inner">
-          {/* TAB 1: SCHIERA PROSSIMA GARA */}
-          <button
-            onClick={() => {
-              setActiveTab('next');
-              setSwappingPlayerId(null);
-            }}
-            className={`px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-black flex items-center gap-2 transition-all select-none ${
-              activeTab === 'next'
-                ? 'bg-amber-400 text-slate-950 shadow-md ring-1 ring-amber-300'
-                : 'text-slate-400 hover:text-white hover:bg-slate-900'
-            }`}
-            title="Schiera la formazione per la prossima giornata (7ª Giornata, 2-5 Ottobre 2026)"
-          >
-            <Calendar className="w-4 h-4" />
-            <span>Schiera Prossima Gara (7ª G.)</span>
-            <span className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-bold ${
-              activeTab === 'next' ? 'bg-slate-950 text-amber-300' : 'bg-slate-800 text-slate-400'
-            }`}>
-              2-5 Ott
-            </span>
-          </button>
-
-          {/* TAB 2: PARTITA IN CORSO */}
+          {/* TAB 1: GIORNATA IN CORSO / ATTUALE (DEFAULT) */}
           <button
             onClick={() => {
               setActiveTab('current');
@@ -562,14 +541,36 @@ ${benchText}
                 ? 'bg-emerald-500 text-slate-950 shadow-md ring-1 ring-emerald-300'
                 : 'text-slate-400 hover:text-white hover:bg-slate-900'
             }`}
-            title="Visualizza la partita e la formazione del turno attualmente in corso (6ª Giornata)"
+            title={`Visualizza e schiera per il turno attualmente in corso (${currentRound.title})`}
           >
             <Activity className="w-4 h-4" />
-            <span>Partita in Corso (6ª G.)</span>
+            <span>{currentRound.shortLabel} Attuale (In Corso)</span>
             <span className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-bold ${
               activeTab === 'current' ? 'bg-slate-950 text-emerald-300 animate-pulse' : 'bg-slate-800 text-slate-400'
             }`}>
-              LIVE
+              {currentRound.dateRangeLabel}
+            </span>
+          </button>
+
+          {/* TAB 2: GIORNATA PRECEDENTE (CONCLUSA) */}
+          <button
+            onClick={() => {
+              setActiveTab('previous');
+              setSwappingPlayerId(null);
+            }}
+            className={`px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-black flex items-center gap-2 transition-all select-none ${
+              activeTab === 'previous'
+                ? 'bg-amber-400 text-slate-950 shadow-md ring-1 ring-amber-300'
+                : 'text-slate-400 hover:text-white hover:bg-slate-900'
+            }`}
+            title={`Visualizza la formazione e le statistiche del turno precedente (${previousRound.title})`}
+          >
+            <Calendar className="w-4 h-4" />
+            <span>{previousRound.shortLabel} Precedente</span>
+            <span className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-bold ${
+              activeTab === 'previous' ? 'bg-slate-950 text-amber-300' : 'bg-slate-800 text-slate-400'
+            }`}>
+              CONCLUSA
             </span>
           </button>
         </div>
@@ -692,18 +693,18 @@ ${benchText}
 
       {/* BANNER INFORMATIVO DI SEZIONE CON FOCALIZZAZIONE AVVERSARI */}
       <div className={`px-3.5 py-1.5 rounded-xl text-xs sm:text-sm flex items-center justify-between gap-2 border flex-shrink-0 ${
-        activeTab === 'next' 
-          ? 'bg-amber-950/30 border-amber-500/40 text-amber-200' 
-          : 'bg-emerald-950/30 border-emerald-500/40 text-emerald-200'
+        activeTab === 'current' 
+          ? 'bg-emerald-950/30 border-emerald-500/40 text-emerald-200' 
+          : 'bg-amber-950/30 border-amber-500/40 text-amber-200'
       }`}>
         <div className="flex items-center gap-2.5">
           <span className="font-black uppercase tracking-wider text-[11px] sm:text-xs px-2 py-0.5 rounded bg-slate-900 border border-current">
-            {activeTab === 'next' ? 'PROSSIMA GARA (7ª G.)' : 'PARTITA IN CORSO (6ª G.)'}
+            {activeTab === 'current' ? `GIORNATA ATTUALE (${currentRound.shortLabel})` : `GIORNATA PRECEDENTE (${previousRound.shortLabel})`}
           </span>
           <span className="text-xs sm:text-sm hidden sm:inline">
-            {activeTab === 'next' 
-              ? '🎯 Gli avversari, i punteggi Ted Score e i consigli sono calcolati sulla 7ª Giornata (difficoltà squadra avversaria + fattore casa/trasferta).' 
-              : '⚡ Formazione e gare del turno attualmente in corso. Visualizza lo stato della squadra per la 6ª giornata.'}
+            {activeTab === 'current' 
+              ? `⚡ Formazione in campo e gare del turno in corso (${currentRound.dateRangeLabel}). Consigli, difficoltà avversario e Ted Score tarati sul turno attivo.` 
+              : `📜 Formazione e statistiche della giornata precedente conclusa (${previousRound.dateRangeLabel}).`}
           </span>
         </div>
 
@@ -737,7 +738,7 @@ ${benchText}
               </div>
             </div>
             <span className="text-[10px] sm:text-[11px] text-slate-400 font-mono hidden sm:inline">
-              {activeTab === 'next' ? '7ª G.' : '6ª G.'}
+              {selectedRound.shortLabel}
             </span>
           </div>
 
@@ -1094,7 +1095,7 @@ ${benchText}
           <div className="bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-3.5 shadow-sm space-y-2.5 flex-1">
             <div className="flex items-center justify-between pb-1 border-b border-slate-800">
               <span className="text-xs sm:text-sm font-black text-white uppercase tracking-wider block">
-                Scelte Chiave ({activeTab === 'next' ? '7ª G.' : '6ª G.'})
+                Scelte Chiave ({selectedRound.shortLabel})
               </span>
               <span className="text-[11px] text-slate-400 font-mono">FDR & Casa/Fuori</span>
             </div>
@@ -1234,7 +1235,7 @@ ${benchText}
         const verdict = getTedPlayerVerdict(player, tedScore, evaluation);
         const matchInfo = evaluation.match;
         const diffBadge = matchInfo ? getDifficultyBadge(matchInfo.difficulty) : null;
-        const currentMatchdayNum = activeTab === 'next' ? NEXT_MATCHDAY_NUMBER : CURRENT_MATCHDAY_NUMBER;
+        const currentMatchdayNum = selectedRound.roundNumber;
         const diddiYoutube = getDiddiMatchdayYoutubeAdvice(player, currentMatchdayNum, evaluation);
         const fgConsigliato = getFantagazzettaConsigliatoStatus(player, evaluation);
 
@@ -1474,7 +1475,7 @@ ${benchText}
         );
       })()}
 
-      {/* 4. MODALE CALENDARIO COMPLETO TURNO (6ª O 7ª GIORNATA) */}
+      {/* 4. MODALE CALENDARIO COMPLETO TURNO */}
       {showFixturesModal && (
         <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-3 animate-in fade-in duration-150">
           <div className="bg-slate-900 border-2 border-slate-700 rounded-2xl w-full max-w-xl overflow-hidden shadow-2xl p-4 select-none space-y-3">

@@ -11,12 +11,7 @@ import {
   TED_LASSO_QUOTES 
 } from '../utils/tedLassoAdvisor';
 import { 
-  CURRENT_MATCHDAY_NUMBER,
-  CURRENT_MATCHDAY_TITLE, 
-  CURRENT_SERIE_A_FIXTURES,
-  NEXT_MATCHDAY_NUMBER,
-  NEXT_MATCHDAY_TITLE,
-  NEXT_SERIE_A_FIXTURES,
+  getActiveMatchdaySchedule,
   cleanPlayerName
 } from '../data/matchdayData';
 import { PlayerPerformanceChart } from './PlayerPerformanceChart';
@@ -59,8 +54,13 @@ export const TedLassoMobileView: React.FC = () => {
     syncOnlineData 
   } = useAuction();
 
-  // Tab Giornata: 'next' (7ª G.) o 'current' (6ª G. LIVE)
-  const [activeTab, setActiveTab] = useState<'next' | 'current'>('next');
+  // Calcolo dinamico turno Serie A: fino a lunedì alle ore 22:00 propone la giornata in corso (attuale), poi scala a precedente
+  const matchdaySchedule = useMemo(() => getActiveMatchdaySchedule(), []);
+  const { currentRound, previousRound } = matchdaySchedule;
+
+  // Tab Giornata: 'current' (Giornata Attuale in Corso, DEFAULT) o 'previous' (Giornata Precedente Conclusa)
+  const [activeTab, setActiveTab] = useState<'current' | 'previous'>('current');
+  const selectedRound = activeTab === 'current' ? currentRound : previousRound;
 
   // Tab di navigazione mobile: 'pitch' (Campo) | 'bench' (Panchina) | 'tactics' (Lavagna) | 'fixtures' (Calendario)
   const [mobileSection, setMobileSection] = useState<'pitch' | 'bench' | 'tactics' | 'fixtures'>('pitch');
@@ -92,7 +92,8 @@ export const TedLassoMobileView: React.FC = () => {
 
   // Caricamento formazione salvata
   useEffect(() => {
-    const saved = localStorage.getItem(`fanta_lineup_${activeTab}_${selectedTeamId}`);
+    const saved = localStorage.getItem(`fanta_lineup_${activeTab}_${selectedTeamId}`) ||
+      (activeTab === 'current' ? localStorage.getItem(`fanta_lineup_next_${selectedTeamId}`) : null);
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
@@ -244,7 +245,7 @@ export const TedLassoMobileView: React.FC = () => {
   };
 
   const handleCopyLineup = () => {
-    const title = activeTab === 'next' ? NEXT_MATCHDAY_TITLE : CURRENT_MATCHDAY_TITLE;
+    const title = selectedRound.title;
     const p = starters.filter(s => s.player.ruolo === 'P').map(s => `${s.player.nome} (${s.evaluation.match ? (s.evaluation.match.isHome ? 'vs ' : '@ ') + s.evaluation.match.opponent : s.player.squadra})`).join(', ');
     const d = starters.filter(s => s.player.ruolo === 'D').map(s => `${s.player.nome} (${s.evaluation.match ? (s.evaluation.match.isHome ? 'vs ' : '@ ') + s.evaluation.match.opponent : s.player.squadra})`).join(', ');
     const c = starters.filter(s => s.player.ruolo === 'C').map(s => `${s.player.nome} (${s.evaluation.match ? (s.evaluation.match.isHome ? 'vs ' : '@ ') + s.evaluation.match.opponent : s.player.squadra})`).join(', ');
@@ -353,8 +354,8 @@ ${benchText}
     }
   };
 
-  const currentFixtures = activeTab === 'next' ? NEXT_SERIE_A_FIXTURES : CURRENT_SERIE_A_FIXTURES;
-  const currentTitle = activeTab === 'next' ? NEXT_MATCHDAY_TITLE : CURRENT_MATCHDAY_TITLE;
+  const currentFixtures = selectedRound.fixtures;
+  const currentTitle = selectedRound.title;
 
   const navigateToDesktop = () => {
     window.history.pushState(null, '', '/');
@@ -398,26 +399,8 @@ ${benchText}
           </div>
         </div>
 
-        {/* SELETTORE GIORNATA (PROSSIMA GARA VS PARTITA IN CORSO) */}
+        {/* SELETTORE GIORNATA (ATTUALE IN CORSO VS PRECEDENTE CONCLUSA) */}
         <div className="grid grid-cols-2 gap-1.5 bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs">
-          <button
-            onClick={() => {
-              setActiveTab('next');
-              setSwappingPlayerId(null);
-            }}
-            className={`py-1.5 rounded-lg font-black flex items-center justify-center gap-1.5 transition-all ${
-              activeTab === 'next'
-                ? 'bg-amber-400 text-slate-950 shadow-md font-black'
-                : 'text-slate-400 hover:text-white'
-            }`}
-          >
-            <Calendar className="w-3.5 h-3.5" />
-            <span>7ª Prossima</span>
-            <span className={`text-[9px] px-1 rounded font-mono ${activeTab === 'next' ? 'bg-slate-950 text-amber-300' : 'bg-slate-800'}`}>
-              2-5 Ott
-            </span>
-          </button>
-
           <button
             onClick={() => {
               setActiveTab('current');
@@ -430,9 +413,27 @@ ${benchText}
             }`}
           >
             <Activity className="w-3.5 h-3.5" />
-            <span>6ª In Corso</span>
+            <span>{currentRound.shortLabel} Attuale</span>
             <span className={`text-[9px] px-1 rounded font-mono ${activeTab === 'current' ? 'bg-slate-950 text-emerald-300 animate-pulse' : 'bg-slate-800'}`}>
-              LIVE
+              {currentRound.dateRangeLabel}
+            </span>
+          </button>
+
+          <button
+            onClick={() => {
+              setActiveTab('previous');
+              setSwappingPlayerId(null);
+            }}
+            className={`py-1.5 rounded-lg font-black flex items-center justify-center gap-1.5 transition-all ${
+              activeTab === 'previous'
+                ? 'bg-amber-400 text-slate-950 shadow-md font-black'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            <Calendar className="w-3.5 h-3.5" />
+            <span>{previousRound.shortLabel} Precedente</span>
+            <span className={`text-[9px] px-1 rounded font-mono ${activeTab === 'previous' ? 'bg-slate-950 text-amber-300' : 'bg-slate-800'}`}>
+              CONCLUSA
             </span>
           </button>
         </div>
@@ -814,7 +815,7 @@ ${benchText}
             {/* SCELTE CHIAVE */}
             <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
               <span className="text-xs font-black text-white uppercase tracking-wider block pb-1 border-b border-slate-800">
-                Scelte Chiave ({activeTab === 'next' ? '7ª G.' : '6ª G.'})
+                Scelte Chiave ({selectedRound.shortLabel})
               </span>
 
               {/* TOP PICK */}
@@ -1008,7 +1009,7 @@ ${benchText}
         const verdict = getTedPlayerVerdict(player, tedScore, evaluation);
         const matchInfo = evaluation.match;
         const diffBadge = matchInfo ? getDifficultyBadge(matchInfo.difficulty) : null;
-        const currentMatchdayNum = activeTab === 'next' ? NEXT_MATCHDAY_NUMBER : CURRENT_MATCHDAY_NUMBER;
+        const currentMatchdayNum = selectedRound.roundNumber;
         const diddiYoutube = getDiddiMatchdayYoutubeAdvice(player, currentMatchdayNum, evaluation);
         const fgConsigliato = getFantagazzettaConsigliatoStatus(player, evaluation);
 
