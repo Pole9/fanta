@@ -59,3 +59,9 @@ Applicazione web ultra-reattiva progettata specificamente per lo svolgimento rap
 - Salvataggio automatico continuo in `localStorage` ad ogni click (anti-chiusura accidentale del browser).
 - Esportazione rose finali e riepilogo bilanci in formato Excel `.xlsx`.
 - Funzione di backup completo della sessione in formato `.json`.
+
+### 7. Fonti Ufficiali Probabili Formazioni & Infortuni
+
+- **Fonte Primaria:** [Fantacalcio.it Probabili Formazioni](https://www.fantacalcio.it/probabili-formazioni-serie-a)
+- **Fonte Secondaria:** [La Gazzetta dello Sport Probabili Formazioni](https://www.gazzetta.it/Calcio/prob_form/)
+- **Regola:** Esclusione tassativa di qualsiasi altra fonte non autorizzata.

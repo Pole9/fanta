@@ -83,7 +83,31 @@ export function parseHtmlData(html: string): SyncedOnlineData {
     }
   }
 
-  // 5. Annotazione ballottaggi sui profili dei calciatori
+  // 5. Squalificati ufficiali da blocchi dedicati
+  const susRegex = /<section class=\"suspendeds\"[\s\S]*?<\/section>/gi;
+  let sm: RegExpExecArray | null;
+  while ((sm = susRegex.exec(html)) !== null) {
+    const block = sm[0];
+    if (!block.includes('Nessun calciatore')) {
+      const pRegex = /<span class=\"player-name[^\"]*\"[^>]*>([^<]+)<\/span>/gi;
+      let pm: RegExpExecArray | null;
+      while ((pm = pRegex.exec(block)) !== null) {
+        const raw = pm[1].trim();
+        const clean = cleanPlayerName(raw);
+        if (clean && clean.length > 2) {
+          players[clean] = {
+            name: raw,
+            titolaritaPercent: 0,
+            status: 'squalificato',
+            ballottaggioCon: null,
+            source: 'Fantacalcio.it (Squalificato)'
+          };
+        }
+      }
+    }
+  }
+
+  // 6. Annotazione ballottaggi sui profili dei calciatori
   for (const b of ballottaggi) {
     const c1 = cleanPlayerName(b.p1);
     const c2 = cleanPlayerName(b.p2);
@@ -126,7 +150,7 @@ export async function syncOnlineMatchdayData(): Promise<{
   totalBallots: number;
 }> {
   try {
-    // 1. Prova endpoint middleware locale Vite dev server
+    // 1. Prova endpoint middleware / Cloudflare Pages Function (/api/fanta-sync)
     try {
       const res = await fetch('/api/fanta-sync', {
         headers: { 'Accept': 'application/json' }
@@ -145,33 +169,56 @@ export async function syncOnlineMatchdayData(): Promise<{
         }
       }
     } catch {
-      // Endpoint dev non attivo o fallito, procedi con fallback
+      // Endpoint non attivo o fallito, procedi con fallback CORS
     }
 
-    // 2. Prova proxy CORS pubblico su Fantacalcio.it
+    // 2. FONTE PRIMARIA: Fantacalcio.it via proxy CORS
     try {
       const targetUrl = 'https://www.fantacalcio.it/probabili-formazioni-serie-a';
       const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`;
       const res = await fetch(proxyUrl);
       if (res.ok) {
         const html = await res.text();
-        if (html.length > 50000) {
+        if (html.length > 25000) {
           const data = parseHtmlData(html);
           localStorage.setItem(SYNC_STORAGE_KEY, JSON.stringify(data));
           return {
             success: true,
             data,
-            message: `Sincronizzazione completata via proxy online: ${data.totalPlayers} calciatori aggiornati da Fantacalcio.it e Gazzetta.`,
+            message: `Sincronizzazione completata da Fantacalcio.it (Fonte Primaria): ${data.totalPlayers} calciatori aggiornati.`,
             totalPlayers: data.totalPlayers,
             totalBallots: data.totalBallots
           };
         }
       }
     } catch {
-      // Proxy CORS non disponibile
+      // Procedi al fallback secondario
     }
 
-    // 3. Fallback con snapshot offline archivio
+    // 3. FONTE SECONDARIA: Gazzetta dello Sport via proxy CORS (escluse tutte le altre)
+    try {
+      const targetUrl2 = 'https://www.gazzetta.it/Calcio/prob_form/';
+      const proxyUrl2 = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl2)}`;
+      const res2 = await fetch(proxyUrl2);
+      if (res2.ok) {
+        const html2 = await res2.text();
+        if (html2.length > 10000) {
+          const data2 = parseHtmlData(html2);
+          localStorage.setItem(SYNC_STORAGE_KEY, JSON.stringify(data2));
+          return {
+            success: true,
+            data: data2,
+            message: `Sincronizzazione completata da La Gazzetta dello Sport (Fonte Secondaria): ${data2.totalPlayers} calciatori aggiornati.`,
+            totalPlayers: data2.totalPlayers,
+            totalBallots: data2.totalBallots
+          };
+        }
+      }
+    } catch {
+      // Nessun'altra fonte ammessa
+    }
+
+    // 4. Fallback con snapshot offline archivio (da Fantacalcio.it & Gazzetta)
     const fallbackData: SyncedOnlineData = {
       ...((liveSnapshot as unknown) as SyncedOnlineData)
     };
@@ -180,7 +227,7 @@ export async function syncOnlineMatchdayData(): Promise<{
     return {
       success: true,
       data: fallbackData,
-      message: `Rete non raggiungibile: caricato snapshot locale delle probabili formazioni (aggiornato al ${fallbackData.timestamp || '25/09/2026'}).`,
+      message: `Rete non raggiungibile: caricato snapshot locale delle probabili formazioni (aggiornato al ${fallbackData.timestamp || '09/10/2026'}).`,
       totalPlayers: fallbackData.totalPlayers,
       totalBallots: fallbackData.totalBallots
     };

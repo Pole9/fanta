@@ -8,15 +8,49 @@ function fantaSyncPlugin(): Plugin {
       server.middlewares.use('/api/fanta-sync', async (req, res, next) => {
         if (req.method === 'GET' || req.method === 'POST') {
           try {
-            const resp = await fetch('https://www.fantacalcio.it/probabili-formazioni-serie-a', {
-              headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36'
+            let html = '';
+            let usedSource = 'Fantacalcio.it (Primaria)';
+
+            // 1. TENTATIVO FONTE PRIMARIA: Fantacalcio.it
+            try {
+              const resp = await fetch('https://www.fantacalcio.it/probabili-formazioni-serie-a', {
+                headers: {
+                  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36'
+                }
+              });
+              if (resp.ok) {
+                const text = await resp.text();
+                if (text && text.length > 25000) {
+                  html = text;
+                }
               }
-            });
-            if (!resp.ok) {
-              throw new Error(`Fantacalcio ha risposto con status ${resp.status}`);
+            } catch {
+              // Procedi al fallback secondario
             }
-            const html = await resp.text();
+
+            // 2. TENTATIVO FONTE SECONDARIA: Gazzetta dello Sport
+            if (!html) {
+              try {
+                const resp2 = await fetch('https://www.gazzetta.it/Calcio/prob_form/', {
+                  headers: {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36'
+                  }
+                });
+                if (resp2.ok) {
+                  const text2 = await resp2.text();
+                  if (text2 && text2.length > 10000) {
+                    html = text2;
+                    usedSource = 'Gazzetta dello Sport (Secondaria)';
+                  }
+                }
+              } catch {
+                // Nessun'altra fonte ammessa
+              }
+            }
+
+            if (!html) {
+              throw new Error('Fonti ufficiali (Fantacalcio.it e Gazzetta dello Sport) non raggiungibili');
+            }
 
             const players: Record<string, any> = {};
             const teamComments: Record<string, string> = {};
@@ -55,7 +89,7 @@ function fantaSyncPlugin(): Plugin {
                 titolaritaPercent: perc,
                 status: perc >= 75 ? 'titolare' : perc >= 45 ? 'ballottaggio' : 'panchina',
                 ballottaggioCon: null,
-                source: 'Fantacalcio.it Live'
+                source: usedSource
               };
             }
 
@@ -74,8 +108,32 @@ function fantaSyncPlugin(): Plugin {
                     titolaritaPercent: 90,
                     status: 'titolare',
                     ballottaggioCon: null,
-                    source: 'Fantacalcio.it Pitch Starter'
+                    source: `${usedSource} (Pitch Starter)`
                   };
+                }
+              }
+            }
+
+            // Squalificati ufficiali
+            const susRegex = /<section class="suspendeds"[\s\S]*?<\/section>/gi;
+            let sm;
+            while ((sm = susRegex.exec(html)) !== null) {
+              const block = sm[0];
+              if (!block.includes('Nessun calciatore')) {
+                const pRegex = /<span class="player-name[^"]*"[^>]*>([^<]+)<\/span>/gi;
+                let pm;
+                while ((pm = pRegex.exec(block)) !== null) {
+                  const raw = pm[1].trim();
+                  const clean = raw.toUpperCase().replace(/[^A-Z0-9\s]/gi, ' ').replace(/\s+/g, ' ').trim();
+                  if (clean && clean.length > 2) {
+                    players[clean] = {
+                      name: raw,
+                      titolaritaPercent: 0,
+                      status: 'squalificato',
+                      ballottaggioCon: null,
+                      source: `${usedSource} (Squalificato)`
+                    };
+                  }
                 }
               }
             }
@@ -105,6 +163,9 @@ function fantaSyncPlugin(): Plugin {
               success: true,
               timestamp: `${dateStr} ore ${timeStr}`,
               syncedAt: Date.now(),
+              primarySource: 'https://www.fantacalcio.it/probabili-formazioni-serie-a',
+              secondarySource: 'https://www.gazzetta.it/Calcio/prob_form/',
+              usedSource,
               totalPlayers: Object.keys(players).length,
               totalBallots: ballottaggi.length,
               players,

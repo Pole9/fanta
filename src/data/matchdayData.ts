@@ -158,108 +158,108 @@ export const CURRENT_SERIE_A_FIXTURES: SerieAMatch[] = [
   }
 ];
 
-// 2. Calendario della PROSSIMA GARA DA SCHIERARE (8ª Giornata Serie A, 17-19 Ottobre 2026)
+// 2. Calendario della PROSSIMA GARA DA SCHIERARE (10-12 Ottobre 2026 - Fonte Fantacalcio.it & Gazzetta)
 export const NEXT_MATCHDAY_NUMBER = 8;
-export const NEXT_MATCHDAY_TITLE = "8ª Giornata Serie A (17-19 Ottobre 2026)";
+export const NEXT_MATCHDAY_TITLE = "Prossimo Turno Serie A (10-12 Ottobre 2026)";
 
 export const NEXT_SERIE_A_FIXTURES: SerieAMatch[] = [
   {
-    id: "m8-1",
-    homeTeam: "Como",
-    awayTeam: "Parma",
-    date: "Sabato",
-    time: "15:00",
-    stadium: "Giuseppe Sinigaglia (Como)",
-    homeDifficulty: 2,
-    awayDifficulty: 3
-  },
-  {
-    id: "m8-2",
+    id: "m-1",
     homeTeam: "Genoa",
-    awayTeam: "Bologna",
-    date: "Sabato",
+    awayTeam: "Fiorentina",
+    date: "Sabato 10 Ottobre",
     time: "15:00",
     stadium: "Luigi Ferraris (Genova)",
     homeDifficulty: 3,
-    awayDifficulty: 3
+    awayDifficulty: 2
   },
   {
-    id: "m8-3",
-    homeTeam: "Milan",
-    awayTeam: "Udinese",
-    date: "Sabato",
+    id: "m-2",
+    homeTeam: "Inter",
+    awayTeam: "Parma",
+    date: "Sabato 10 Ottobre",
     time: "18:00",
-    stadium: "San Siro (Milano)",
-    homeDifficulty: 2,
-    awayDifficulty: 4
+    stadium: "Giuseppe Meazza (Milano)",
+    homeDifficulty: 1,
+    awayDifficulty: 5
   },
   {
-    id: "m8-4",
-    homeTeam: "Juventus",
-    awayTeam: "Lazio",
-    date: "Sabato",
+    id: "m-3",
+    homeTeam: "Napoli",
+    awayTeam: "Frosinone",
+    date: "Sabato 10 Ottobre",
     time: "20:45",
-    stadium: "Allianz Stadium (Torino)",
-    homeDifficulty: 2,
-    awayDifficulty: 4
+    stadium: "Diego Armando Maradona (Napoli)",
+    homeDifficulty: 1,
+    awayDifficulty: 5
   },
   {
-    id: "m8-5",
-    homeTeam: "Empoli",
-    awayTeam: "Napoli",
-    date: "Domenica",
+    id: "m-4",
+    homeTeam: "Como",
+    awayTeam: "Roma",
+    date: "Domenica 11 Ottobre",
     time: "12:30",
-    stadium: "Carlo Castellani (Empoli)",
+    stadium: "Giuseppe Sinigaglia (Como)",
     homeDifficulty: 4,
     awayDifficulty: 2
   },
   {
-    id: "m8-6",
+    id: "m-5",
+    homeTeam: "Lazio",
+    awayTeam: "Monza",
+    date: "Domenica 11 Ottobre",
+    time: "15:00",
+    stadium: "Stadio Olimpico (Roma)",
+    homeDifficulty: 2,
+    awayDifficulty: 4
+  },
+  {
+    id: "m-6",
     homeTeam: "Lecce",
-    awayTeam: "Fiorentina",
-    date: "Domenica",
+    awayTeam: "Bologna",
+    date: "Domenica 11 Ottobre",
     time: "15:00",
     stadium: "Via del Mare (Lecce)",
     homeDifficulty: 3,
-    awayDifficulty: 2
+    awayDifficulty: 3
   },
   {
-    id: "m8-7",
-    homeTeam: "Venezia",
-    awayTeam: "Atalanta",
-    date: "Domenica",
-    time: "15:00",
-    stadium: "Pier Luigi Penzo (Venezia)",
+    id: "m-7",
+    homeTeam: "Sassuolo",
+    awayTeam: "Milan",
+    date: "Domenica 11 Ottobre",
+    time: "18:00",
+    stadium: "Mapei Stadium (Reggio Emilia)",
     homeDifficulty: 4,
     awayDifficulty: 2
   },
   {
-    id: "m8-8",
+    id: "m-8",
     homeTeam: "Cagliari",
-    awayTeam: "Torino",
-    date: "Domenica",
-    time: "18:00",
-    stadium: "Unipol Domus (Cagliari)",
-    homeDifficulty: 3,
-    awayDifficulty: 3
+    awayTeam: "Juventus",
+    date: "Domenica 11 Ottobre",
+    time: "20:45",
+    stadium: "Sardegna Arena (Cagliari)",
+    homeDifficulty: 4,
+    awayDifficulty: 2
   },
   {
-    id: "m8-9",
-    homeTeam: "Roma",
-    awayTeam: "Inter",
-    date: "Domenica",
-    time: "20:45",
-    stadium: "Olimpico (Roma)",
-    homeDifficulty: 3,
-    awayDifficulty: 3
+    id: "m-9",
+    homeTeam: "Atalanta",
+    awayTeam: "Venezia",
+    date: "Lunedì 12 Ottobre",
+    time: "18:30",
+    stadium: "Gewiss Stadium (Bergamo)",
+    homeDifficulty: 1,
+    awayDifficulty: 5
   },
   {
-    id: "m8-10",
-    homeTeam: "Monza",
-    awayTeam: "Verona",
-    date: "Lunedì",
+    id: "m-10",
+    homeTeam: "Torino",
+    awayTeam: "Udinese",
+    date: "Lunedì 12 Ottobre",
     time: "20:45",
-    stadium: "U-Power Stadium (Monza)",
+    stadium: "Stadio Olimpico Grande Torino (Torino)",
     homeDifficulty: 3,
     awayDifficulty: 3
   }
