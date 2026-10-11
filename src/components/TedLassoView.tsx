@@ -21,10 +21,12 @@ import {
   getActiveMatchdaySchedule,
   cleanPlayerName,
   MatchdayType,
-  getTeamUpcomingMatches
+  getTeamUpcomingMatches,
+  SerieAMatch
 } from '../data/matchdayData';
 import { SERIE_A_SHARED_SURNAMES } from '../data/injuryData';
 import { PlayerPerformanceChart } from './PlayerPerformanceChart';
+import { ProbableLineupsModal } from './ProbableLineupsModal';
 import { getDiddiMatchdayYoutubeAdvice, getFantagazzettaConsigliatoStatus } from '../utils/matchdayAdviceProvider';
 import { 
   Sparkles, 
@@ -101,9 +103,36 @@ export const TedLassoView: React.FC = () => {
   const [copyFeedback, setCopyFeedback] = useState<boolean>(false);
   const [saveFeedback, setSaveFeedback] = useState<boolean>(false);
   const [showFixturesModal, setShowFixturesModal] = useState<boolean>(false);
+  const [selectedMatchForLineups, setSelectedMatchForLineups] = useState<SerieAMatch | null>(null);
+
+  // Gestione tasto indietro (popstate / browser back) per non uscire dall'app
+  useEffect(() => {
+    const handlePopState = () => {
+      if (selectedMatchForLineups) {
+        setSelectedMatchForLineups(null);
+        return;
+      }
+      if (selectedPlayerForReport) {
+        setSelectedPlayerForReport(null);
+        return;
+      }
+      if (showFixturesModal) {
+        setShowFixturesModal(false);
+        return;
+      }
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [selectedMatchForLineups, selectedPlayerForReport, showFixturesModal]);
 
   // Squadra corrente
   const activeTeam = teams.find(t => t.id === selectedTeamId) || teams[0];
+
+  // Set di ID dei giocatori della propria rosa per evidenziazione nelle formazioni
+  const myTeamPlayerIds = useMemo(() => {
+    if (!activeTeam) return new Set<number>();
+    return new Set(activeTeam.players.map(p => p.playerId));
+  }, [activeTeam]);
 
   // Risolvi i giocatori completi della squadra dalle assegnazioni
   const teamFullPlayers = useMemo(() => {
@@ -981,17 +1010,23 @@ ${benchText}
         </div>
 
         {/* COLONNA 2: CAMPO DA CALCIO VERDE E TABELLA TITOLARI (AL CENTRO - Lg: col-span-6) */}
-        <div className="order-1 lg:order-2 lg:col-span-6 xl:col-span-6 2xl:col-span-6 flex flex-col gap-2.5 overflow-y-auto pr-1 scrollbar-thin bg-slate-900 border border-slate-800 rounded-xl p-2 shadow-md min-h-0">
+        <div className={`order-1 lg:order-2 lg:col-span-6 xl:col-span-6 2xl:col-span-6 flex flex-col gap-2.5 overflow-y-auto pr-1 scrollbar-thin border rounded-xl p-2 shadow-md min-h-0 ${
+          isLight ? 'bg-slate-100/70 border-slate-300' : 'bg-slate-900 border-slate-800'
+        }`}>
           
           {/* CAMPO DA CALCIO VERDE (GREEN PITCH) */}
-          <div className="fanta-pitch relative rounded-xl bg-gradient-to-b from-emerald-900 via-emerald-850 to-emerald-950 border-2 border-emerald-600/40 shadow-inner overflow-hidden min-h-[480px] h-[520px] flex-shrink-0">
+          <div className={`fanta-pitch relative rounded-xl border-2 shadow-inner overflow-hidden min-h-[480px] h-[520px] flex-shrink-0 transition-colors ${
+            isLight 
+              ? 'bg-gradient-to-b from-emerald-600 via-emerald-700 to-emerald-800 border-emerald-500 shadow-xl' 
+              : 'bg-gradient-to-b from-emerald-900 via-emerald-850 to-emerald-950 border-emerald-600/40'
+          }`}>
             
             {/* LINEE DEL CAMPO DA CALCIO */}
-            <div className="absolute inset-2 border border-white/20 rounded pointer-events-none" />
-            <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-white/20 -translate-y-1/2 pointer-events-none" />
-            <div className="absolute top-1/2 left-1/2 w-32 h-32 border border-white/20 rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
-            <div className="absolute top-0 left-1/2 w-52 h-20 border-b border-x border-white/20 -translate-x-1/2 pointer-events-none" />
-            <div className="absolute bottom-0 left-1/2 w-56 h-24 border-t border-x border-white/20 -translate-x-1/2 pointer-events-none" />
+            <div className={`absolute inset-2 border rounded pointer-events-none ${isLight ? 'border-white/50' : 'border-white/20'}`} />
+            <div className={`absolute top-1/2 left-0 right-0 h-[1px] -translate-y-1/2 pointer-events-none ${isLight ? 'bg-white/50' : 'bg-white/20'}`} />
+            <div className={`absolute top-1/2 left-1/2 w-32 h-32 border rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none ${isLight ? 'border-white/50' : 'border-white/20'}`} />
+            <div className={`absolute top-0 left-1/2 w-52 h-20 border-b border-x -translate-x-1/2 pointer-events-none ${isLight ? 'border-white/50' : 'border-white/20'}`} />
+            <div className={`absolute bottom-0 left-1/2 w-56 h-24 border-t border-x -translate-x-1/2 pointer-events-none ${isLight ? 'border-white/50' : 'border-white/20'}`} />
 
             {/* AVVISO DI SWAP ATTIVO */}
             {swappingPlayerCard && (
@@ -1069,17 +1104,22 @@ ${benchText}
                             setSwappingPlayerId(card.player.id);
                           }
                         } else {
+                          window.history.pushState({ modal: 'playerReport', playerId: card.player.id }, '');
                           setSelectedPlayerForReport(card);
                         }
                       }}
-                      className={`group cursor-pointer rounded-xl p-2 sm:p-2.5 bg-slate-950/94 hover:bg-slate-900 border transition-all duration-150 active:scale-95 flex flex-col items-center shadow-2xl min-w-[98px] sm:min-w-[118px] xl:min-w-[134px] 2xl:min-w-[145px] max-w-[155px] ${
+                      className={`group cursor-pointer rounded-xl p-2 sm:p-2.5 border transition-all duration-150 active:scale-95 flex flex-col items-center shadow-2xl min-w-[98px] sm:min-w-[118px] xl:min-w-[134px] 2xl:min-w-[145px] max-w-[155px] ${
+                        isLight 
+                          ? 'bg-white/95 hover:bg-white text-slate-950 border-2 border-slate-300 hover:border-blue-600 shadow-xl' 
+                          : 'bg-slate-950/94 hover:bg-slate-900 text-white border-slate-700/80 hover:border-amber-400/80 shadow-2xl'
+                      } ${
                         isSelectedForSwap
-                          ? 'border-amber-400 ring-2 ring-amber-400 scale-105 bg-amber-950/40'
+                          ? (isLight ? 'border-amber-500 ring-2 ring-amber-500 scale-105 bg-amber-50' : 'border-amber-400 ring-2 ring-amber-400 scale-105 bg-amber-950/40')
                           : isTargetForSwap
-                            ? 'border-emerald-400 ring-2 ring-emerald-400 scale-105 bg-emerald-950/50 animate-pulse'
+                            ? (isLight ? 'border-emerald-500 ring-2 ring-emerald-500 scale-105 bg-emerald-50 animate-pulse' : 'border-emerald-400 ring-2 ring-emerald-400 scale-105 bg-emerald-950/50 animate-pulse')
                             : isIncompatibleForSwap
                               ? 'border-slate-800 opacity-40 grayscale-[40%]'
-                              : 'border-slate-700/80 hover:border-amber-400/80'
+                              : ''
                       }`}
                     >
                       {/* Top Bar: Ruolo + Ted Score */}
@@ -1095,23 +1135,29 @@ ${benchText}
                       </div>
 
                       {/* Nome Calciatore */}
-                      <span className="text-xs sm:text-sm font-black text-white truncate max-w-[95px] sm:max-w-[120px] leading-tight text-center">
+                      <span className={`text-xs sm:text-sm font-black truncate max-w-[95px] sm:max-w-[120px] leading-tight text-center ${
+                        isLight ? 'text-slate-950' : 'text-white'
+                      }`}>
                         {card.player.nome}
                       </span>
 
                       {/* Squadra & Avversaria del turno con FDR e Home/Away */}
-                      <div className="text-[10px] sm:text-[11px] font-mono mt-1 w-full text-center leading-tight">
+                      <div className={`text-[10px] sm:text-[11px] font-mono mt-1 w-full text-center leading-tight ${
+                        isLight ? 'text-slate-700' : 'text-slate-300'
+                      }`}>
                         {matchInfo ? (
                           <div className="flex flex-col items-center gap-0.5">
                             <div className="flex items-center justify-center gap-1">
                               <span className={`px-1 py-0.2 rounded font-black text-[8px] sm:text-[9px] uppercase ${
                                 matchInfo.isHome 
-                                  ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/40' 
-                                  : 'bg-slate-900 text-slate-300 border border-slate-700'
+                                  ? (isLight ? 'bg-emerald-100 text-emerald-950 border border-emerald-400 font-bold' : 'bg-emerald-950 text-emerald-300 border border-emerald-500/40')
+                                  : (isLight ? 'bg-slate-200 text-slate-900 border border-slate-300 font-bold' : 'bg-slate-900 text-slate-300 border border-slate-700')
                               }`}>
                                 {matchInfo.isHome ? 'CASA' : 'FUORI'}
                               </span>
-                              <span className="font-bold text-amber-300 truncate max-w-[65px] sm:max-w-[80px]">
+                              <span className={`font-black truncate max-w-[65px] sm:max-w-[80px] ${
+                                isLight ? 'text-slate-950' : 'text-amber-300'
+                              }`}>
                                 {matchInfo.isHome ? 'vs ' : '@ '}{matchInfo.opponent.slice(0, 4).toUpperCase()}
                               </span>
                             </div>
@@ -1124,20 +1170,20 @@ ${benchText}
                             )}
                           </div>
                         ) : (
-                          <span className="text-slate-400 font-bold">{card.player.squadra.slice(0, 5).toUpperCase()}</span>
+                          <span className={`font-bold ${isLight ? 'text-slate-800' : 'text-slate-400'}`}>{card.player.squadra.slice(0, 5).toUpperCase()}</span>
                         )}
                       </div>
 
                       {/* Indicatori sintetici: Gazzetta % e Fantagazzetta stelle */}
                       <div className="flex items-center gap-1.5 mt-1 text-[10px] sm:text-[11px] font-mono leading-none">
-                        <span className={`px-1.5 py-0.2 rounded text-[9px] sm:text-[10px] font-bold ${
+                        <span className={`px-1.5 py-0.2 rounded text-[9px] sm:text-[10px] font-black border ${
                           card.evaluation.gazzetta.titolaritaPercent >= 85 
-                            ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/30' 
-                            : 'bg-amber-950 text-amber-300 border border-amber-500/30'
+                            ? (isLight ? 'bg-emerald-100 text-emerald-950 border border-emerald-400' : 'bg-emerald-950 text-emerald-300 border border-emerald-500/30')
+                            : (isLight ? 'bg-amber-100 text-amber-950 border border-amber-400' : 'bg-amber-950 text-amber-300 border border-amber-500/30')
                         }`}>
                           {card.evaluation.gazzetta.titolaritaPercent}%
                         </span>
-                        <span className="text-amber-400 font-bold text-[10px] sm:text-xs">
+                        <span className="text-amber-500 font-black text-[10px] sm:text-xs drop-shadow-sm">
                           {'★'.repeat(card.evaluation.fantagazzetta.stars)}
                         </span>
                       </div>
@@ -1154,12 +1200,14 @@ ${benchText}
                             setSwappingPlayerId(card.player.id);
                           }
                         }}
-                        className={`mt-1.5 py-0.5 px-1.5 rounded transition-all text-[9px] sm:text-[10px] font-bold flex items-center gap-1 ${
+                        className={`mt-1.5 py-0.5 px-1.5 rounded transition-all text-[9px] sm:text-[10px] font-bold flex items-center gap-1 shadow-sm ${
                           isSelectedForSwap
                             ? 'opacity-100 bg-amber-400 text-slate-950 font-black'
                             : isTargetForSwap
                               ? 'opacity-100 bg-emerald-400 text-slate-950 font-black animate-pulse'
-                              : 'opacity-0 group-hover:opacity-100 bg-slate-800 text-slate-300 hover:text-amber-300'
+                              : (isLight 
+                                  ? 'opacity-0 group-hover:opacity-100 bg-slate-100 text-slate-900 hover:bg-slate-200 border border-slate-300' 
+                                  : 'opacity-0 group-hover:opacity-100 bg-slate-800 text-slate-300 hover:text-amber-300')
                         }`}
                         title={isSelectedForSwap ? "Annulla selezione" : isTargetForSwap ? "Sostituisci questo titolare" : "Scambia con un panchinaro"}
                       >
@@ -2117,17 +2165,33 @@ ${benchText}
 
             <div className="space-y-1.5 max-h-[60vh] overflow-y-auto pr-1 scrollbar-thin">
               {currentFixtures.map(m => (
-                <div key={m.id} className="p-2 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-between text-xs">
+                <div 
+                  key={m.id} 
+                  onClick={() => {
+                    window.history.pushState({ modal: 'matchLineups', matchId: m.id }, '');
+                    setSelectedMatchForLineups(m);
+                  }}
+                  className={`p-2 sm:p-2.5 rounded-xl border flex items-center justify-between text-xs cursor-pointer transition-all ${
+                    isLight 
+                      ? 'bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-900 shadow-sm' 
+                      : 'bg-slate-950 hover:bg-slate-850 border-slate-800 text-white'
+                  }`}
+                  title="Clicca per visualizzare le probabili formazioni Gazzetta con disposizione in campo"
+                >
                   <div className="flex items-center gap-2">
                     <span className="font-mono text-[10px] text-slate-400 w-14">{m.date} {m.time}</span>
-                    <span className="font-bold text-white w-24 text-right">{m.homeTeam}</span>
+                    <span className="font-bold w-24 text-right truncate">{m.homeTeam}</span>
                     <span className="text-slate-500 font-bold text-[10px]">vs</span>
-                    <span className="font-bold text-white w-24">{m.awayTeam}</span>
+                    <span className="font-bold w-24 truncate">{m.awayTeam}</span>
                   </div>
                   <div className="flex items-center gap-1.5">
                     <span className="text-[10px] text-slate-400 font-mono hidden sm:inline">{m.stadium}</span>
                     <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-slate-900 text-amber-300 border border-slate-750">
-                      Diff. H:{m.homeDifficulty} / A:{m.awayDifficulty}
+                      H:{m.homeDifficulty} / A:{m.awayDifficulty}
+                    </span>
+                    <span className="px-2 py-0.5 rounded text-[10px] font-black bg-emerald-500 text-slate-950 flex items-center gap-0.5 shadow-sm">
+                      Formazioni
+                      <ChevronRight className="w-3 h-3" />
                     </span>
                   </div>
                 </div>
@@ -2144,6 +2208,18 @@ ${benchText}
             </div>
           </div>
         </div>
+      )}
+
+      {/* MODAL PROBABILI FORMAZIONI GAZZETTA CON DISPOSIZIONE IN CAMPO */}
+      {selectedMatchForLineups && (
+        <ProbableLineupsModal
+          match={selectedMatchForLineups}
+          onClose={() => setSelectedMatchForLineups(null)}
+          allPlayers={players}
+          syncedOnlineData={syncedOnlineData}
+          myTeamPlayerIds={myTeamPlayerIds}
+          isLight={isLight}
+        />
       )}
 
     </div>

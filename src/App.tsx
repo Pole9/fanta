@@ -31,7 +31,7 @@ const checkIsMobilePath = () => {
 };
 
 const AppLayout: React.FC = () => {
-  const { activeView } = useAuction();
+  const { activeView, setActiveView } = useAuction();
   const [isMobileRoute, setIsMobileRoute] = useState<boolean>(checkIsMobilePath);
 
   useEffect(() => {
@@ -40,17 +40,26 @@ const AppLayout: React.FC = () => {
       window.history.replaceState(null, '', '/mobile');
     }
 
-    const handleLocationChange = () => {
+    const handleLocationChange = (e: PopStateEvent) => {
       setIsMobileRoute(checkIsMobilePath());
+      if (e.state && e.state.appView) {
+        setActiveView(e.state.appView);
+      }
     };
 
     window.addEventListener('popstate', handleLocationChange);
-    window.addEventListener('hashchange', handleLocationChange);
+    window.addEventListener('hashchange', () => setIsMobileRoute(checkIsMobilePath()));
     return () => {
       window.removeEventListener('popstate', handleLocationChange);
-      window.removeEventListener('hashchange', handleLocationChange);
     };
-  }, []);
+  }, [setActiveView]);
+
+  // Push state quando cambia activeView su desktop
+  useEffect(() => {
+    if (!isMobileRoute && window.history.state?.appView !== activeView) {
+      window.history.pushState({ appView: activeView }, '', window.location.pathname);
+    }
+  }, [activeView, isMobileRoute]);
 
   // Se siamo nella route mobile (/mobile): visualizza SOLO la sezione Ted Lasso da cellulare
   if (isMobileRoute) {
@@ -62,10 +71,10 @@ const AppLayout: React.FC = () => {
   }
 
   return (
-    <div className="h-screen max-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between select-none overflow-hidden">
+    <div className="min-h-screen max-w-full bg-slate-950 text-slate-100 flex flex-col justify-between select-none overflow-x-hidden">
       {activeView !== 'ted_lasso' && <Header />}
       
-      <main className="max-w-[1850px] w-full mx-auto px-2 sm:px-3 py-1 flex-1 overflow-hidden flex flex-col min-h-0">
+      <main className="max-w-[1850px] w-full mx-auto px-2 sm:px-3 py-1 flex-1 flex flex-col min-h-0 overflow-y-auto lg:overflow-hidden">
         <Suspense fallback={<LoadingFallback />}>
           {activeView === 'home' && <HomeView />}
           {activeView === 'ted_lasso' && <TedLassoView />}
