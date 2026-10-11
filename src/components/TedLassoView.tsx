@@ -2214,11 +2214,15 @@ ${benchText}
       {selectedMatchForLineups && (
         <ProbableLineupsModal
           match={selectedMatchForLineups}
+          fixtures={currentFixtures}
           onClose={() => setSelectedMatchForLineups(null)}
           allPlayers={players}
           syncedOnlineData={syncedOnlineData}
           myTeamPlayerIds={myTeamPlayerIds}
           isLight={isLight}
+          activeTab={activeTab}
+          roundTitle={selectedRound.title}
+          onMatchChange={(m) => setSelectedMatchForLineups(m)}
         />
       )}
 
