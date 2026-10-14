@@ -28,6 +28,7 @@ import { SERIE_A_SHARED_SURNAMES } from '../data/injuryData';
 import { PlayerPerformanceChart } from './PlayerPerformanceChart';
 import { ProbableLineupsModal } from './ProbableLineupsModal';
 import { RosterImportModal } from './RosterImportModal';
+import { DesktopPlayerReportModal } from './DesktopPlayerReportModal';
 import { getDiddiMatchdayYoutubeAdvice, getFantagazzettaConsigliatoStatus } from '../utils/matchdayAdviceProvider';
 import { 
   Sparkles, 
@@ -287,44 +288,7 @@ export const TedLassoView: React.FC = () => {
     return [...starters, ...bench];
   }, [starters, bench]);
 
-  // Navigazione tra calciatori con frecce (tastiera e pulsanti)
-  const handlePrevPlayer = () => {
-    if (!selectedPlayerForReport || allReportCards.length === 0) return;
-    const currentIndex = allReportCards.findIndex(c => c.player.id === selectedPlayerForReport.player.id);
-    const prevIndex = (currentIndex - 1 + allReportCards.length) % allReportCards.length;
-    setSelectedPlayerForReport(allReportCards[prevIndex]);
-  };
 
-  const handleNextPlayer = () => {
-    if (!selectedPlayerForReport || allReportCards.length === 0) return;
-    const currentIndex = allReportCards.findIndex(c => c.player.id === selectedPlayerForReport.player.id);
-    const nextIndex = (currentIndex + 1) % allReportCards.length;
-    setSelectedPlayerForReport(allReportCards[nextIndex]);
-  };
-
-  // Listener da tastiera per navigare con freccia sinistra e freccia destra
-  useEffect(() => {
-    if (!selectedPlayerForReport) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const target = e.target as HTMLElement | null;
-      if (target && ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)) return;
-
-      if (e.key === 'ArrowLeft') {
-        e.preventDefault();
-        handlePrevPlayer();
-      } else if (e.key === 'ArrowRight') {
-        e.preventDefault();
-        handleNextPlayer();
-      } else if (e.key === 'Escape') {
-        e.preventDefault();
-        setSelectedPlayerForReport(null);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedPlayerForReport, allReportCards]);
 
   // Set normalizzato dei nomi dei calciatori appartenenti alla rosa dell'utente
   const squadPlayerCleanNames = useMemo(() => {
@@ -1882,251 +1846,19 @@ ${benchText}
 
       </div>
 
-      {/* 3. MODALE DETTAGLIO "TED'S MATCH REPORT" */}
-      {selectedPlayerForReport && (() => {
-        const { player, evaluation, tedScore } = selectedPlayerForReport;
-        const verdict = getTedPlayerVerdict(player, tedScore, evaluation);
-        const matchInfo = evaluation.match;
-        const diffBadge = matchInfo ? getDifficultyBadge(matchInfo.difficulty) : null;
-        const currentMatchdayNum = selectedRound.roundNumber;
-        const diddiYoutube = getDiddiMatchdayYoutubeAdvice(player, currentMatchdayNum, evaluation);
-        const fgConsigliato = getFantagazzettaConsigliatoStatus(player, evaluation);
-
-        return (
-          <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-2 sm:p-3 animate-in fade-in duration-150">
-            <div className="bg-slate-900 border-2 border-slate-700 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl space-y-3 p-3.5 sm:p-4 select-none max-h-[95vh] overflow-y-auto scrollbar-thin">
-              
-              {/* TESTATA MODALE CALCIATORE */}
-              <div className="flex items-start justify-between pb-2 border-b border-slate-800">
-                <div className="flex items-center gap-2.5">
-                  <span className={`w-8 h-8 rounded-lg font-black text-sm flex items-center justify-center ${getRoleBg(player.ruolo)}`}>
-                    {player.ruolo}
-                  </span>
-                  <div>
-                    <h2 className="text-lg font-black text-white uppercase leading-tight">
-                      {player.nome}
-                    </h2>
-                    <div className="text-xs sm:text-sm text-slate-300 font-mono flex items-center gap-1.5 mt-0.5 flex-wrap">
-                      <span className="text-slate-400 font-bold">{player.squadra}</span>
-                      <span>•</span>
-                      <span>Qt: <strong className="text-white font-bold">{player.quotazione}</strong></span>
-                      <span>•</span>
-                      <span>FVM: <strong className="text-amber-400 font-black">{player.fvm}</strong></span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <div className={`px-2.5 py-1 rounded-xl text-xs font-black border ${getScoreColor(tedScore)}`}>
-                    Ted Score: {tedScore}/100
-                  </div>
-
-                  {/* NAVIGAZIONE TRA CALCIATORI CON FRECCE */}
-                  <div className="flex items-center bg-slate-950 border border-slate-800 rounded-lg p-0.5 shadow-sm">
-                    <button
-                      onClick={handlePrevPlayer}
-                      className="p-1 rounded hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"
-                      title="Giocatore precedente (Freccia Sinistra ←)"
-                    >
-                      <ChevronLeft className="w-4 h-4" />
-                    </button>
-                    
-                    <span className="px-1.5 text-[10px] font-mono font-bold text-slate-400">
-                      {allReportCards.findIndex(c => c.player.id === player.id) + 1}/{allReportCards.length}
-                    </span>
-
-                    <button
-                      onClick={handleNextPlayer}
-                      className="p-1 rounded hover:bg-slate-800 text-slate-300 hover:text-white transition-colors"
-                      title="Giocatore successivo (Freccia Destra →)"
-                    >
-                      <ChevronRight className="w-4 h-4" />
-                    </button>
-                  </div>
-
-                  <button
-                    onClick={() => setSelectedPlayerForReport(null)}
-                    className="p-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
-                    title="Chiudi Report (Esc)"
-                  >
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
-              </div>
-
-              {/* 1. ALL'INIZIO DEL REPORT: GRAFICO VOTO E FANTAVOTO CON KPI (FANTACALCIO.IT) */}
-              <PlayerPerformanceChart player={player} />
-
-              {/* 2. BOX MATCH PREVISTO CON COEFFICIENTE DI DIFFICOLTÀ E FATTORE CAMPO */}
-              {matchInfo && (
-                <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 space-y-1.5">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-black text-amber-400 uppercase flex items-center gap-1.5">
-                      <Calendar className="w-3.5 h-3.5" />
-                      <span>{matchInfo.matchdayTitle}</span>
-                    </span>
-                    <span className={`px-2 py-0.5 rounded font-black text-[10px] uppercase ${
-                      matchInfo.isHome 
-                        ? 'bg-emerald-950 text-emerald-300 border border-emerald-500/40' 
-                        : 'bg-slate-900 text-slate-300 border border-slate-700'
-                    }`}>
-                      {matchInfo.isHome ? 'IN CASA' : 'IN TRASFERTA'}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-300 font-bold">
-                      {matchInfo.isHome ? `${player.squadra} vs ${matchInfo.opponent}` : `${matchInfo.opponent} vs ${player.squadra}`}
-                    </span>
-                    <span className="text-slate-400 font-mono text-[11px]">
-                      {matchInfo.date} {matchInfo.time}
-                    </span>
-                  </div>
-
-                  {diffBadge && (
-                    <div className="flex items-center justify-between pt-1 border-t border-slate-850">
-                      <span className="text-[11px] text-slate-400">Difficoltà Avversario (FDR):</span>
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-black border ${diffBadge.color}`}>
-                        {diffBadge.label}
-                      </span>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* 3. CITAZIONE E VERDETTO DI TED LASSO */}
-              <div className="bg-amber-950/40 border border-amber-400/50 rounded-xl p-3 space-y-1">
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-black text-amber-400 uppercase flex items-center gap-1">
-                    <span>👨🏻‍💼</span>
-                    <span>Verdetto Ted Lasso: {verdict.badge}</span>
-                  </span>
-                </div>
-                <p className="text-xs text-slate-200 italic font-medium">
-                  "{verdict.quote}"
-                </p>
-                <p className="text-[11px] text-slate-300 font-bold mt-1">
-                  {verdict.verdict}
-                </p>
-              </div>
-
-              {/* 4. SEZIONI ANALITICHE INTEGRATE */}
-              <div className="space-y-2 text-xs">
-                
-                {/* A. GAZZETTA DELLO SPORT */}
-                <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
-                  <div className="flex items-center justify-between">
-                    <span className="font-black text-rose-400 uppercase flex items-center gap-1">
-                      <Activity className="w-3.5 h-3.5" />
-                      <span>Probabili Formazioni Gazzetta</span>
-                    </span>
-                    <span className="font-mono font-bold text-white">
-                      {evaluation.gazzetta.titolaritaPercent}% Titolare
-                    </span>
-                  </div>
-                  <p className="text-[11px] text-slate-300">
-                    {evaluation.gazzetta.noteGazzetta}
-                  </p>
-                  {evaluation.gazzetta.ballottaggioCon && (
-                    <div className="text-[10px] text-amber-400 font-mono font-bold">
-                      ⚔️ Ballottaggio: {evaluation.gazzetta.ballottaggioCon}
-                    </div>
-                  )}
-                </div>
-
-                {/* B. REDAZIONE FANTAGAZZETTA */}
-                <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
-                  <div className="flex items-center justify-between">
-                    <span className="font-black text-blue-400 uppercase flex items-center gap-1">
-                      <Star className="w-3.5 h-3.5 fill-blue-400" />
-                      <span>Redazione Fantagazzetta</span>
-                    </span>
-                    <span className="font-bold text-amber-400">
-                      {'★'.repeat(evaluation.fantagazzetta.stars)} ({evaluation.fantagazzetta.fascia})
-                    </span>
-                  </div>
-                  <p className="text-[11px] text-slate-300">
-                    {evaluation.fantagazzetta.commentoRedazione}
-                  </p>
-                </div>
-
-                {/* C. ULTERIORE RIQUADRO FANTAGAZZETTA: CONSIGLIATO DI GIORNATA */}
-                {fgConsigliato.isConsigliato && (
-                  <div className="p-3 rounded-xl bg-blue-950/40 border border-blue-500/60 space-y-1 shadow-sm">
-                    <div className="flex items-center justify-between flex-wrap gap-1">
-                      <span className="font-black text-blue-300 uppercase flex items-center gap-1.5 text-xs">
-                        <span>🔥</span>
-                        <span>{fgConsigliato.titolo}</span>
-                      </span>
-                      <span className="px-2 py-0.5 rounded bg-blue-900/80 text-blue-200 text-[10px] font-mono font-bold">
-                        {fgConsigliato.rubrica}
-                      </span>
-                    </div>
-                    <p className="text-xs text-blue-100 font-medium">
-                      {fgConsigliato.motivo}
-                    </p>
-                  </div>
-                )}
-
-                {/* D. SUL FONDO: YOUTUBE LUCA DIDDI (CHI SCHIERARE ALLA Xª GIORNATA) */}
-                <div className="p-3 rounded-xl bg-slate-950 border border-amber-500/50 space-y-1.5 shadow-sm">
-                  <div className="flex items-center justify-between flex-wrap gap-1">
-                    <span className="font-black text-amber-400 uppercase flex items-center gap-1.5 text-xs">
-                      <span>📺</span>
-                      <span>{diddiYoutube.title}</span>
-                    </span>
-                    <span className={`px-2 py-0.5 rounded text-[10px] font-black border uppercase ${diddiYoutube.tagColor}`}>
-                      {diddiYoutube.tag}
-                    </span>
-                  </div>
-
-                  <div className="text-xs text-amber-200 font-bold">
-                    🎯 Verdetto Diddi: {diddiYoutube.verdict}
-                  </div>
-
-                  <p className="text-[11px] text-slate-200 leading-relaxed font-sans bg-slate-900/80 p-2 rounded-lg border border-slate-800">
-                    "{diddiYoutube.analysis}"
-                  </p>
-                </div>
-
-              </div>
-
-              {/* FOOTER MODALE CON NAVIGAZIONE FRECCE */}
-              <div className="pt-2 border-t border-slate-800 flex items-center justify-between flex-wrap gap-2">
-                <div className="flex items-center gap-1.5">
-                  <button
-                    onClick={handlePrevPlayer}
-                    className="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-xs flex items-center gap-1 transition-all active:scale-95"
-                    title="Tasto Freccia Sinistra ←"
-                  >
-                    <ChevronLeft className="w-4 h-4" />
-                    <span className="hidden sm:inline">Precedente</span>
-                  </button>
-                  <button
-                    onClick={handleNextPlayer}
-                    className="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white font-bold text-xs flex items-center gap-1 transition-all active:scale-95"
-                    title="Tasto Freccia Destra →"
-                  >
-                    <span className="hidden sm:inline">Successivo</span>
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
-                  <span className="text-[11px] text-slate-500 font-mono hidden md:inline ml-1">
-                    (Scorri con ← → da tastiera)
-                  </span>
-                </div>
-
-                <button
-                  onClick={() => setSelectedPlayerForReport(null)}
-                  className="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-black text-xs transition-all active:scale-95"
-                >
-                  Chiudi Report
-                </button>
-              </div>
-
-            </div>
-          </div>
-        );
-      })()}
+      {/* 3. MODALE DETTAGLIO "TED'S MATCH REPORT" OTTIMIZZATO PER DESKTOP */}
+      {selectedPlayerForReport && (
+        <DesktopPlayerReportModal
+          card={selectedPlayerForReport}
+          allCards={allReportCards}
+          onClose={() => setSelectedPlayerForReport(null)}
+          onSelectCard={(c) => setSelectedPlayerForReport(c)}
+          isLight={isLight}
+          roundTitle={selectedRound.title}
+          roundNumber={selectedRound.roundNumber}
+          teams={teams}
+        />
+      )}
 
       {/* 4. MODALE CALENDARIO COMPLETO TURNO */}
       {showFixturesModal && (
