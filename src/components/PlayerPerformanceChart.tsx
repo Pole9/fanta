@@ -148,39 +148,43 @@ export const PlayerPerformanceChart: React.FC<Props> = ({
         </div>
 
         {/* 2. GRAFICO AD ALTA DEFINIZIONE A TUTTO SCHERMO */}
-        <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3 sm:p-4 pt-14 sm:pt-16 flex-1 min-h-0 flex flex-col justify-end relative shadow-xl overflow-hidden">
+        <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3 sm:p-4 flex-1 min-h-0 flex flex-col justify-between shadow-xl">
           
-          {/* HEADER DEL GRAFICO CON TITOLO E SCALA */}
-          <div className="absolute top-2.5 left-3 sm:left-4 right-3 sm:right-4 flex items-center justify-between flex-wrap gap-2 z-20">
+          {/* HEADER DEL GRAFICO CON TITOLO E SCALA (NON PIÙ ABSOLUTE: NESSUNA SOVRAPPOSIZIONE) */}
+          <div className="flex items-center justify-between flex-wrap gap-2 pb-2.5 mb-2 border-b border-slate-800/80 flex-shrink-0">
             <div className="flex items-center gap-2">
-              <span className="px-2.5 py-0.5 sm:py-1 rounded-md bg-blue-600 text-white font-bold text-[10px] sm:text-xs uppercase tracking-wider">
+              <span className="px-2.5 py-1 rounded-md bg-blue-600 text-white font-bold text-xs uppercase tracking-wider shadow-sm">
                 Istogramma Prestazioni 38 Giornate
               </span>
-              <span className="text-[10px] sm:text-xs text-slate-400 font-mono hidden md:inline">
+              <span className="text-xs text-slate-400 font-mono hidden md:inline">
                 Scala voti 0 - 14 (Sufficienza evidenziata a 6)
               </span>
             </div>
 
-            {activeMatchday !== null && (() => {
+            {activeMatchday !== null ? (() => {
               const cur = history.find(h => h.matchday === activeMatchday);
               if (!cur) return null;
               return (
-                <div className="text-[11px] sm:text-xs font-mono text-amber-300 bg-slate-950 border border-slate-700 px-2.5 py-0.5 rounded-lg flex items-center gap-2 shadow-inner">
+                <div className="text-xs font-mono text-amber-300 bg-slate-950 border border-slate-700 px-3 py-1 rounded-lg flex items-center gap-2.5 shadow-inner">
                   <span className="font-bold text-amber-400">G.{cur.matchday}:</span>
-                  <span className="font-black text-white">{cur.matchScore}</span>
-                  <span className="text-slate-400">vs {cur.opponent}</span>
+                  <span className="font-black text-white bg-slate-900 px-2 py-0.5 rounded border border-slate-800">{cur.matchScore}</span>
+                  <span className="text-slate-300">vs <strong>{cur.opponent}</strong> ({cur.isHome ? 'Casa' : 'Trasf.'})</span>
                   {cur.voto !== null && (
-                    <span className="text-emerald-400 font-bold ml-1.5">
+                    <span className="text-emerald-400 font-bold ml-1 pl-2 border-l border-slate-800">
                       Voto: {cur.voto} {cur.malus > 0 ? `(Netto ${Math.max(0, cur.voto - cur.malus)})` : ''} | Fanta: {cur.fantaVoto}
                     </span>
                   )}
                 </div>
               );
-            })()}
+            })() : (
+              <span className="text-xs text-slate-500 italic hidden sm:inline">
+                Passa con il mouse sulle colonne per visualizzare i dettagli della gara
+              </span>
+            )}
           </div>
 
           {/* AREA EFFETTIVA DEL GRAFICO */}
-          <div className="relative flex-1 min-h-0 w-full flex items-end">
+          <div className="relative flex-1 min-h-0 w-full flex items-end pt-4 pb-1">
             
             {/* GRIGLIA ASSE Y (0, 2, 4, 6, 8, 10, 12, 14) */}
             <div className="absolute inset-0 flex flex-col justify-between pointer-events-none pr-1">
@@ -196,7 +200,7 @@ export const PlayerPerformanceChart: React.FC<Props> = ({
               ))}
             </div>
 
-            {/* BARRE ISTOGRAMMA CON H-FULL SU TUTTA LA GERARCHIA */}
+            {/* BARRE ISTOGRAMMA */}
             <div className="relative z-10 w-full h-full flex items-end pl-7 gap-1 sm:gap-1.5">
               {history.map((item) => {
                 const isSV = item.status === 'senza_voto';
@@ -205,11 +209,19 @@ export const PlayerPerformanceChart: React.FC<Props> = ({
                 const { style, className } = getBarStyle(item.status, item.voto);
                 const isSelected = activeMatchday === item.matchday;
 
-                // Calcolo altezze percentuali: la somma tocca esattamente il voto base o fantaVoto
+                // Calcolo altezze percentuali sulla scala 0..14
                 const netVote = hasVoto ? Math.max(0, item.voto! - item.malus) : 0;
                 const netVoteHeightPercent = hasVoto ? (netVote / maxScale) * 100 : 0;
                 const malusHeightPercent = hasVoto && item.malus > 0 ? (item.malus / maxScale) * 100 : 0;
                 const bonusHeightPercent = hasVoto && item.bonus > 0 ? (item.bonus / maxScale) * 100 : 0;
+                const totalBarHeightPercent = Math.min(100, Math.max(0, netVoteHeightPercent + malusHeightPercent + bonusHeightPercent));
+
+                // Proporzioni interne dei singoli segmenti rispetto all'altezza totale della barra
+                const bonusSegmentPercent = totalBarHeightPercent > 0 ? (bonusHeightPercent / totalBarHeightPercent) * 100 : 0;
+                const malusSegmentPercent = totalBarHeightPercent > 0 ? (malusHeightPercent / totalBarHeightPercent) * 100 : 0;
+                const netVoteSegmentPercent = totalBarHeightPercent > 0 ? (netVoteHeightPercent / totalBarHeightPercent) * 100 : 0;
+
+                const isCalloutAbove = totalBarHeightPercent <= 55;
 
                 return (
                   <div 
@@ -219,16 +231,21 @@ export const PlayerPerformanceChart: React.FC<Props> = ({
                     onMouseLeave={() => setActiveMatchday(null)}
                     onClick={() => setActiveMatchday(prev => prev === item.matchday ? null : item.matchday)}
                   >
-                    {/* CALLOUT FLUTTUANTE */}
+                    {/* CALLOUT FLUTTUANTE: POSIZIONAMENTO ADATTIVO RISPETTO ALLA BARRA PER EVITARE QUALSIASI SOVRAPPOSIZIONE */}
                     <div 
-                      className={`absolute bottom-full mb-2 sm:mb-3 z-50 pointer-events-none transition-all duration-150 ${
+                      style={
+                        isCalloutAbove
+                          ? { bottom: `calc(${totalBarHeightPercent}% + 10px)` }
+                          : { top: `calc(${100 - totalBarHeightPercent}% + 10px)` }
+                      }
+                      className={`absolute z-50 pointer-events-none transition-all duration-150 ${
                         isSelected 
                           ? 'opacity-100 visible scale-100' 
                           : 'opacity-0 invisible scale-95'
                       } ${
-                        item.matchday <= 4 
+                        item.matchday <= 5 
                           ? 'left-0 translate-x-0' 
-                          : item.matchday >= 35 
+                          : item.matchday >= 34 
                           ? 'right-0 translate-x-0' 
                           : 'left-1/2 -translate-x-1/2'
                       }`}
@@ -315,18 +332,23 @@ export const PlayerPerformanceChart: React.FC<Props> = ({
                         )}
                       </div>
 
+                      {/* FRECCETTA PUNTATORE ORIENTATA VERSO LA BARRA */}
                       <div 
-                        className={`absolute -bottom-1.5 w-3 h-3 bg-slate-900 border-r border-b border-slate-700 rotate-45 pointer-events-none ${
-                          item.matchday <= 4 
+                        className={`absolute w-3 h-3 bg-slate-900 pointer-events-none ${
+                          isCalloutAbove
+                            ? '-bottom-1.5 border-r border-b border-slate-700 rotate-45'
+                            : '-top-1.5 border-l border-t border-slate-700 rotate-45'
+                        } ${
+                          item.matchday <= 5 
                             ? 'left-4' 
-                            : item.matchday >= 35 
+                            : item.matchday >= 34 
                             ? 'right-4' 
                             : 'left-1/2 -translate-x-1/2'
                         }`}
                       />
                     </div>
 
-                    {/* BARRA O SIGLA: H-FULL SU DIV CONTENITORE COSÌ LE PERCENTUALI FUNZIONANO */}
+                    {/* BARRA O SIGLA: H-FULL RIMANE SUL PARENT PER IL LAYOUT ASSE Y */}
                     {isINF ? (
                       <span 
                         className={`text-[9px] sm:text-[10px] font-black text-purple-400 font-mono mb-1 tracking-tighter transition-all ${
@@ -346,9 +368,10 @@ export const PlayerPerformanceChart: React.FC<Props> = ({
                         SV
                       </span>
                     ) : hasVoto ? (
-                      /* COLONNA IMPILATA: H-FULL FONDAMENTALE */
+                      /* BARRA IMPILATA: ALTEZZA TOTALBARHEIGHTPERCENT (RING ESCLUSIVAMENTE SULLA BARRA REALE) */
                       <div 
-                        className={`w-full h-full flex flex-col justify-end items-stretch transition-all duration-200 ${
+                        style={{ height: `${totalBarHeightPercent}%` }}
+                        className={`w-full flex flex-col justify-end items-stretch transition-all duration-200 ${
                           isSelected ? 'ring-2 ring-amber-400 brightness-125 z-20 shadow-xl rounded-t-sm scale-x-110' : 'hover:brightness-110'
                         }`}
                         title={`G.${item.matchday} - ${item.matchScore}: Voto Base ${item.voto}${item.malus > 0 ? ` -${item.malus} Malus (Netto ${netVote})` : ''}${item.bonus > 0 ? ` +${item.bonus} Bonus` : ''} = Fanta ${item.fantaVoto}`}
@@ -356,7 +379,7 @@ export const PlayerPerformanceChart: React.FC<Props> = ({
                         {/* 1. BONUS IN CIMA (CIANO) */}
                         {bonusHeightPercent > 0 && (
                           <div 
-                            style={{ height: `${bonusHeightPercent}%` }}
+                            style={{ height: `${bonusSegmentPercent}%` }}
                             className="w-full bg-cyan-400 border-x border-t border-cyan-300 rounded-t-sm shadow-sm"
                             title={`Bonus: +${item.bonus}`}
                           />
@@ -365,7 +388,7 @@ export const PlayerPerformanceChart: React.FC<Props> = ({
                         {/* 2. MALUS (ROSSO VIVO - ERODE IL VOTO ORIGINARIO DALLA CIMA) */}
                         {malusHeightPercent > 0 && (
                           <div 
-                            style={{ height: `${malusHeightPercent}%` }}
+                            style={{ height: `${malusSegmentPercent}%` }}
                             className={`w-full bg-rose-500 border-x border-t border-rose-400 shadow-sm ${bonusHeightPercent <= 0 ? 'rounded-t-sm' : ''}`}
                             title={`Malus: -${item.malus} (Voto Base ${item.voto} -> Netto ${netVote})`}
                           />
@@ -373,7 +396,7 @@ export const PlayerPerformanceChart: React.FC<Props> = ({
 
                         {/* 3. VOTO NETTO (ALLA BASE - COLORE STATO) */}
                         <div
-                          style={{ height: `${netVoteHeightPercent}%`, ...style }}
+                          style={{ height: `${netVoteSegmentPercent}%`, ...style }}
                           className={`w-full shadow-md ${className} ${bonusHeightPercent <= 0 && malusHeightPercent <= 0 ? 'rounded-t-sm' : ''}`}
                           title={`Voto Netto: ${netVote} (Voto Base: ${item.voto})`}
                         />
