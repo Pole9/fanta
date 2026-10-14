@@ -27,11 +27,13 @@ import {
 import { SERIE_A_SHARED_SURNAMES } from '../data/injuryData';
 import { PlayerPerformanceChart } from './PlayerPerformanceChart';
 import { ProbableLineupsModal } from './ProbableLineupsModal';
+import { RosterImportModal } from './RosterImportModal';
 import { getDiddiMatchdayYoutubeAdvice, getFantagazzettaConsigliatoStatus } from '../utils/matchdayAdviceProvider';
 import { 
   Sparkles, 
   Zap, 
   Shield, 
+  Upload, 
   CheckCircle2, 
   AlertTriangle, 
   ArrowRightLeft, 
@@ -104,10 +106,15 @@ export const TedLassoView: React.FC = () => {
   const [saveFeedback, setSaveFeedback] = useState<boolean>(false);
   const [showFixturesModal, setShowFixturesModal] = useState<boolean>(false);
   const [selectedMatchForLineups, setSelectedMatchForLineups] = useState<SerieAMatch | null>(null);
+  const [showRosterImportModal, setShowRosterImportModal] = useState<boolean>(false);
 
   // Gestione tasto indietro (popstate / browser back) per non uscire dall'app
   useEffect(() => {
     const handlePopState = () => {
+      if (showRosterImportModal) {
+        setShowRosterImportModal(false);
+        return;
+      }
       if (selectedMatchForLineups) {
         setSelectedMatchForLineups(null);
         return;
@@ -123,7 +130,7 @@ export const TedLassoView: React.FC = () => {
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
-  }, [selectedMatchForLineups, selectedPlayerForReport, showFixturesModal]);
+  }, [showRosterImportModal, selectedMatchForLineups, selectedPlayerForReport, showFixturesModal]);
 
   // Squadra corrente
   const activeTeam = teams.find(t => t.id === selectedTeamId) || teams[0];
@@ -777,6 +784,16 @@ ${benchText}
           >
             <RefreshCw className={`w-4 h-4 ${isSyncingOnline ? 'animate-spin' : ''}`} />
             <span className="hidden lg:inline">{isSyncingOnline ? 'Sync...' : 'Sync Live'}</span>
+          </button>
+
+          {/* PULSANTE ROSE CSV */}
+          <button
+            onClick={() => setShowRosterImportModal(true)}
+            className="px-2.5 py-1.5 rounded-lg text-xs sm:text-sm font-black flex items-center gap-1.5 transition-all border border-emerald-500/40 bg-emerald-950/60 text-emerald-300 hover:text-white hover:bg-emerald-900/60 shadow-sm active:scale-95"
+            title="Carica o aggiorna le 8 rose dal template CSV"
+          >
+            <Upload className="w-4 h-4 text-emerald-400" />
+            <span className="hidden xl:inline">Rose CSV</span>
           </button>
 
           {/* PULSANTE VERSIONE MOBILE */}
@@ -2225,6 +2242,12 @@ ${benchText}
           onMatchChange={(m) => setSelectedMatchForLineups(m)}
         />
       )}
+
+      {/* MODAL IMPORTAZIONE ROSE CSV */}
+      <RosterImportModal 
+        isOpen={showRosterImportModal} 
+        onClose={() => setShowRosterImportModal(false)} 
+      />
 
     </div>
   );

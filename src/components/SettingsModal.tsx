@@ -15,6 +15,7 @@ import {
   FileSpreadsheet
 } from 'lucide-react';
 import { exportListoneExcel, parseListoneFile } from '../utils/listoneExportImport';
+import { RosterImportModal } from './RosterImportModal';
 
 export const SettingsModal: React.FC = () => {
   const { 
@@ -42,6 +43,7 @@ export const SettingsModal: React.FC = () => {
   ];
 
   const [settingsFeedback, setSettingsFeedback] = useState<string | null>(null);
+  const [showRosterImportModal, setShowRosterImportModal] = useState<boolean>(false);
   const listoneInputRef = React.useRef<HTMLInputElement>(null);
 
   // Esportazione Listone Excel con tutti i commenti
@@ -306,6 +308,31 @@ export const SettingsModal: React.FC = () => {
           )}
         </div>
 
+        {/* AGGIORNAMENTO ROSE DA CSV (ASTA DI RIPARAZIONE / SCAMBI) */}
+        <div className="p-4 bg-slate-950 rounded-xl border border-slate-800 space-y-2">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <span className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
+                <Users className="w-4 h-4 text-emerald-400" />
+                <span>Aggiornamento Rose da Template CSV (Asta Riparazione / Scambi)</span>
+              </span>
+              <p className="text-[11px] text-slate-400 mt-0.5">
+                Carica o incolla il file CSV con le 8 rose aggiornate (25 calciatori, ruoli e costi) oppure scarica il template delle rose attuali per modificarlo in Excel.
+              </p>
+            </div>
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <button
+                onClick={() => setShowRosterImportModal(true)}
+                className="w-full sm:w-auto px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-black flex items-center justify-center gap-1.5 shadow transition-all active:scale-95 border border-emerald-400"
+                title="Apri pannello importazione ed esportazione rose CSV"
+              >
+                <Upload className="w-3.5 h-3.5" />
+                <span>Aggiorna Rose CSV</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 flex-wrap">
           <button
             onClick={loadSimulatedAuction}
@@ -341,6 +368,12 @@ export const SettingsModal: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {/* MODAL IMPORTAZIONE ROSE CSV */}
+      <RosterImportModal 
+        isOpen={showRosterImportModal} 
+        onClose={() => setShowRosterImportModal(false)} 
+      />
 
     </div>
   );

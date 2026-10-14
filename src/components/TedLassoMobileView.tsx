@@ -20,11 +20,13 @@ import {
 import { SERIE_A_SHARED_SURNAMES } from '../data/injuryData';
 import { PlayerPerformanceChart } from './PlayerPerformanceChart';
 import { ProbableLineupsModal } from './ProbableLineupsModal';
+import { RosterImportModal } from './RosterImportModal';
 import { getDiddiMatchdayYoutubeAdvice, getFantagazzettaConsigliatoStatus } from '../utils/matchdayAdviceProvider';
 import { 
   Sparkles, 
   Zap, 
   Shield, 
+  Upload, 
   Star, 
   X, 
   Activity, 
@@ -95,10 +97,15 @@ export const TedLassoMobileView: React.FC = () => {
   const [copyFeedback, setCopyFeedback] = useState<boolean>(false);
   const [saveFeedback, setSaveFeedback] = useState<boolean>(false);
   const [selectedMatchForLineups, setSelectedMatchForLineups] = useState<SerieAMatch | null>(null);
+  const [showRosterImportModal, setShowRosterImportModal] = useState<boolean>(false);
 
   // Gestione tasto indietro (popstate / browser back) per chiudere modali o tornare al campo senza uscire dall'app
   useEffect(() => {
     const handlePopState = () => {
+      if (showRosterImportModal) {
+        setShowRosterImportModal(false);
+        return;
+      }
       if (selectedMatchForLineups) {
         setSelectedMatchForLineups(null);
         return;
@@ -114,7 +121,7 @@ export const TedLassoMobileView: React.FC = () => {
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
-  }, [selectedMatchForLineups, selectedPlayerForReport, mobileSection]);
+  }, [showRosterImportModal, selectedMatchForLineups, selectedPlayerForReport, mobileSection]);
 
   // Squadra corrente dell'utente
   const activeTeam = teams.find(t => t.id === selectedTeamId) || teams[0];
@@ -500,6 +507,16 @@ ${benchText}
           </div>
 
           <div className="flex items-center gap-1.5">
+            {/* Tasto carica rose da CSV */}
+            <button
+              onClick={() => setShowRosterImportModal(true)}
+              className="px-2 py-1 rounded-lg bg-emerald-950/70 border border-emerald-500/50 text-emerald-300 hover:text-white font-bold text-[11px] flex items-center gap-1 shadow-sm active:scale-95"
+              title="Carica o aggiorna le rose dal template CSV"
+            >
+              <Upload className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Rose CSV</span>
+            </button>
+
             {/* Tasto passa alla versione Desktop */}
             <button
               onClick={navigateToDesktop}
@@ -1829,6 +1846,12 @@ ${benchText}
           onMatchChange={(m) => setSelectedMatchForLineups(m)}
         />
       )}
+
+      {/* 6. MODALE IMPORTAZIONE ROSE CSV */}
+      <RosterImportModal 
+        isOpen={showRosterImportModal} 
+        onClose={() => setShowRosterImportModal(false)} 
+      />
 
     </div>
   );

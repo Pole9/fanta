@@ -49,6 +49,7 @@ interface AuctionContextType {
   reloadOfficialData: () => void;
   loadSimulatedAuction: () => void;
   forceLoadCompleteRosters: () => void;
+  applyImportedRosters: (newTeams: Team[]) => void;
   reloadTatticoNotes: () => void;
   theme: 'dark' | 'light';
   toggleTheme: () => void;
@@ -933,6 +934,57 @@ export const AuctionProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }
   }, [forceLoadCompleteRosters, setActiveView]);
 
+  const applyImportedRosters = useCallback((newTeams: Team[]) => {
+    // 1. Mappa le assegnazioni dalle nuove squadre importate
+    const assignmentMap = new Map<number, { teamId: string; price: number }>();
+    newTeams.forEach(team => {
+      team.players.forEach(pl => {
+        assignmentMap.set(pl.playerId, { teamId: team.id, price: pl.price });
+      });
+    });
+
+    // 2. Ricalcola players marcando come 'assigned' o 'available'
+    const updatedPlayers = OFFICIAL_PLAYERS.map(official => {
+      const ass = assignmentMap.get(official.id);
+      if (ass) {
+        return {
+          ...official,
+          status: 'assigned' as const,
+          assignedTo: ass.teamId,
+          price: ass.price
+        };
+      }
+      return {
+        ...official,
+        status: 'available' as const,
+        assignedTo: null,
+        price: null
+      };
+    });
+
+    // 3. Salva in stato
+    setTeams(newTeams);
+    setPlayers(updatedPlayers);
+
+    // 4. Salva in localStorage
+    try {
+      localStorage.setItem(`${STORAGE_KEY}_teams`, JSON.stringify(newTeams));
+      localStorage.setItem(`${STORAGE_KEY}_players`, JSON.stringify(updatedPlayers));
+
+      // Rimuovi vecchie formazioni Ted Lasso salvate in localStorage per ricalcolare coi nuovi titolari
+      const keysToRemove: string[] = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith('fanta_lineup_')) {
+          keysToRemove.push(k);
+        }
+      }
+      keysToRemove.forEach(k => localStorage.removeItem(k));
+    } catch (e) {
+      console.warn('Errore salvataggio storage:', e);
+    }
+  }, []);
+
   const value = {
     teams,
     players,
@@ -966,6 +1018,7 @@ export const AuctionProvider: React.FC<{ children: React.ReactNode }> = ({ child
     reloadOfficialData,
     loadSimulatedAuction,
     forceLoadCompleteRosters,
+    applyImportedRosters,
     reloadTatticoNotes,
     theme,
     toggleTheme,
