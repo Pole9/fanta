@@ -65,7 +65,7 @@ interface AuctionContextType {
   activePlayerIndexInRole: number;
 }
 
-const STORAGE_KEY = 'fanta_asta_master_v27_giornata6';
+const STORAGE_KEY = 'fanta_asta_master_v28_riparazione1';
 
 // Helper per costruire i giocatori con le assegnazioni iniziali dalle rose ufficiali
 const getInitialPlayersWithAssignments = (): Player[] => {
