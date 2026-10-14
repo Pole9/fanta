@@ -45944,14 +45944,14 @@ export const OFFICIAL_PLAYERS: Player[] = [
       "2026/27": {
         "season": "2026/27",
         "squadra": "Inter",
-        "isTitolare": false,
-        "partiteTitolare": 1,
-        "titolaritaDettaglio": "2/5 (Staffetta / Subentrato)",
-        "motivoTitolarita": "subentrato",
-        "pg": 2,
-        "mv": 5.5,
-        "fm": 10,
-        "gf": 4,
+        "isTitolare": true,
+        "partiteTitolare": 7,
+        "titolaritaDettaglio": "5/5 (Titolare inamovibile)",
+        "motivoTitolarita": "titolare_fisso",
+        "pg": 7,
+        "mv": 7.07,
+        "fm": 10.07,
+        "gf": 7,
         "gs": 0,
         "rp": 0,
         "rc": 0,
@@ -46026,8 +46026,8 @@ export const OFFICIAL_PLAYERS: Player[] = [
       "totalPg": 96,
       "seasonsCount": 3
     },
-    "titolarita2026_27": "2/4 (Staffetta / Subentrato)",
-    "motivo2026_27": "subentrato",
+    "titolarita2026_27": "4/4 Tit. (Titolare fisso)",
+    "motivo2026_27": "titolare_fisso",
     "note": "Tattico: A 72 crediti (24%) occasione top, titolarissimo dell'Inter."
   },
   {
