@@ -1,18 +1,17 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useMemo } from 'react';
 import { TedPlayerCard, getTedPlayerVerdict } from '../utils/tedLassoAdvisor';
 import { PlayerPerformanceChart } from './PlayerPerformanceChart';
 import { getDiddiMatchdayYoutubeAdvice, getFantagazzettaConsigliatoStatus } from '../utils/matchdayAdviceProvider';
-import { Role } from '../types';
+import { Role, Team } from '../types';
 import { 
   X, 
   ChevronLeft, 
   ChevronRight, 
   Star, 
   Activity, 
-  Sparkles, 
-  AlertTriangle, 
+  Calendar, 
   Shield,
-  Calendar
+  AlertTriangle 
 } from 'lucide-react';
 
 export interface PlayerDetailModalProps {
@@ -25,6 +24,7 @@ export interface PlayerDetailModalProps {
   isLight?: boolean;
   matchdayNumber?: number;
   isMyPlayer?: boolean;
+  teams?: Team[];
 }
 
 export const PlayerDetailModal: React.FC<PlayerDetailModalProps> = ({
@@ -36,13 +36,46 @@ export const PlayerDetailModal: React.FC<PlayerDetailModalProps> = ({
   hasNext = true,
   isLight = false,
   matchdayNumber = 7,
-  isMyPlayer = false
+  isMyPlayer = false,
+  teams = []
 }) => {
   const { player, evaluation, tedScore } = card;
   const verdict = getTedPlayerVerdict(player, tedScore, evaluation);
   const matchInfo = evaluation.match;
   const diddiYoutube = getDiddiMatchdayYoutubeAdvice(player, matchdayNumber, evaluation);
   const fgConsigliato = getFantagazzettaConsigliatoStatus(player, evaluation);
+
+  // Calcolo squadra di appartenenza al fanta o 'FREE'
+  const ownershipInfo = useMemo(() => {
+    for (const t of teams) {
+      const pl = t.players.find(p => p.playerId === player.id);
+      if (pl) {
+        return {
+          isOwned: true,
+          teamName: t.name,
+          price: pl.price
+        };
+      }
+      if (player.assignedTo && player.assignedTo === t.id) {
+        return {
+          isOwned: true,
+          teamName: t.name,
+          price: player.price || null
+        };
+      }
+    }
+    if (isMyPlayer) {
+      return { isOwned: true, teamName: 'IN ROSA', price: player.price || null };
+    }
+    if (player.status === 'assigned') {
+      return { isOwned: true, teamName: 'ASSEGNATO', price: player.price || null };
+    }
+    return {
+      isOwned: false,
+      teamName: 'FREE',
+      price: null
+    };
+  }, [teams, player, isMyPlayer]);
 
   // Gestione tasto indietro (popstate / browser back)
   useEffect(() => {
@@ -174,10 +207,26 @@ export const PlayerDetailModal: React.FC<PlayerDetailModalProps> = ({
                 }`}>
                   {player.nome}
                 </h2>
-                {isMyPlayer && (
-                  <span className="px-1.5 py-0.5 rounded bg-amber-400 text-slate-950 font-black text-[9px] uppercase tracking-wider inline-flex items-center gap-0.5 shadow-sm">
-                    <Star className="w-2.5 h-2.5 fill-slate-950" />
-                    <span>IN ROSA</span>
+                {ownershipInfo.isOwned ? (
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-wider inline-flex items-center gap-1 border shadow-sm ${
+                    isLight 
+                      ? 'bg-blue-100 text-blue-900 border-blue-300' 
+                      : 'bg-blue-950/80 text-blue-300 border-blue-500/50'
+                  }`}>
+                    <Shield className="w-3 h-3 text-blue-400" />
+                    <span>{ownershipInfo.teamName}</span>
+                    {ownershipInfo.price !== null && (
+                      <span className="text-amber-400 font-mono font-bold">({ownershipInfo.price} cr.)</span>
+                    )}
+                  </span>
+                ) : (
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-widest inline-flex items-center gap-1 border shadow-sm ${
+                    isLight 
+                      ? 'bg-emerald-100 text-emerald-900 border-emerald-400' 
+                      : 'bg-emerald-950/90 text-emerald-300 border-emerald-500/60'
+                  }`}>
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <span>FREE</span>
                   </span>
                 )}
               </div>

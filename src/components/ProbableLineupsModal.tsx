@@ -12,6 +12,7 @@ import { getInjuryInfo } from '../data/injuryData';
 import { Player, Role } from '../types';
 import { TedPlayerCard, calculateTedScore } from '../utils/tedLassoAdvisor';
 import { PlayerDetailModal } from './PlayerDetailModal';
+import { useAuction } from '../context/AuctionContext';
 import { 
   X, 
   Star, 
@@ -64,6 +65,8 @@ export const ProbableLineupsModal: React.FC<ProbableLineupsModalProps> = ({
   roundTitle,
   onMatchChange
 }) => {
+  const { teams } = useAuction();
+
   // Gestione partita corrente tra quelle della giornata (swipe / frecce)
   const [currentMatchId, setCurrentMatchId] = useState<string>(match.id);
 
@@ -851,6 +854,7 @@ export const ProbableLineupsModal: React.FC<ProbableLineupsModalProps> = ({
           isLight={isLight}
           matchdayNumber={currentMatch ? 7 : 7}
           isMyPlayer={myTeamPlayerIds.has(selectedPlayerCard.player.id)}
+          teams={teams}
         />
       )}
     </div>

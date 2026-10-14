@@ -2,7 +2,6 @@ import React, { useEffect, useMemo } from 'react';
 import { TedPlayerCard, getTedPlayerVerdict } from '../utils/tedLassoAdvisor';
 import { PlayerPerformanceChart } from './PlayerPerformanceChart';
 import { getDiddiMatchdayYoutubeAdvice, getFantagazzettaConsigliatoStatus } from '../utils/matchdayAdviceProvider';
-import { getTeamUpcomingMatches, UpcomingMatchInfo } from '../data/matchdayData';
 import { Role, Team, SeasonStats } from '../types';
 import { 
   X, 
@@ -56,29 +55,32 @@ export const DesktopPlayerReportModal: React.FC<DesktopPlayerReportModalProps> =
   const diddiYoutube = getDiddiMatchdayYoutubeAdvice(player, roundNumber, evaluation);
   const fgConsigliato = getFantagazzettaConsigliatoStatus(player, evaluation);
 
-  // Prossime 3 gare per la squadra del calciatore
-  const upcomingMatches = useMemo<UpcomingMatchInfo[]>(() => {
-    return getTeamUpcomingMatches(player.squadra, 3);
-  }, [player.squadra]);
-
-  // Squadra d'asta proprietaria e costo d'asta (se assegnato)
+  // Squadra d'asta proprietaria o 'FREE' se non appartiene a nessuna rosa
   const ownershipInfo = useMemo(() => {
     for (const t of teams) {
       const pl = t.players.find(p => p.playerId === player.id);
       if (pl) {
         return {
+          isOwned: true,
           teamName: t.name,
           teamColor: t.color,
-          price: pl.price,
-          isAssigned: true
+          price: pl.price
+        };
+      }
+      if (player.assignedTo && player.assignedTo === t.id) {
+        return {
+          isOwned: true,
+          teamName: t.name,
+          teamColor: t.color,
+          price: player.price || null
         };
       }
     }
     return {
-      teamName: 'Non Assegnato',
-      teamColor: '#94a3b8',
-      price: player.price || null,
-      isAssigned: player.status === 'assigned'
+      isOwned: false,
+      teamName: 'FREE',
+      teamColor: null,
+      price: null
     };
   }, [teams, player]);
 
@@ -287,17 +289,27 @@ export const DesktopPlayerReportModal: React.FC<DesktopPlayerReportModalProps> =
                   )}
                 </span>
 
-                {/* PROPRIETÀ SQUADRA LEGA */}
-                {ownershipInfo.isAssigned && (
-                  <span className={`px-2 py-0.5 rounded-lg text-xs font-bold font-mono border ${
+                {/* PROPRIETÀ SQUADRA FANTA O "FREE" */}
+                {ownershipInfo.isOwned ? (
+                  <span className={`px-2.5 py-0.5 rounded-lg text-xs font-black uppercase tracking-wider inline-flex items-center gap-1.5 border shadow-sm ${
                     isLight 
-                      ? 'bg-slate-100 text-slate-700 border-slate-300' 
-                      : 'bg-slate-900 text-slate-300 border-slate-800'
+                      ? 'bg-blue-50 text-blue-900 border-blue-300' 
+                      : 'bg-blue-950/80 text-blue-300 border-blue-500/50'
                   }`}>
-                    <span className="font-semibold">{ownershipInfo.teamName}</span>
+                    <Shield className="w-3.5 h-3.5 text-blue-400" />
+                    <span>{ownershipInfo.teamName}</span>
                     {ownershipInfo.price !== null && (
-                      <span className="text-amber-400 font-black ml-1.5">{ownershipInfo.price} cr.</span>
+                      <span className="text-amber-400 font-mono font-bold">({ownershipInfo.price} cr.)</span>
                     )}
+                  </span>
+                ) : (
+                  <span className={`px-2.5 py-0.5 rounded-lg text-xs font-black uppercase tracking-widest inline-flex items-center gap-1.5 border shadow-sm ${
+                    isLight 
+                      ? 'bg-emerald-100 text-emerald-900 border-emerald-400' 
+                      : 'bg-emerald-950/90 text-emerald-300 border-emerald-500/60'
+                  }`}>
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                    <span>FREE</span>
                   </span>
                 )}
               </div>
@@ -488,37 +500,7 @@ export const DesktopPlayerReportModal: React.FC<DesktopPlayerReportModalProps> =
                     </div>
                   )}
 
-                  {/* PROSSIMI 3 TURNI CALENDARIO IN SINTESI */}
-                  {upcomingMatches.length > 0 && (
-                    <div className="pt-2 border-t border-slate-800/60">
-                      <span className="text-[11px] text-slate-400 font-bold uppercase tracking-wider block mb-2">
-                        Calendario Prossimi Turni:
-                      </span>
-                      <div className="grid grid-cols-3 gap-2">
-                        {upcomingMatches.map((um, idx) => {
-                          const badge = getFdrBadge(um.difficulty);
-                          return (
-                            <div 
-                              key={idx} 
-                              className={`p-2 rounded-lg border text-center space-y-1 ${
-                                isLight ? 'bg-slate-100 border-slate-200' : 'bg-slate-900 border-slate-800'
-                              }`}
-                            >
-                              <div className="text-[10px] font-mono text-slate-400 font-bold">
-                                {um.shortLabel}
-                              </div>
-                              <div className="text-xs font-black truncate">
-                                {um.isHome ? 'vs ' : '@ '}{um.opponent}
-                              </div>
-                              <div className={`text-[9.5px] px-1 py-0.2 rounded font-black border uppercase ${badge.bg}`}>
-                                {badge.label.split(' ')[0]} FDR
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
+
                 </div>
               )}
 
