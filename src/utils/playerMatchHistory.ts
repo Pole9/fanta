@@ -16,6 +16,8 @@ export interface MatchdayHistoryItem {
   matchday: number;
   status: MatchdayStatus;
   voto: number | null;
+  bonus: number;            // Somma punti bonus (es. +3 gol, +1 assist)
+  malus: number;            // Somma punti malus (es. 0.5 amm, 1 esp)
   fantaVoto: number | null;
   opponent: string;
   opponentAbbr: string;
@@ -23,7 +25,9 @@ export interface MatchdayHistoryItem {
   isHome: boolean;
   matchScore: string;       // ES. "MIL-LAZ 3-2" o "MIL-JUV"
   score: string | null;     // ES. "3-2"
-  bonusMalusText?: string;  // ES. "+3 Gol"
+  bonusMalusText?: string;  // ES. "+3 Gol, -0.5 Amm."
+  bonusText?: string;       // ES. "+3 Gol"
+  malusText?: string;       // ES. "-0.5 Amm."
   played: boolean;
 }
 
@@ -111,6 +115,8 @@ export function getPlayerPerformanceHistory(player: Player, playedMatchdaysCount
         matchday: m,
         status: 'futura',
         voto: null,
+        bonus: 0,
+        malus: 0,
         fantaVoto: null,
         opponent: matchRes.opponent,
         opponentAbbr: matchRes.opponentAbbr,
@@ -146,33 +152,50 @@ export function getPlayerPerformanceHistory(player: Player, playedMatchdaysCount
       let calculatedVote = Math.round((mv + delta) * 2) / 2;
       calculatedVote = Math.max(4.5, Math.min(8.5, calculatedVote));
 
-      // FantaVoto (distribuzione deterministica bonus/malus senza divisione per zero)
-      let bonusMalus = 0;
+      // Calcolo separato di Bonus e Malus per la visualizzazione impilata
+      let bonusTotal = 0;
+      let malusTotal = 0;
       const bonusParts: string[] = [];
+      const malusParts: string[] = [];
+
       if (gf > 0 && m === 1 + (player.id % modBase)) {
-        bonusMalus += 3;
+        bonusTotal += 3;
         bonusParts.push('+3 Gol ⚽');
       }
       if (assist > 0 && m === 1 + ((player.id + 2) % modBase)) {
-        bonusMalus += 1;
+        bonusTotal += 1;
         bonusParts.push('+1 Assist 👟');
       }
       if (amm > 0 && m === 1 + ((player.id + 1) % modBase)) {
-        bonusMalus -= 0.5;
-        bonusParts.push('-0.5 Amm. 🟨');
+        malusTotal += 0.5;
+        malusParts.push('-0.5 Amm. 🟨');
       }
       if (esp > 0 && m === pg) {
-        bonusMalus -= 1;
-        bonusParts.push('-1.0 Esp. 🟥');
+        malusTotal += 1;
+        malusParts.push('-1.0 Esp. 🟥');
       }
 
-      const fantaVoto = Math.max(3.0, calculatedVote + bonusMalus);
-      const bonusMalusText = bonusParts.length > 0 ? bonusParts.join(', ') : undefined;
+      // Se portiere e ha subito gol
+      if (player.ruolo === 'P') {
+        const gsCount = s26?.gs !== undefined ? s26.gs : (player.gs || 0);
+        if (gsCount > 0 && m === 1 + ((player.id + 3) % modBase)) {
+          malusTotal += 1;
+          malusParts.push('-1 Gol Subito 🥅');
+        }
+      }
+
+      const fantaVoto = Math.max(1.0, calculatedVote + bonusTotal - malusTotal);
+      const allParts = [...bonusParts, ...malusParts];
+      const bonusMalusText = allParts.length > 0 ? allParts.join(', ') : undefined;
+      const bonusText = bonusParts.length > 0 ? bonusParts.join(', ') : undefined;
+      const malusText = malusParts.length > 0 ? malusParts.join(', ') : undefined;
 
       history.push({
         matchday: m,
         status,
         voto: calculatedVote,
+        bonus: bonusTotal,
+        malus: malusTotal,
         fantaVoto: fantaVoto,
         opponent: matchRes.opponent,
         opponentAbbr: matchRes.opponentAbbr,
@@ -181,6 +204,8 @@ export function getPlayerPerformanceHistory(player: Player, playedMatchdaysCount
         matchScore: matchRes.matchScore,
         score: matchRes.score,
         bonusMalusText,
+        bonusText,
+        malusText,
         played: true
       });
     } else {
@@ -191,6 +216,8 @@ export function getPlayerPerformanceHistory(player: Player, playedMatchdaysCount
           matchday: m,
           status: 'non_giocato_infortunio',
           voto: null,
+          bonus: 0,
+          malus: 0,
           fantaVoto: null,
           opponent: matchRes.opponent,
           opponentAbbr: matchRes.opponentAbbr,
@@ -206,6 +233,8 @@ export function getPlayerPerformanceHistory(player: Player, playedMatchdaysCount
           matchday: m,
           status: isSV ? 'senza_voto' : 'non_ha_giocato',
           voto: null,
+          bonus: 0,
+          malus: 0,
           fantaVoto: null,
           opponent: matchRes.opponent,
           opponentAbbr: matchRes.opponentAbbr,

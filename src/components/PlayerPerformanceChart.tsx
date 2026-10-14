@@ -213,7 +213,7 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
       {/* 2. GRAFICO VOTO E FANTAVOTO (38 GIORNATE CON ISTOGRAMMA PERSONALIZZATO) */}
       <div className="space-y-1.5">
         {/* INTESTAZIONE GRAFICO CON BADGE, RIEPILOGO GIORNATA ATTIVA E TASTO FULLSCREEN */}
-        <div className="flex items-center justify-between flex-wrap gap-2">
+        <div className="flex items-center justify-between min-h-[34px] flex-wrap gap-2">
           <div className="flex items-center gap-2">
             <span className="px-2 py-0.5 rounded bg-blue-600 text-white font-bold text-[10px] uppercase tracking-wider">
               Voto e Fantavoto
@@ -224,25 +224,26 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
           </div>
 
           <div className="flex items-center gap-2 ml-auto">
-            {/* INDICATORE STATO / LIVE PREVIEW DELLA GIORNATA EVIDENZIATA */}
-            {activeMatchday !== null ? (() => {
-              const cur = history.find(h => h.matchday === activeMatchday);
-              if (!cur) return null;
-              return (
-                <div className="text-[11px] font-mono text-amber-300 bg-slate-900 border border-slate-700 px-2 py-0.5 rounded flex items-center gap-2 shadow-sm animate-fadeIn">
-                  <span className="font-bold text-amber-400">G.{cur.matchday}:</span>
-                  <span className="font-black text-white">{cur.matchScore}</span>
-                  <span className="text-slate-400 text-[10px]">vs {cur.opponent} ({cur.isHome ? 'C' : 'T'})</span>
-                  {cur.voto !== null && (
-                    <span className="text-emerald-400 font-bold ml-1">V: {cur.voto}</span>
-                  )}
-                </div>
-              );
-            })() : (
-              <span className="text-[10px] text-slate-500 italic hidden md:inline">
-                Evidenzia una giornata per dettagli e risultato
-              </span>
-            )}
+            {/* LIVE PREVIEW GIORNATA CON ALTEZZA E LARGHEZZA STABILE (ANTI-GLITCH) */}
+            <div className="h-6 flex items-center min-w-[160px] sm:min-w-[210px] justify-end">
+              {activeMatchday !== null ? (() => {
+                const cur = history.find(h => h.matchday === activeMatchday);
+                if (!cur) return null;
+                return (
+                  <div className="text-[11px] font-mono text-amber-300 bg-slate-900 border border-slate-700 px-2 py-0.5 rounded flex items-center gap-2 shadow-sm">
+                    <span className="font-bold text-amber-400">G.{cur.matchday}:</span>
+                    <span className="font-black text-white">{cur.matchScore}</span>
+                    {cur.voto !== null && (
+                      <span className="text-emerald-400 font-bold ml-1">V: {cur.voto}</span>
+                    )}
+                  </div>
+                );
+              })() : (
+                <span className="text-[10px] text-slate-500 italic hidden md:inline">
+                  Evidenzia una giornata per dettagli
+                </span>
+              )}
+            </div>
 
             {/* PULSANTE ESPANDI A TUTTO SCHERMO */}
             <button
@@ -257,8 +258,8 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
           </div>
         </div>
 
-        {/* CONTAINER GRAFICO CON ASSE Y ED ASSE X */}
-        <div className="relative bg-slate-900/60 rounded-xl p-3 border border-slate-800">
+        {/* CONTAINER GRAFICO CON ASSE Y ED ASSE X (PT-24 PER ALLOGGIARE CALLOUT SENZA GLITCH) */}
+        <div className="relative bg-slate-900/60 rounded-xl p-3 pt-24 border border-slate-800">
           
           {/* ALTEZZA DEL GRAFICO: 120px */}
           <div className="relative h-[120px] flex items-end">
@@ -267,7 +268,7 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
             <div className="absolute inset-0 flex flex-col justify-between pointer-events-none pr-1">
               {[14, 12, 10, 8, 6, 4, 2, 0].map((val) => (
                 <div key={val} className="w-full flex items-center justify-between text-[9px] text-slate-600 font-mono">
-                  <span className="w-4 text-right pr-1 select-none">{val}</span>
+                  <span className="w-5 text-right pr-2 select-none">{val}</span>
                   <div className={`flex-1 border-b ${
                     val === 6 
                       ? 'border-emerald-500/40 border-dashed' 
@@ -277,30 +278,34 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
               ))}
             </div>
 
-            {/* BARRE ISTOGRAMMA PER LE 38 GIORNATE (OFFSET SINISTRO PER ASSE Y) */}
-            <div className="relative z-10 w-full h-full flex items-end pl-5 gap-[2px]">
+            {/* BARRE ISTOGRAMMA IMPILATE PER LE 38 GIORNATE */}
+            <div className="relative z-10 w-full h-full flex items-end pl-6 gap-[2px]">
               {history.map((item) => {
                 const isSV = item.status === 'senza_voto';
                 const isINF = item.status === 'non_giocato_infortunio';
                 const hasVoto = item.voto !== null && item.voto > 0;
-                const heightPercent = hasVoto ? Math.min(100, (item.voto! / maxScale) * 100) : 0;
                 const { style, className } = getBarStyle(item.status, item.voto);
                 const isSelected = activeMatchday === item.matchday;
+
+                // Calcolo altezze in pixel per stack: Voto base, Malus (rosso) e Bonus (ciano)
+                const voteHeightPx = hasVoto ? (item.voto! / maxScale) * 120 : 0;
+                const malusHeightPx = hasVoto && item.malus > 0 ? (item.malus / maxScale) * 120 : 0;
+                const bonusHeightPx = hasVoto && item.bonus > 0 ? (item.bonus / maxScale) * 120 : 0;
 
                 return (
                   <div 
                     key={item.matchday} 
-                    className="flex-1 h-full flex flex-col justify-end items-center group relative cursor-pointer"
+                    className="flex-1 h-full flex flex-col justify-end items-center relative cursor-pointer"
                     onMouseEnter={() => setActiveMatchday(item.matchday)}
                     onMouseLeave={() => setActiveMatchday(null)}
                     onClick={() => setActiveMatchday(prev => prev === item.matchday ? null : item.matchday)}
                   >
-                    {/* CALLOUT FLUTTUANTE CON RISULTATO PARTITA (ES. MIL-LAZ 3-2), AVVERSARIO E VOTI */}
+                    {/* CALLOUT FLUTTUANTE CON RISULTATO PARTITA, BONUS E MALUS */}
                     <div 
-                      className={`absolute bottom-full mb-2.5 z-50 pointer-events-none transition-all duration-150 ${
+                      className={`absolute bottom-full mb-2 z-50 pointer-events-none transition-all duration-150 ${
                         isSelected 
                           ? 'opacity-100 visible scale-100' 
-                          : 'opacity-0 invisible scale-95 group-hover:opacity-100 group-hover:visible group-hover:scale-100'
+                          : 'opacity-0 invisible scale-95'
                       } ${
                         item.matchday <= 3 
                           ? 'left-0 translate-x-0' 
@@ -309,7 +314,7 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
                           : 'left-1/2 -translate-x-1/2'
                       }`}
                     >
-                      <div className="bg-slate-900/98 backdrop-blur-md border border-slate-700 rounded-lg p-2.5 shadow-2xl shadow-black/95 min-w-[205px] max-w-[245px] text-left text-white font-sans select-none">
+                      <div className="bg-slate-900/98 backdrop-blur-md border border-slate-700 rounded-lg p-2.5 shadow-2xl shadow-black/95 min-w-[215px] max-w-[250px] text-left text-white font-sans select-none pointer-events-none">
                         
                         {/* RIGA 1: BADGE GIORNATA + MATCH SCORE IN EVIDENZA (ES. MIL-LAZ 3-2) */}
                         <div className="flex items-center justify-between gap-1.5 border-b border-slate-800 pb-1.5 mb-1.5">
@@ -332,20 +337,34 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
                           </span>
                         </div>
 
-                        {/* RIGA 3: DETTAGLIO PRESTAZIONE, VOTO E FANTAVOTO */}
+                        {/* RIGA 3: DETTAGLIO PRESTAZIONE CON VOTO, BONUS E MALUS SEPARATI */}
                         {item.played ? (
                           hasVoto ? (
                             <div className="pt-1 border-t border-slate-800/80 space-y-1">
                               <div className="flex items-center justify-between text-[11px]">
-                                <span className="text-slate-400">Voto / Fanta:</span>
-                                <div className="flex items-center gap-1.5 font-mono">
-                                  <span className="font-black text-emerald-400">{item.voto}</span>
-                                  <span className="text-slate-500">/</span>
-                                  <span className="font-black text-amber-400">{item.fantaVoto}</span>
-                                </div>
+                                <span className="text-slate-400">Voto Base:</span>
+                                <span className="font-black text-emerald-400 font-mono">{item.voto}</span>
                               </div>
+
+                              {/* INDICATORI BONUS E MALUS */}
+                              <div className="flex items-center justify-between text-[10px] font-mono">
+                                <span>
+                                  {item.bonus > 0 ? (
+                                    <span className="text-cyan-400 font-bold">+{item.bonus} Bonus</span>
+                                  ) : (
+                                    <span className="text-slate-500">0 Bonus</span>
+                                  )}
+                                  {item.malus > 0 && (
+                                    <span className="text-rose-400 font-bold ml-1.5">-{item.malus} Malus</span>
+                                  )}
+                                </span>
+                                <span className="font-black text-amber-400 text-xs">
+                                  Fanta: {item.fantaVoto}
+                                </span>
+                              </div>
+
                               {item.bonusMalusText && (
-                                <div className="text-[10px] text-emerald-300 font-semibold bg-emerald-950/60 px-1.5 py-0.5 rounded border border-emerald-700/50 text-center">
+                                <div className="text-[10px] text-slate-200 font-semibold bg-slate-950 px-1.5 py-0.5 rounded border border-slate-800 text-center">
                                   {item.bonusMalusText}
                                 </div>
                               )}
@@ -378,7 +397,7 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
 
                       {/* FRECCETTA / BECCUCCIO VERSO IL BASSO PUNTATO SULLA BARRA */}
                       <div 
-                        className={`absolute -bottom-1 w-2.5 h-2.5 bg-slate-900 border-r border-b border-slate-700 rotate-45 ${
+                        className={`absolute -bottom-1 w-2.5 h-2.5 bg-slate-900 border-r border-b border-slate-700 rotate-45 pointer-events-none ${
                           item.matchday <= 3 
                             ? 'left-3' 
                             : item.matchday >= 36 
@@ -409,14 +428,38 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
                         SV
                       </span>
                     ) : hasVoto ? (
-                      /* BARRA ISTOGRAMMA COLORATA SECONDO I 5 STATI */
-                      <div
-                        style={{ height: `${heightPercent}%`, ...style }}
-                        className={`w-full rounded-t-sm transition-all duration-300 shadow-sm ${className} ${
-                          isSelected ? 'ring-2 ring-amber-400 brightness-125 shadow-lg' : 'hover:brightness-110'
+                      /* COLONNA IMPILATA: BONUS (CIANO IN CIMA) + MALUS (ROSSO AL CENTRO) + VOTO BASE */
+                      <div 
+                        className={`w-full flex flex-col justify-end items-stretch transition-all duration-200 ${
+                          isSelected ? 'ring-2 ring-amber-400 brightness-125 z-20 shadow-lg rounded-t-sm' : 'hover:brightness-110'
                         }`}
-                        title={`G.${item.matchday} - ${item.matchScore}: Voto ${item.voto}`}
-                      />
+                        title={`G.${item.matchday} - ${item.matchScore}: Voto ${item.voto}${item.bonus > 0 ? ` +${item.bonus} Bonus` : ''}${item.malus > 0 ? ` -${item.malus} Malus` : ''} = Fanta ${item.fantaVoto}`}
+                      >
+                        {/* 1. SEGMENTO BONUS IN CIMA (CIANO/AZZURRO) */}
+                        {bonusHeightPx > 0 && (
+                          <div 
+                            style={{ height: `${bonusHeightPx}px` }}
+                            className="w-full bg-cyan-400 border-x border-t border-cyan-300 rounded-t-sm shadow-sm"
+                            title={`Bonus: +${item.bonus}`}
+                          />
+                        )}
+
+                        {/* 2. SEGMENTO MALUS (ROSSO VIVO) */}
+                        {malusHeightPx > 0 && (
+                          <div 
+                            style={{ height: `${malusHeightPx}px` }}
+                            className={`w-full bg-rose-500 border-x border-t border-rose-400 shadow-sm ${bonusHeightPx <= 0 ? 'rounded-t-sm' : ''}`}
+                            title={`Malus: -${item.malus}`}
+                          />
+                        )}
+
+                        {/* 3. SEGMENTO VOTO BASE (ALLA BASE - COLORE STATO) */}
+                        <div
+                          style={{ height: `${voteHeightPx}px`, ...style }}
+                          className={`w-full shadow-sm ${className} ${bonusHeightPx <= 0 && malusHeightPx <= 0 ? 'rounded-t-sm' : ''}`}
+                          title={`Voto Base: ${item.voto}`}
+                        />
+                      </div>
                     ) : (
                       /* GIORNATE FUTURE O NON A VOTO */
                       <div 
@@ -433,7 +476,7 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
           </div>
 
           {/* ASSE X: GIORNATE CHIAVE (1, 10, 19, 30, 38) COME SU FANTACALCIO */}
-          <div className="flex justify-between pl-5 pt-1.5 text-[10px] font-mono text-slate-400 font-bold border-t border-slate-800">
+          <div className="flex justify-between pl-6 pt-1.5 text-[10px] font-mono text-slate-400 font-bold border-t border-slate-800">
             <span>1</span>
             <span>10</span>
             <span>19</span>
@@ -443,7 +486,7 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
 
         </div>
 
-        {/* LEGENDA UFFICIALE COLORAZIONE ISTOGRAMMA */}
+        {/* LEGENDA UFFICIALE COLORAZIONE ISTOGRAMMA INCLUSI BONUS E MALUS */}
         <div className="flex items-center justify-between flex-wrap gap-2 text-[10px] pt-1 text-slate-300 font-medium">
           <div className="flex items-center gap-1.5">
             <span className="w-2.5 h-2.5 rounded-sm bg-emerald-400 border border-emerald-300 flex-shrink-0" />
@@ -463,6 +506,18 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
           <div className="flex items-center gap-1.5">
             <span className="w-2.5 h-2.5 rounded-sm bg-yellow-400 border border-yellow-300 flex-shrink-0" />
             <span>Subentrato</span>
+          </div>
+
+          {/* BONUS (CIANO/AZZURRO) */}
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-sm bg-cyan-400 border border-cyan-300 shadow-sm flex-shrink-0" />
+            <span className="text-cyan-300 font-semibold">Bonus (+Gol, +Ass)</span>
+          </div>
+
+          {/* MALUS (ROSSO) */}
+          <div className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-sm bg-rose-500 border border-rose-400 shadow-sm flex-shrink-0" />
+            <span className="text-rose-300 font-semibold">Malus (-Amm, -Esp)</span>
           </div>
 
           <div className="flex items-center gap-1.5">
@@ -631,8 +686,8 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
                 })()}
               </div>
 
-              {/* CONTAINER GRAFICO ESPANSO: ALTEZZA 280px / 340px */}
-              <div className="relative bg-slate-950/90 rounded-xl p-4 border border-slate-800 flex-1 min-h-[260px] sm:min-h-[320px] flex flex-col justify-end">
+              {/* CONTAINER GRAFICO ESPANSO: ALTEZZA 280px / 340px CON PT-24 PER CALLOUT */}
+              <div className="relative bg-slate-950/90 rounded-xl p-4 pt-24 border border-slate-800 flex-1 min-h-[280px] sm:min-h-[340px] flex flex-col justify-end">
                 
                 <div className="relative h-[220px] sm:h-[280px] flex items-end">
                   
@@ -640,7 +695,7 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
                   <div className="absolute inset-0 flex flex-col justify-between pointer-events-none pr-1">
                     {[14, 12, 10, 8, 6, 4, 2, 0].map((val) => (
                       <div key={val} className="w-full flex items-center justify-between text-[10px] text-slate-500 font-mono">
-                        <span className="w-5 text-right pr-2 select-none font-bold">{val}</span>
+                        <span className="w-6 text-right pr-2 select-none font-bold">{val}</span>
                         <div className={`flex-1 border-b ${
                           val === 6 
                             ? 'border-emerald-500/50 border-dashed' 
@@ -650,20 +705,24 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
                     ))}
                   </div>
 
-                  {/* BARRE ISTOGRAMMA FULLSCREEN (LARGHEZZA E SPAZIATURA MAGGIORATA) */}
+                  {/* BARRE ISTOGRAMMA FULLSCREEN (LARGHEZZA E SPAZIATURA MAGGIORATA CON STACK BONUS/MALUS) */}
                   <div className="relative z-10 w-full h-full flex items-end pl-7 gap-1 sm:gap-1.5">
                     {history.map((item) => {
                       const isSV = item.status === 'senza_voto';
                       const isINF = item.status === 'non_giocato_infortunio';
                       const hasVoto = item.voto !== null && item.voto > 0;
-                      const heightPercent = hasVoto ? Math.min(100, (item.voto! / maxScale) * 100) : 0;
                       const { style, className } = getBarStyle(item.status, item.voto);
                       const isSelected = activeMatchday === item.matchday;
+
+                      // Calcolo altezze percentuali rispetto a maxScale
+                      const voteHeightPercent = hasVoto ? (item.voto! / maxScale) * 100 : 0;
+                      const malusHeightPercent = hasVoto && item.malus > 0 ? (item.malus / maxScale) * 100 : 0;
+                      const bonusHeightPercent = hasVoto && item.bonus > 0 ? (item.bonus / maxScale) * 100 : 0;
 
                       return (
                         <div 
                           key={item.matchday} 
-                          className="flex-1 h-full flex flex-col justify-end items-center group relative cursor-pointer"
+                          className="flex-1 h-full flex flex-col justify-end items-center relative cursor-pointer"
                           onMouseEnter={() => setActiveMatchday(item.matchday)}
                           onMouseLeave={() => setActiveMatchday(null)}
                           onClick={() => setActiveMatchday(prev => prev === item.matchday ? null : item.matchday)}
@@ -673,7 +732,7 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
                             className={`absolute bottom-full mb-3 z-50 pointer-events-none transition-all duration-150 ${
                               isSelected 
                                 ? 'opacity-100 visible scale-100' 
-                                : 'opacity-0 invisible scale-95 group-hover:opacity-100 group-hover:visible group-hover:scale-100'
+                                : 'opacity-0 invisible scale-95'
                             } ${
                               item.matchday <= 4 
                                 ? 'left-0 translate-x-0' 
@@ -682,7 +741,7 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
                                 : 'left-1/2 -translate-x-1/2'
                             }`}
                           >
-                            <div className="bg-slate-900 border border-slate-700 rounded-xl p-3 shadow-2xl shadow-black min-w-[230px] max-w-[270px] text-left text-white font-sans select-none">
+                            <div className="bg-slate-900 border border-slate-700 rounded-xl p-3 shadow-2xl shadow-black min-w-[240px] max-w-[280px] text-left text-white font-sans select-none pointer-events-none">
                               
                               <div className="flex items-center justify-between gap-2 border-b border-slate-800 pb-2 mb-2">
                                 <div className="flex items-center gap-2">
@@ -707,15 +766,29 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
                                 hasVoto ? (
                                   <div className="pt-1.5 border-t border-slate-800 space-y-1.5">
                                     <div className="flex items-center justify-between text-xs">
-                                      <span className="text-slate-400">Voto / Fantavoto:</span>
-                                      <div className="flex items-center gap-2 font-mono">
-                                        <span className="font-black text-emerald-400 text-sm">{item.voto}</span>
-                                        <span className="text-slate-500">/</span>
-                                        <span className="font-black text-amber-400 text-sm">{item.fantaVoto}</span>
-                                      </div>
+                                      <span className="text-slate-400">Voto Base:</span>
+                                      <span className="font-black text-emerald-400 font-mono text-sm">{item.voto}</span>
                                     </div>
+
+                                    {/* DETTAGLIO BONUS E MALUS IMPILATI */}
+                                    <div className="flex items-center justify-between text-xs font-mono">
+                                      <span>
+                                        {item.bonus > 0 ? (
+                                          <span className="text-cyan-400 font-bold">+{item.bonus} Bonus</span>
+                                        ) : (
+                                          <span className="text-slate-500">0 Bonus</span>
+                                        )}
+                                        {item.malus > 0 && (
+                                          <span className="text-rose-400 font-bold ml-1.5">-{item.malus} Malus</span>
+                                        )}
+                                      </span>
+                                      <span className="font-black text-amber-400 text-sm">
+                                        Fanta: {item.fantaVoto}
+                                      </span>
+                                    </div>
+
                                     {item.bonusMalusText && (
-                                      <div className="text-xs text-emerald-300 font-semibold bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-700/50 text-center">
+                                      <div className="text-xs text-slate-200 font-semibold bg-slate-950 px-2 py-0.5 rounded border border-slate-800 text-center">
                                         {item.bonusMalusText}
                                       </div>
                                     )}
@@ -747,7 +820,7 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
                             </div>
 
                             <div 
-                              className={`absolute -bottom-1.5 w-3 h-3 bg-slate-900 border-r border-b border-slate-700 rotate-45 ${
+                              className={`absolute -bottom-1.5 w-3 h-3 bg-slate-900 border-r border-b border-slate-700 rotate-45 pointer-events-none ${
                                 item.matchday <= 4 
                                   ? 'left-4' 
                                   : item.matchday >= 35 
@@ -777,13 +850,38 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
                               SV
                             </span>
                           ) : hasVoto ? (
-                            <div
-                              style={{ height: `${heightPercent}%`, ...style }}
-                              className={`w-full rounded-t-sm transition-all duration-300 shadow-md ${className} ${
-                                isSelected ? 'ring-2 ring-amber-400 brightness-125 shadow-xl scale-x-110' : 'hover:brightness-110'
+                            /* COLONNA IMPILATA FULLSCREEN: BONUS CIANO + MALUS ROSSO + VOTO BASE */
+                            <div 
+                              className={`w-full flex flex-col justify-end items-stretch transition-all duration-200 ${
+                                isSelected ? 'ring-2 ring-amber-400 brightness-125 z-20 shadow-xl rounded-t-sm scale-x-110' : 'hover:brightness-110'
                               }`}
-                              title={`G.${item.matchday} - ${item.matchScore}: Voto ${item.voto}`}
-                            />
+                              title={`G.${item.matchday} - ${item.matchScore}: Voto ${item.voto}${item.bonus > 0 ? ` +${item.bonus} Bonus` : ''}${item.malus > 0 ? ` -${item.malus} Malus` : ''} = Fanta ${item.fantaVoto}`}
+                            >
+                              {/* 1. SEGMENTO BONUS IN CIMA (CIANO/AZZURRO) */}
+                              {bonusHeightPercent > 0 && (
+                                <div 
+                                  style={{ height: `${bonusHeightPercent}%` }}
+                                  className="w-full bg-cyan-400 border-x border-t border-cyan-300 rounded-t-sm shadow-sm"
+                                  title={`Bonus: +${item.bonus}`}
+                                />
+                              )}
+
+                              {/* 2. SEGMENTO MALUS (ROSSO VIVO) */}
+                              {malusHeightPercent > 0 && (
+                                <div 
+                                  style={{ height: `${malusHeightPercent}%` }}
+                                  className={`w-full bg-rose-500 border-x border-t border-rose-400 shadow-sm ${bonusHeightPercent <= 0 ? 'rounded-t-sm' : ''}`}
+                                  title={`Malus: -${item.malus}`}
+                                />
+                              )}
+
+                              {/* 3. SEGMENTO VOTO BASE (ALLA BASE - COLORE STATO) */}
+                              <div
+                                style={{ height: `${voteHeightPercent}%`, ...style }}
+                                className={`w-full shadow-md ${className} ${bonusHeightPercent <= 0 && malusHeightPercent <= 0 ? 'rounded-t-sm' : ''}`}
+                                title={`Voto Base: ${item.voto}`}
+                              />
+                            </div>
                           ) : (
                             <div 
                               className={`w-full h-1 rounded-full mb-1 transition-all ${
@@ -838,12 +936,18 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
                         {sel.played ? (
                           sel.voto !== null ? (
                             <div className="flex items-center gap-2 font-mono text-xs">
-                              <span className="text-slate-400">Voto:</span>
+                              <span className="text-slate-400">Voto Base:</span>
                               <span className="font-black text-emerald-400 text-sm">{sel.voto}</span>
-                              <span className="text-slate-400 ml-1">Fanta:</span>
+                              {sel.bonus > 0 && (
+                                <span className="text-cyan-400 font-bold ml-1">+{sel.bonus} Bon.</span>
+                              )}
+                              {sel.malus > 0 && (
+                                <span className="text-rose-400 font-bold ml-1">-{sel.malus} Mal.</span>
+                              )}
+                              <span className="text-slate-400 ml-1.5">Fanta:</span>
                               <span className="font-black text-amber-400 text-sm">{sel.fantaVoto}</span>
                               {sel.bonusMalusText && (
-                                <span className="ml-2 px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 font-sans font-bold border border-emerald-800">
+                                <span className="ml-2 px-2 py-0.5 rounded bg-slate-900 text-slate-200 font-sans font-bold border border-slate-700">
                                   {sel.bonusMalusText}
                                 </span>
                               )}
@@ -869,7 +973,7 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
                 )}
               </div>
 
-              {/* LEGENDA UFFICIALE FULLSCREEN */}
+              {/* LEGENDA UFFICIALE FULLSCREEN INCLUSI BONUS E MALUS */}
               <div className="flex items-center justify-between flex-wrap gap-3 text-xs pt-2 text-slate-300 font-medium border-t border-slate-800/80">
                 <div className="flex items-center gap-1.5">
                   <span className="w-3 h-3 rounded-sm bg-emerald-400 border border-emerald-300 flex-shrink-0" />
@@ -889,6 +993,18 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
                 <div className="flex items-center gap-1.5">
                   <span className="w-3 h-3 rounded-sm bg-yellow-400 border border-yellow-300 flex-shrink-0" />
                   <span>Subentrato</span>
+                </div>
+
+                {/* BONUS CIANO */}
+                <div className="flex items-center gap-1.5">
+                  <span className="w-3 h-3 rounded-sm bg-cyan-400 border border-cyan-300 shadow-sm flex-shrink-0" />
+                  <span className="text-cyan-300 font-semibold">Bonus (+Gol, +Ass)</span>
+                </div>
+
+                {/* MALUS ROSSO */}
+                <div className="flex items-center gap-1.5">
+                  <span className="w-3 h-3 rounded-sm bg-rose-500 border border-rose-400 shadow-sm flex-shrink-0" />
+                  <span className="text-rose-300 font-semibold">Malus (-Amm, -Esp)</span>
                 </div>
 
                 <div className="flex items-center gap-1.5">
