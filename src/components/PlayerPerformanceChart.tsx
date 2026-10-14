@@ -2,7 +2,7 @@ import React from 'react';
 import { createPortal } from 'react-dom';
 import { Player } from '../types';
 import { getPlayerPerformanceHistory, MatchdayHistoryItem, MatchdayStatus } from '../utils/playerMatchHistory';
-import { CheckCircle2, Maximize2, Minimize2, X } from 'lucide-react';
+import { CheckCircle2, Maximize2, Minimize2, X, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface Props {
   player: Player;
@@ -18,6 +18,89 @@ export const PlayerPerformanceChart: React.FC<Props> = ({
   const { history, kpis } = getPlayerPerformanceHistory(player, 7);
   const [activeMatchday, setActiveMatchday] = React.useState<number | null>(null);
   const [isFullscreen, setIsFullscreen] = React.useState<boolean>(false);
+
+  // Ultima giornata disputata per fallback iniziale di navigazione
+  const lastPlayedMatchday = React.useMemo(() => {
+    return [...history].reverse().find(h => h.played && h.voto !== null)?.matchday || 6;
+  }, [history]);
+
+  // Passaggio rapido alla partita precedente
+  const handlePrevMatchday = React.useCallback(() => {
+    setActiveMatchday(prev => {
+      if (prev === null) {
+        return Math.max(1, lastPlayedMatchday - 1);
+      }
+      return Math.max(1, prev - 1);
+    });
+  }, [lastPlayedMatchday]);
+
+  // Passaggio rapido alla partita successiva
+  const handleNextMatchday = React.useCallback(() => {
+    setActiveMatchday(prev => {
+      if (prev === null) {
+        return Math.min(38, lastPlayedMatchday + 1);
+      }
+      return Math.min(38, prev + 1);
+    });
+  }, [lastPlayedMatchday]);
+
+  // Gestione gesture swipe (touch) per passare da una partita alla precedente o successiva
+  const touchStartRef = React.useRef<{ x: number; y: number; time: number } | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length === 1) {
+      touchStartRef.current = {
+        x: e.touches[0].clientX,
+        y: e.touches[0].clientY,
+        time: Date.now()
+      };
+    }
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!touchStartRef.current) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartRef.current.x;
+    const deltaY = e.changedTouches[0].clientY - touchStartRef.current.y;
+    const elapsed = Date.now() - touchStartRef.current.time;
+    touchStartRef.current = null;
+
+    if (Math.abs(deltaX) > 30 && Math.abs(deltaX) > Math.abs(deltaY) * 1.2 && elapsed < 800) {
+      if (deltaX < 0) {
+        // Swipe verso sinistra -> partita successiva
+        handleNextMatchday();
+      } else {
+        // Swipe verso destra -> partita precedente
+        handlePrevMatchday();
+      }
+    }
+  };
+
+  // Supporto gesture drag orizzontale con mouse
+  const mouseStartRef = React.useRef<{ x: number; y: number; time: number } | null>(null);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    mouseStartRef.current = {
+      x: e.clientX,
+      y: e.clientY,
+      time: Date.now()
+    };
+  };
+
+  const handleMouseUp = (e: React.MouseEvent) => {
+    if (!mouseStartRef.current) return;
+    const deltaX = e.clientX - mouseStartRef.current.x;
+    const deltaY = e.clientY - mouseStartRef.current.y;
+    const elapsed = Date.now() - mouseStartRef.current.time;
+    mouseStartRef.current = null;
+
+    if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > Math.abs(deltaY) * 1.2 && elapsed < 800) {
+      if (deltaX < 0) {
+        handleNextMatchday();
+      } else {
+        handlePrevMatchday();
+      }
+    }
+  };
 
   // Gestione tasto ESC se usato come fallback interno
   React.useEffect(() => {
@@ -103,7 +186,13 @@ export const PlayerPerformanceChart: React.FC<Props> = ({
   // =========================================================================
   if (isExpandedMode) {
     return (
-      <div className="w-full h-full flex flex-col justify-between space-y-2 sm:space-y-3 overflow-hidden select-none">
+      <div 
+        className="w-full h-full flex flex-col justify-between space-y-2 sm:space-y-3 overflow-hidden select-none touch-pan-y"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
+      >
         
         {/* 1. SEZIONE KPI COMPATTA (ORIZZONTALE E RESPONSIVE MOBILE) */}
         <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-1.5 sm:p-2.5 px-2.5 sm:px-3 flex items-center justify-between gap-2 flex-shrink-0">
@@ -165,7 +254,29 @@ export const PlayerPerformanceChart: React.FC<Props> = ({
               const cur = history.find(h => h.matchday === activeMatchday);
               if (!cur) return null;
               return (
-                <div className="text-xs font-mono text-amber-300 bg-slate-950 border border-slate-700 px-3 py-1 rounded-lg flex items-center gap-2.5 shadow-inner">
+                <div className="text-xs font-mono text-amber-300 bg-slate-950 border border-slate-700 px-2 sm:px-3 py-1 rounded-lg flex items-center gap-1.5 sm:gap-2.5 shadow-inner">
+                  {/* Tasti rapidi prev/next matchday */}
+                  <div className="flex items-center gap-0.5 mr-0.5">
+                    <button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); handlePrevMatchday(); }}
+                      disabled={cur.matchday <= 1}
+                      className="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-white disabled:opacity-20 cursor-pointer"
+                      title="Partita precedente (Swipe ◄)"
+                    >
+                      <ChevronLeft className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); handleNextMatchday(); }}
+                      disabled={cur.matchday >= 38}
+                      className="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-white disabled:opacity-20 cursor-pointer"
+                      title="Partita successiva (Swipe ►)"
+                    >
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+
                   <span className="font-bold text-amber-400">G.{cur.matchday}:</span>
                   <span className="font-black text-white bg-slate-900 px-2 py-0.5 rounded border border-slate-800">{cur.matchScore}</span>
                   <span className="text-slate-300">vs <strong>{cur.opponent}</strong> ({cur.isHome ? 'Casa' : 'Trasf.'})</span>
@@ -178,7 +289,7 @@ export const PlayerPerformanceChart: React.FC<Props> = ({
               );
             })() : (
               <span className="text-xs text-slate-500 italic hidden sm:inline">
-                Passa con il mouse sulle colonne per visualizzare i dettagli della gara
+                Tocca una colonna o fai swipe ◄ ► per scorrere le partite
               </span>
             )}
           </div>
@@ -469,7 +580,7 @@ export const PlayerPerformanceChart: React.FC<Props> = ({
           </div>
 
           <div className="text-[10px] sm:text-[11px] text-slate-400 font-mono hidden xs:inline">
-            {activeMatchday ? `G.${activeMatchday} attiva` : 'Tocca una colonna'}
+            {activeMatchday ? `G.${activeMatchday} attiva • Swipe ◄ ► per cambiare partita` : 'Swipe ◄ ► o tocca una colonna'}
           </div>
         </div>
 
