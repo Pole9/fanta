@@ -45,7 +45,8 @@ import {
   Sun,
   Moon,
   LayoutGrid,
-  List
+  List,
+  Minimize2
 } from 'lucide-react';
 
 const ROLE_NAMES: Record<Role, string> = {
@@ -90,6 +91,7 @@ export const TedLassoMobileView: React.FC = () => {
   const [selectedTeamId] = useState<string>(myTeamId || 'team-1');
   const [selectedFormationId, setSelectedFormationId] = useState<string>('3-4-3');
   const [selectedPlayerForReport, setSelectedPlayerForReport] = useState<TedPlayerCard | null>(null);
+  const [isChartExpanded, setIsChartExpanded] = useState<boolean>(false);
   const [swappingPlayerId, setSwappingPlayerId] = useState<number | null>(null);
   const [swapWarning, setSwapWarning] = useState<string | null>(null);
   const [quoteIndex, setQuoteIndex] = useState<number>(0);
@@ -110,6 +112,10 @@ export const TedLassoMobileView: React.FC = () => {
         setSelectedMatchForLineups(null);
         return;
       }
+      if (isChartExpanded) {
+        setIsChartExpanded(false);
+        return;
+      }
       if (selectedPlayerForReport) {
         setSelectedPlayerForReport(null);
         return;
@@ -121,7 +127,7 @@ export const TedLassoMobileView: React.FC = () => {
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
-  }, [showRosterImportModal, selectedMatchForLineups, selectedPlayerForReport, mobileSection]);
+  }, [showRosterImportModal, selectedMatchForLineups, isChartExpanded, selectedPlayerForReport, mobileSection]);
 
   // Squadra corrente dell'utente
   const activeTeam = teams.find(t => t.id === selectedTeamId) || teams[0];
@@ -1734,6 +1740,81 @@ ${benchText}
           };
         })();
 
+        // SE MODALITÀ GRAFICO ESPANSO: SOSTITUISCE LA SCHEDA MOBILE A SCHERMO INTERO SENZA POPUP SOVRAPPOSTI
+        if (isChartExpanded) {
+          return (
+            <div 
+              className="fixed inset-0 z-50 bg-slate-950 w-screen h-screen flex flex-col overflow-hidden select-none animate-in fade-in duration-150"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* TOP BAR FULLSCREEN OTTIMIZZATA PER MOBILE / APP */}
+              <div className="h-12 px-3 bg-slate-900 border-b border-slate-800 flex items-center justify-between gap-2 flex-shrink-0">
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className={`w-7 h-7 rounded-lg font-black text-xs flex items-center justify-center shadow flex-shrink-0 ${getRoleBg(player.ruolo)}`}>
+                    {player.ruolo}
+                  </span>
+                  <div className="min-w-0 flex items-center gap-1.5">
+                    <h2 className="text-sm font-black text-white uppercase leading-tight truncate">
+                      {player.nome}
+                    </h2>
+                    <span className="text-[10px] font-bold text-slate-300 bg-slate-800 px-1.5 py-0.5 rounded border border-slate-700">
+                      {player.squadra}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-1.5">
+                  <div className="flex items-center bg-slate-950 border border-slate-800 rounded-lg p-0.5">
+                    <button
+                      onClick={handlePrevPlayer}
+                      className="p-1 rounded hover:bg-slate-800 text-slate-300"
+                      title="Precedente"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={handleNextPlayer}
+                      className="p-1 rounded hover:bg-slate-800 text-slate-300"
+                      title="Successivo"
+                    >
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  <button
+                    onClick={() => setIsChartExpanded(false)}
+                    className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/30 text-[11px] font-bold"
+                    title="Riduci a scheda report"
+                  >
+                    <Minimize2 className="w-3.5 h-3.5" />
+                    <span>Riduci</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setIsChartExpanded(false);
+                      setSelectedPlayerForReport(null);
+                    }}
+                    className="p-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white"
+                    title="Chiudi"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+              {/* CORPO DEL GRAFICO A TUTTO SCHERMO SENZA SCROLLBAR */}
+              <div className="flex-1 min-h-0 p-2 sm:p-4 overflow-hidden flex flex-col">
+                <PlayerPerformanceChart 
+                  player={player} 
+                  isExpandedMode={true} 
+                  onToggleExpand={() => setIsChartExpanded(false)} 
+                />
+              </div>
+            </div>
+          );
+        }
+
         return (
           <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-3 animate-in fade-in duration-150">
             <div className="bg-slate-900 border-t-2 sm:border-2 border-slate-700 rounded-t-3xl sm:rounded-2xl w-full max-w-xl overflow-hidden shadow-2xl space-y-3 p-3.5 select-none max-h-[92vh] overflow-y-auto scrollbar-thin">
@@ -1792,7 +1873,10 @@ ${benchText}
                   </div>
 
                   <button
-                    onClick={() => setSelectedPlayerForReport(null)}
+                    onClick={() => {
+                      setIsChartExpanded(false);
+                      setSelectedPlayerForReport(null);
+                    }}
                     className="p-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white"
                   >
                     <X className="w-5 h-5" />
@@ -1801,7 +1885,10 @@ ${benchText}
               </div>
 
               {/* GRAFICO E KPI FANTACALCIO */}
-              <PlayerPerformanceChart player={player} />
+              <PlayerPerformanceChart 
+                player={player} 
+                onToggleExpand={() => setIsChartExpanded(true)} 
+              />
 
               {/* MATCH & FDR */}
               {matchInfo && (

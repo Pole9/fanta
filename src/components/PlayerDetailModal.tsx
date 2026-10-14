@@ -11,7 +11,8 @@ import {
   Activity, 
   Calendar, 
   Shield,
-  AlertTriangle 
+  AlertTriangle,
+  Minimize2 
 } from 'lucide-react';
 
 export interface PlayerDetailModalProps {
@@ -77,25 +78,37 @@ export const PlayerDetailModal: React.FC<PlayerDetailModalProps> = ({
     };
   }, [teams, player, isMyPlayer]);
 
+  const [isChartExpanded, setIsChartExpanded] = React.useState(false);
+
   // Gestione tasto indietro (popstate / browser back)
   useEffect(() => {
     const handlePopState = () => {
-      onClose();
+      if (isChartExpanded) {
+        setIsChartExpanded(false);
+      } else {
+        onClose();
+      }
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
-  }, [onClose]);
+  }, [onClose, isChartExpanded]);
 
   // Gestione tastiera: ESC per chiudere, frecce per cambiare giocatore
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape') {
+        if (isChartExpanded) {
+          setIsChartExpanded(false);
+        } else {
+          onClose();
+        }
+      }
       if (e.key === 'ArrowLeft' && onPrevPlayer) onPrevPlayer();
       if (e.key === 'ArrowRight' && onNextPlayer) onNextPlayer();
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onClose, onPrevPlayer, onNextPlayer]);
+  }, [onClose, onPrevPlayer, onNextPlayer, isChartExpanded]);
 
   // Gestione gesture touch swipe laterale per cambiare giocatore
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
@@ -176,6 +189,83 @@ export const PlayerDetailModal: React.FC<PlayerDetailModalProps> = ({
   };
 
   const diffBadge = matchInfo ? getDifficultyBadge(matchInfo.difficulty) : null;
+
+  if (isChartExpanded) {
+    return (
+      <div 
+        className="fixed inset-0 z-50 bg-slate-950 w-screen h-screen flex flex-col overflow-hidden select-none animate-in fade-in duration-150"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className={`h-12 sm:h-14 px-3 sm:px-6 border-b flex items-center justify-between gap-2 sm:gap-4 flex-shrink-0 ${
+          isLight ? 'bg-white border-slate-200' : 'bg-slate-900 border-slate-800'
+        }`}>
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <span className={`w-8 h-8 rounded-lg font-black text-xs flex items-center justify-center shadow-md flex-shrink-0 ${getRoleBg(player.ruolo)}`}>
+              {player.ruolo}
+            </span>
+            <div className="flex items-center gap-2 min-w-0">
+              <h2 className={`text-base sm:text-xl font-black uppercase tracking-wide truncate ${
+                isLight ? 'text-slate-950' : 'text-white'
+              }`}>
+                {player.nome}
+              </h2>
+              <span className="text-xs font-bold text-slate-300 bg-slate-800 px-2 py-0.5 rounded border border-slate-700">
+                {player.squadra}
+              </span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-1.5 sm:gap-3">
+            {(onPrevPlayer || onNextPlayer) && (
+              <div className="flex items-center bg-slate-950 border border-slate-800 rounded-lg p-0.5">
+                <button
+                  onClick={onPrevPlayer}
+                  disabled={!hasPrev}
+                  className="p-1 rounded text-slate-300 disabled:opacity-30"
+                  title="Precedente"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={onNextPlayer}
+                  disabled={!hasNext}
+                  className="p-1 rounded text-slate-300 disabled:opacity-30"
+                  title="Successivo"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+
+            <button
+              onClick={() => setIsChartExpanded(false)}
+              className="flex items-center gap-1 px-2.5 py-1 sm:py-1.5 rounded-lg bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/30 text-xs font-bold"
+              title="Riduci a report"
+            >
+              <Minimize2 className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Riduci</span>
+            </button>
+
+            <button
+              onClick={onClose}
+              className="p-1 sm:p-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white"
+              title="Chiudi"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
+        <div className="flex-1 min-h-0 p-2 sm:p-4 overflow-hidden flex flex-col">
+          <PlayerPerformanceChart 
+            player={player} 
+            isExpandedMode={true} 
+            onToggleExpand={() => setIsChartExpanded(false)} 
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div 
@@ -313,7 +403,10 @@ export const PlayerDetailModal: React.FC<PlayerDetailModalProps> = ({
                 Ultime giornate Serie A
               </span>
             </div>
-            <PlayerPerformanceChart player={player} />
+            <PlayerPerformanceChart 
+              player={player} 
+              onToggleExpand={() => setIsChartExpanded(true)} 
+            />
           </div>
 
           {/* 2. MATCH DEL TURNO & DIFFICOLTÀ AVVERSARIO (FDR) */}

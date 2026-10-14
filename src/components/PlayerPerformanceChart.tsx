@@ -105,30 +105,30 @@ export const PlayerPerformanceChart: React.FC<Props> = ({
     return (
       <div className="w-full h-full flex flex-col justify-between space-y-2 sm:space-y-3 overflow-hidden select-none">
         
-        {/* 1. SEZIONE KPI COMPATTA (ORIZZONTALE) */}
-        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-2 sm:p-2.5 px-3 flex items-center justify-between gap-2 flex-shrink-0">
-          <div className="flex items-center gap-3 sm:gap-6 flex-wrap">
-            <div className="flex items-center gap-1.5">
-              <span className="text-[11px] sm:text-xs text-slate-400 font-medium">Partite a voto:</span>
-              <span className="text-sm sm:text-base font-black text-blue-400 font-mono">{kpis.partiteAVoto}</span>
+        {/* 1. SEZIONE KPI COMPATTA (ORIZZONTALE E RESPONSIVE MOBILE) */}
+        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-1.5 sm:p-2.5 px-2.5 sm:px-3 flex items-center justify-between gap-2 flex-shrink-0">
+          <div className="grid grid-cols-5 sm:flex sm:items-center gap-1 sm:gap-6 w-full sm:w-auto text-center sm:text-left">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:gap-1.5">
+              <span className="text-[9px] sm:text-xs text-slate-400 font-medium truncate">Partite</span>
+              <span className="text-xs sm:text-base font-black text-blue-400 font-mono">{kpis.partiteAVoto}</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <span className="text-[11px] sm:text-xs text-slate-400 font-medium">Gol:</span>
-              <span className="text-sm sm:text-base font-black text-blue-400 font-mono">{kpis.gol} ⚽</span>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:gap-1.5">
+              <span className="text-[9px] sm:text-xs text-slate-400 font-medium truncate">Gol</span>
+              <span className="text-xs sm:text-base font-black text-blue-400 font-mono">{kpis.gol} ⚽</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <span className="text-[11px] sm:text-xs text-slate-400 font-medium">Assist:</span>
-              <span className="text-sm sm:text-base font-black text-blue-400 font-mono">{kpis.assist} 👟</span>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:gap-1.5">
+              <span className="text-[9px] sm:text-xs text-slate-400 font-medium truncate">Assist</span>
+              <span className="text-xs sm:text-base font-black text-blue-400 font-mono">{kpis.assist} 👟</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <span className="text-[11px] sm:text-xs text-slate-400 font-medium">Media Voto:</span>
-              <span className={`text-sm sm:text-base font-black font-mono ${isMvUnder6 ? 'text-rose-500' : 'text-emerald-400'}`}>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:gap-1.5">
+              <span className="text-[9px] sm:text-xs text-slate-400 font-medium truncate">Media</span>
+              <span className={`text-xs sm:text-base font-black font-mono ${isMvUnder6 ? 'text-rose-500' : 'text-emerald-400'}`}>
                 {mv !== null ? mv.toFixed(2) : '-'}
               </span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <span className="text-[11px] sm:text-xs text-slate-400 font-medium">Fanta Media:</span>
-              <span className={`text-sm sm:text-base font-black font-mono ${isFmvUnder6 ? 'text-rose-500' : 'text-amber-400'}`}>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:gap-1.5">
+              <span className="text-[9px] sm:text-xs text-slate-400 font-medium truncate">Fanta</span>
+              <span className={`text-xs sm:text-base font-black font-mono ${isFmvUnder6 ? 'text-rose-500' : 'text-amber-400'}`}>
                 {fmv !== null ? fmv.toFixed(2) : '-'}
               </span>
             </div>
@@ -201,7 +201,7 @@ export const PlayerPerformanceChart: React.FC<Props> = ({
             </div>
 
             {/* BARRE ISTOGRAMMA */}
-            <div className="relative z-10 w-full h-full flex items-end pl-7 gap-1 sm:gap-1.5">
+            <div className="relative z-10 w-full h-full flex items-end pl-5 sm:pl-7 gap-0.5 sm:gap-1.5">
               {history.map((item) => {
                 const isSV = item.status === 'senza_voto';
                 const isINF = item.status === 'non_giocato_infortunio';
@@ -243,14 +243,14 @@ export const PlayerPerformanceChart: React.FC<Props> = ({
                           ? 'opacity-100 visible scale-100' 
                           : 'opacity-0 invisible scale-95'
                       } ${
-                        item.matchday <= 5 
+                        item.matchday <= 10 
                           ? 'left-0 translate-x-0' 
-                          : item.matchday >= 34 
+                          : item.matchday >= 28 
                           ? 'right-0 translate-x-0' 
                           : 'left-1/2 -translate-x-1/2'
                       }`}
                     >
-                      <div className="bg-slate-900 border border-slate-700 rounded-xl p-3 shadow-2xl shadow-black min-w-[230px] max-w-[270px] text-left text-white font-sans select-none pointer-events-none">
+                      <div className="bg-slate-900 border border-slate-700 rounded-xl p-2.5 sm:p-3 shadow-2xl shadow-black w-[215px] sm:w-[260px] text-left text-white font-sans select-none pointer-events-none">
                         <div className="flex items-center justify-between gap-2 border-b border-slate-800 pb-1.5 mb-1.5">
                           <div className="flex items-center gap-1.5">
                             <span className="text-xs font-bold text-amber-400 font-mono">G.{item.matchday}</span>
@@ -339,10 +339,10 @@ export const PlayerPerformanceChart: React.FC<Props> = ({
                             ? '-bottom-1.5 border-r border-b border-slate-700 rotate-45'
                             : '-top-1.5 border-l border-t border-slate-700 rotate-45'
                         } ${
-                          item.matchday <= 5 
-                            ? 'left-4' 
-                            : item.matchday >= 34 
-                            ? 'right-4' 
+                          item.matchday <= 10 
+                            ? 'left-3 sm:left-4' 
+                            : item.matchday >= 28 
+                            ? 'right-3 sm:right-4' 
                             : 'left-1/2 -translate-x-1/2'
                         }`}
                       />
@@ -416,7 +416,7 @@ export const PlayerPerformanceChart: React.FC<Props> = ({
           </div>
 
           {/* ASSE X DEL GRAFICO CON TUTTE LE GIORNATE CHIAVE */}
-          <div className="flex justify-between pl-7 pt-2 text-xs font-mono text-slate-400 font-bold border-t border-slate-800">
+          <div className="flex justify-between pl-5 sm:pl-7 pt-2 text-xs font-mono text-slate-400 font-bold border-t border-slate-800">
             <span>1</span>
             <span>5</span>
             <span>10</span>
@@ -430,46 +430,46 @@ export const PlayerPerformanceChart: React.FC<Props> = ({
 
         </div>
 
-        {/* 3. FOOTER COMPATTO: LEGENDA UFFICIALE */}
-        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-2 px-3 flex items-center justify-between flex-wrap gap-2 text-xs text-slate-300 font-medium flex-shrink-0">
-          <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
-            <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-sm bg-emerald-400 border border-emerald-300 flex-shrink-0" />
-              <span>Titolare 90'</span>
+        {/* 3. FOOTER COMPATTO: LEGENDA UFFICIALE (RESPONSIVE PER SMARTPHONE E APP) */}
+        <div className="bg-slate-900/90 border border-slate-800 rounded-xl p-1.5 sm:p-2 px-2.5 sm:px-3 flex items-center justify-between flex-wrap gap-1.5 sm:gap-2 text-[10px] sm:text-xs text-slate-300 font-medium flex-shrink-0">
+          <div className="flex items-center gap-2 sm:gap-4 flex-wrap">
+            <div className="flex items-center gap-1 sm:gap-1.5">
+              <span className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-sm bg-emerald-400 border border-emerald-300 flex-shrink-0" />
+              <span>Tit. 90'</span>
             </div>
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1 sm:gap-1.5">
               <span 
-                className="w-2.5 h-2.5 rounded-sm border border-emerald-400 flex-shrink-0"
+                className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-sm border border-emerald-400 flex-shrink-0"
                 style={{
                   background: 'repeating-linear-gradient(-45deg, #4ade80, #4ade80 2px, #166534 2px, #166534 4px)'
                 }}
               />
-              <span>Titolare sost.</span>
+              <span>Sost.</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-sm bg-yellow-400 border border-yellow-300 flex-shrink-0" />
-              <span>Subentrato</span>
+            <div className="flex items-center gap-1 sm:gap-1.5">
+              <span className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-sm bg-yellow-400 border border-yellow-300 flex-shrink-0" />
+              <span>Sub.</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-sm bg-cyan-400 border border-cyan-300 shadow-sm flex-shrink-0" />
-              <span className="text-cyan-300 font-semibold">Bonus (+Gol, +Ass)</span>
+            <div className="flex items-center gap-1 sm:gap-1.5">
+              <span className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-sm bg-cyan-400 border border-cyan-300 shadow-sm flex-shrink-0" />
+              <span className="text-cyan-300 font-semibold">Bonus</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-sm bg-rose-500 border border-rose-400 shadow-sm flex-shrink-0" />
-              <span className="text-rose-300 font-semibold">Malus (erode voto base)</span>
+            <div className="flex items-center gap-1 sm:gap-1.5">
+              <span className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-sm bg-rose-500 border border-rose-400 shadow-sm flex-shrink-0" />
+              <span className="text-rose-300 font-semibold">Malus</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <span className="text-xs font-black text-amber-300 font-mono">SV</span>
-              <span>Senza voto</span>
+            <div className="flex items-center gap-1 sm:gap-1.5">
+              <span className="text-[10px] sm:text-xs font-black text-amber-300 font-mono">SV</span>
+              <span>SV</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <span className="text-xs font-black text-purple-400 font-mono">INF</span>
-              <span>Infortunato</span>
+            <div className="flex items-center gap-1 sm:gap-1.5">
+              <span className="text-[10px] sm:text-xs font-black text-purple-400 font-mono">INF</span>
+              <span>Inf.</span>
             </div>
           </div>
 
-          <div className="text-[11px] text-slate-400 font-mono">
-            {activeMatchday ? `G.${activeMatchday} attiva` : 'Passa con il mouse sulle colonne'}
+          <div className="text-[10px] sm:text-[11px] text-slate-400 font-mono hidden xs:inline">
+            {activeMatchday ? `G.${activeMatchday} attiva` : 'Tocca una colonna'}
           </div>
         </div>
 
@@ -668,14 +668,14 @@ export const PlayerPerformanceChart: React.FC<Props> = ({
                           ? 'opacity-100 visible scale-100' 
                           : 'opacity-0 invisible scale-95'
                       } ${
-                        item.matchday <= 3 
+                        item.matchday <= 10 
                           ? 'left-0 translate-x-0' 
-                          : item.matchday >= 36 
+                          : item.matchday >= 28 
                           ? 'right-0 translate-x-0' 
                           : 'left-1/2 -translate-x-1/2'
                       }`}
                     >
-                      <div className="bg-slate-900/98 backdrop-blur-md border border-slate-700 rounded-lg p-2.5 shadow-2xl shadow-black/95 min-w-[215px] max-w-[250px] text-left text-white font-sans select-none pointer-events-none">
+                      <div className="bg-slate-900/98 backdrop-blur-md border border-slate-700 rounded-lg p-2 sm:p-2.5 shadow-2xl shadow-black/95 w-[215px] sm:w-[250px] text-left text-white font-sans select-none pointer-events-none">
                         <div className="flex items-center justify-between gap-1.5 border-b border-slate-800 pb-1.5 mb-1.5">
                           <div className="flex items-center gap-1.5">
                             <span className="text-[10px] font-bold text-amber-400 font-mono">G.{item.matchday}</span>
@@ -759,9 +759,9 @@ export const PlayerPerformanceChart: React.FC<Props> = ({
 
                       <div 
                         className={`absolute -bottom-1 w-2.5 h-2.5 bg-slate-900 border-r border-b border-slate-700 rotate-45 pointer-events-none ${
-                          item.matchday <= 3 
+                          item.matchday <= 10 
                             ? 'left-3' 
-                            : item.matchday >= 36 
+                            : item.matchday >= 28 
                             ? 'right-3' 
                             : 'left-1/2 -translate-x-1/2'
                         }`}
