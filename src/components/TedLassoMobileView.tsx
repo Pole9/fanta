@@ -1705,21 +1705,66 @@ ${benchText}
         const diddiYoutube = getDiddiMatchdayYoutubeAdvice(player, currentMatchdayNum, evaluation);
         const fgConsigliato = getFantagazzettaConsigliatoStatus(player, evaluation);
 
+        // Squadra di appartenenza al fanta o 'FREE'
+        const ownershipInfo = (() => {
+          for (const t of teams) {
+            const pl = t.players.find(p => p.playerId === player.id);
+            if (pl) {
+              return {
+                isOwned: true,
+                teamName: t.name,
+                price: pl.price
+              };
+            }
+            if (player.assignedTo && player.assignedTo === t.id) {
+              return {
+                isOwned: true,
+                teamName: t.name,
+                price: player.price || null
+              };
+            }
+          }
+          if (player.status === 'assigned') {
+            return { isOwned: true, teamName: 'ASSEGNATO', price: player.price || null };
+          }
+          return {
+            isOwned: false,
+            teamName: 'FREE',
+            price: null
+          };
+        })();
+
         return (
           <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-3 animate-in fade-in duration-150">
             <div className="bg-slate-900 border-t-2 sm:border-2 border-slate-700 rounded-t-3xl sm:rounded-2xl w-full max-w-xl overflow-hidden shadow-2xl space-y-3 p-3.5 select-none max-h-[92vh] overflow-y-auto scrollbar-thin">
               
               {/* HEADER MODALE MOBILE */}
               <div className="flex items-start justify-between pb-2 border-b border-slate-800">
-                <div className="flex items-center gap-2">
-                  <span className={`w-7 h-7 rounded-lg font-black text-xs flex items-center justify-center ${getRoleBg(player.ruolo)}`}>
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className={`w-7 h-7 rounded-lg font-black text-xs flex items-center justify-center shadow flex-shrink-0 ${getRoleBg(player.ruolo)}`}>
                     {player.ruolo}
                   </span>
-                  <div>
-                    <h2 className="text-base font-black text-white uppercase leading-tight">
-                      {player.nome}
-                    </h2>
-                    <span className="text-[11px] text-slate-400 font-mono">
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <h2 className="text-base font-black text-white uppercase leading-tight truncate">
+                        {player.nome}
+                      </h2>
+                      {ownershipInfo.isOwned ? (
+                        <span className="px-1.5 py-0.2 rounded text-[10px] font-black uppercase tracking-wider inline-flex items-center gap-1 bg-blue-500/20 text-blue-300 border border-blue-500/40 shadow-sm flex-shrink-0">
+                          <Shield className="w-2.5 h-2.5 text-blue-400" />
+                          <span>{ownershipInfo.teamName}</span>
+                          {ownershipInfo.price !== null && (
+                            <span className="text-amber-400 font-mono font-bold">({ownershipInfo.price})</span>
+                          )}
+                        </span>
+                      ) : (
+                        <span className="px-1.5 py-0.2 rounded text-[10px] font-black uppercase tracking-widest inline-flex items-center gap-1 bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-sm flex-shrink-0">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                          <span>FREE</span>
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-[11px] text-slate-400 font-mono block mt-0.5">
                       {player.squadra} • Qt: {player.quotazione} • FVM: {player.fvm}
                     </span>
                   </div>

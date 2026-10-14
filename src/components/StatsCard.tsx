@@ -204,7 +204,7 @@ export const StatsCard: React.FC<StatsCardProps> = ({ player }) => {
             </span>
           )}
 
-          {/* BADGES STATO ASSEGNAZIONE / INVENDUTO SE PRESENTE */}
+          {/* BADGES STATO ASSEGNAZIONE / INVENDUTO / FREE */}
           {player.status === 'assigned' && (
             <span className="px-2 py-0.5 rounded-md bg-emerald-600 text-white text-xs font-black shadow flex-shrink-0">
               Preso: {player.price} ({assignedTeam?.name})
@@ -213,6 +213,11 @@ export const StatsCard: React.FC<StatsCardProps> = ({ player }) => {
           {player.status === 'skipped' && (
             <span className="px-2 py-0.5 rounded-md bg-amber-500 text-slate-950 text-xs font-black shadow flex-shrink-0">
               Invenduto
+            </span>
+          )}
+          {player.status === 'available' && (
+            <span className="px-2 py-0.5 rounded-md bg-emerald-950/80 text-emerald-300 border border-emerald-500/50 text-xs font-black shadow flex-shrink-0">
+              FREE
             </span>
           )}
         </div>
