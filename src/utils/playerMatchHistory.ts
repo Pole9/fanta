@@ -1,5 +1,6 @@
 import { Player } from '../types';
 import { getInjuryInfo } from '../data/injuryData';
+import { getMatchdayResultForTeam, TeamMatchResult } from '../data/serieACalendarResults';
 
 export type MatchdayStatus = 
   | 'titolare_completo'      // 1) Partito titolare e non sostituito -> verde chiaro
@@ -16,8 +17,14 @@ export interface MatchdayHistoryItem {
   status: MatchdayStatus;
   voto: number | null;
   fantaVoto: number | null;
-  opponent?: string;
-  isHome?: boolean;
+  opponent: string;
+  opponentAbbr: string;
+  teamAbbr: string;
+  isHome: boolean;
+  matchScore: string;       // ES. "MIL-LAZ 3-2" o "MIL-JUV"
+  score: string | null;     // ES. "3-2"
+  bonusMalusText?: string;  // ES. "+3 Gol"
+  played: boolean;
 }
 
 export interface PlayerHistoryKPIs {
@@ -97,12 +104,21 @@ export function getPlayerPerformanceHistory(player: Player, playedMatchdaysCount
   const modBase = pg > 0 ? pg : 1;
 
   for (let m = 1; m <= 38; m++) {
+    const matchRes = getMatchdayResultForTeam(player.squadra, m);
+
     if (m > playedMatchdaysCount) {
       history.push({
         matchday: m,
         status: 'futura',
         voto: null,
-        fantaVoto: null
+        fantaVoto: null,
+        opponent: matchRes.opponent,
+        opponentAbbr: matchRes.opponentAbbr,
+        teamAbbr: matchRes.isHome ? matchRes.homeAbbr : matchRes.awayAbbr,
+        isHome: matchRes.isHome,
+        matchScore: matchRes.matchScore,
+        score: null,
+        played: false
       });
       continue;
     }
@@ -132,18 +148,40 @@ export function getPlayerPerformanceHistory(player: Player, playedMatchdaysCount
 
       // FantaVoto (distribuzione deterministica bonus/malus senza divisione per zero)
       let bonusMalus = 0;
-      if (gf > 0 && m === 1 + (player.id % modBase)) bonusMalus += 3;
-      if (assist > 0 && m === 1 + ((player.id + 2) % modBase)) bonusMalus += 1;
-      if (amm > 0 && m === 1 + ((player.id + 1) % modBase)) bonusMalus -= 0.5;
-      if (esp > 0 && m === pg) bonusMalus -= 1;
+      const bonusParts: string[] = [];
+      if (gf > 0 && m === 1 + (player.id % modBase)) {
+        bonusMalus += 3;
+        bonusParts.push('+3 Gol ⚽');
+      }
+      if (assist > 0 && m === 1 + ((player.id + 2) % modBase)) {
+        bonusMalus += 1;
+        bonusParts.push('+1 Assist 👟');
+      }
+      if (amm > 0 && m === 1 + ((player.id + 1) % modBase)) {
+        bonusMalus -= 0.5;
+        bonusParts.push('-0.5 Amm. 🟨');
+      }
+      if (esp > 0 && m === pg) {
+        bonusMalus -= 1;
+        bonusParts.push('-1.0 Esp. 🟥');
+      }
 
       const fantaVoto = Math.max(3.0, calculatedVote + bonusMalus);
+      const bonusMalusText = bonusParts.length > 0 ? bonusParts.join(', ') : undefined;
 
       history.push({
         matchday: m,
         status,
         voto: calculatedVote,
-        fantaVoto: fantaVoto
+        fantaVoto: fantaVoto,
+        opponent: matchRes.opponent,
+        opponentAbbr: matchRes.opponentAbbr,
+        teamAbbr: matchRes.isHome ? matchRes.homeAbbr : matchRes.awayAbbr,
+        isHome: matchRes.isHome,
+        matchScore: matchRes.matchScore,
+        score: matchRes.score,
+        bonusMalusText,
+        played: true
       });
     } else {
       // Giornata disputata in cui non ha preso voto
@@ -153,7 +191,14 @@ export function getPlayerPerformanceHistory(player: Player, playedMatchdaysCount
           matchday: m,
           status: 'non_giocato_infortunio',
           voto: null,
-          fantaVoto: null
+          fantaVoto: null,
+          opponent: matchRes.opponent,
+          opponentAbbr: matchRes.opponentAbbr,
+          teamAbbr: matchRes.isHome ? matchRes.homeAbbr : matchRes.awayAbbr,
+          isHome: matchRes.isHome,
+          matchScore: matchRes.matchScore,
+          score: matchRes.score,
+          played: true
         });
       } else {
         const isSV = pseudoRandom(m * 11) > 0.5;
@@ -161,7 +206,14 @@ export function getPlayerPerformanceHistory(player: Player, playedMatchdaysCount
           matchday: m,
           status: isSV ? 'senza_voto' : 'non_ha_giocato',
           voto: null,
-          fantaVoto: null
+          fantaVoto: null,
+          opponent: matchRes.opponent,
+          opponentAbbr: matchRes.opponentAbbr,
+          teamAbbr: matchRes.isHome ? matchRes.homeAbbr : matchRes.awayAbbr,
+          isHome: matchRes.isHome,
+          matchScore: matchRes.matchScore,
+          score: matchRes.score,
+          played: true
         });
       }
     }
