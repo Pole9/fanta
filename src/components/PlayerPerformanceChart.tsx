@@ -287,8 +287,9 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
                 const { style, className } = getBarStyle(item.status, item.voto);
                 const isSelected = activeMatchday === item.matchday;
 
-                // Calcolo altezze in pixel per stack: Voto base, Malus (rosso) e Bonus (ciano)
-                const voteHeightPx = hasVoto ? (item.voto! / maxScale) * 120 : 0;
+                // Calcolo altezze in pixel: Voto netto (colore stato), Malus (rosso che erode il voto originario) e Bonus (ciano)
+                const netVote = hasVoto ? Math.max(0, item.voto! - item.malus) : 0;
+                const netVoteHeightPx = hasVoto ? (netVote / maxScale) * 120 : 0;
                 const malusHeightPx = hasVoto && item.malus > 0 ? (item.malus / maxScale) * 120 : 0;
                 const bonusHeightPx = hasVoto && item.bonus > 0 ? (item.bonus / maxScale) * 120 : 0;
 
@@ -343,7 +344,14 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
                             <div className="pt-1 border-t border-slate-800/80 space-y-1">
                               <div className="flex items-center justify-between text-[11px]">
                                 <span className="text-slate-400">Voto Base:</span>
-                                <span className="font-black text-emerald-400 font-mono">{item.voto}</span>
+                                <span className="font-black text-emerald-400 font-mono">
+                                  {item.voto}
+                                  {item.malus > 0 && (
+                                    <span className="text-rose-400 font-normal text-[10px] ml-1">
+                                      (Netto: {netVote})
+                                    </span>
+                                  )}
+                                </span>
                               </div>
 
                               {/* INDICATORI BONUS E MALUS */}
@@ -428,12 +436,12 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
                         SV
                       </span>
                     ) : hasVoto ? (
-                      /* COLONNA IMPILATA: BONUS (CIANO IN CIMA) + MALUS (ROSSO AL CENTRO) + VOTO BASE */
+                      /* COLONNA IMPILATA: BONUS (CIANO IN CIMA) + MALUS (ROSSO AL CENTRO CHE ERODE IL VOTO ORIGINARIO) + VOTO NETTO */
                       <div 
                         className={`w-full flex flex-col justify-end items-stretch transition-all duration-200 ${
                           isSelected ? 'ring-2 ring-amber-400 brightness-125 z-20 shadow-lg rounded-t-sm' : 'hover:brightness-110'
                         }`}
-                        title={`G.${item.matchday} - ${item.matchScore}: Voto ${item.voto}${item.bonus > 0 ? ` +${item.bonus} Bonus` : ''}${item.malus > 0 ? ` -${item.malus} Malus` : ''} = Fanta ${item.fantaVoto}`}
+                        title={`G.${item.matchday} - ${item.matchScore}: Voto Base ${item.voto}${item.malus > 0 ? ` -${item.malus} Malus (Netto ${netVote})` : ''}${item.bonus > 0 ? ` +${item.bonus} Bonus` : ''} = Fanta ${item.fantaVoto}`}
                       >
                         {/* 1. SEGMENTO BONUS IN CIMA (CIANO/AZZURRO) */}
                         {bonusHeightPx > 0 && (
@@ -444,20 +452,20 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
                           />
                         )}
 
-                        {/* 2. SEGMENTO MALUS (ROSSO VIVO) */}
+                        {/* 2. SEGMENTO MALUS (ROSSO VIVO - ERODE IL VOTO ORIGINARIO DALLA CIMA) */}
                         {malusHeightPx > 0 && (
                           <div 
                             style={{ height: `${malusHeightPx}px` }}
                             className={`w-full bg-rose-500 border-x border-t border-rose-400 shadow-sm ${bonusHeightPx <= 0 ? 'rounded-t-sm' : ''}`}
-                            title={`Malus: -${item.malus}`}
+                            title={`Malus: -${item.malus} (Voto Base ${item.voto} -> Netto ${netVote})`}
                           />
                         )}
 
-                        {/* 3. SEGMENTO VOTO BASE (ALLA BASE - COLORE STATO) */}
+                        {/* 3. SEGMENTO VOTO NETTO (ALLA BASE - COLORE STATO: VERDE/GIALLO) */}
                         <div
-                          style={{ height: `${voteHeightPx}px`, ...style }}
+                          style={{ height: `${netVoteHeightPx}px`, ...style }}
                           className={`w-full shadow-sm ${className} ${bonusHeightPx <= 0 && malusHeightPx <= 0 ? 'rounded-t-sm' : ''}`}
-                          title={`Voto Base: ${item.voto}`}
+                          title={`Voto Netto: ${netVote} (Voto Base: ${item.voto})`}
                         />
                       </div>
                     ) : (
@@ -517,7 +525,7 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
           {/* MALUS (ROSSO) */}
           <div className="flex items-center gap-1.5">
             <span className="w-2.5 h-2.5 rounded-sm bg-rose-500 border border-rose-400 shadow-sm flex-shrink-0" />
-            <span className="text-rose-300 font-semibold">Malus (-Amm, -Esp)</span>
+            <span className="text-rose-300 font-semibold">Malus (erode voto base)</span>
           </div>
 
           <div className="flex items-center gap-1.5">
@@ -715,7 +723,8 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
                       const isSelected = activeMatchday === item.matchday;
 
                       // Calcolo altezze percentuali rispetto a maxScale
-                      const voteHeightPercent = hasVoto ? (item.voto! / maxScale) * 100 : 0;
+                      const netVote = hasVoto ? Math.max(0, item.voto! - item.malus) : 0;
+                      const netVoteHeightPercent = hasVoto ? (netVote / maxScale) * 100 : 0;
                       const malusHeightPercent = hasVoto && item.malus > 0 ? (item.malus / maxScale) * 100 : 0;
                       const bonusHeightPercent = hasVoto && item.bonus > 0 ? (item.bonus / maxScale) * 100 : 0;
 
@@ -767,7 +776,14 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
                                   <div className="pt-1.5 border-t border-slate-800 space-y-1.5">
                                     <div className="flex items-center justify-between text-xs">
                                       <span className="text-slate-400">Voto Base:</span>
-                                      <span className="font-black text-emerald-400 font-mono text-sm">{item.voto}</span>
+                                      <span className="font-black text-emerald-400 font-mono text-sm">
+                                        {item.voto}
+                                        {item.malus > 0 && (
+                                          <span className="text-rose-400 font-normal text-xs ml-1">
+                                            (Netto: {netVote})
+                                          </span>
+                                        )}
+                                      </span>
                                     </div>
 
                                     {/* DETTAGLIO BONUS E MALUS IMPILATI */}
@@ -850,12 +866,12 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
                               SV
                             </span>
                           ) : hasVoto ? (
-                            /* COLONNA IMPILATA FULLSCREEN: BONUS CIANO + MALUS ROSSO + VOTO BASE */
+                            /* COLONNA IMPILATA FULLSCREEN: BONUS CIANO + MALUS ROSSO (ERODE VOTO ORIGINARIO) + VOTO NETTO */
                             <div 
                               className={`w-full flex flex-col justify-end items-stretch transition-all duration-200 ${
                                 isSelected ? 'ring-2 ring-amber-400 brightness-125 z-20 shadow-xl rounded-t-sm scale-x-110' : 'hover:brightness-110'
                               }`}
-                              title={`G.${item.matchday} - ${item.matchScore}: Voto ${item.voto}${item.bonus > 0 ? ` +${item.bonus} Bonus` : ''}${item.malus > 0 ? ` -${item.malus} Malus` : ''} = Fanta ${item.fantaVoto}`}
+                              title={`G.${item.matchday} - ${item.matchScore}: Voto Base ${item.voto}${item.malus > 0 ? ` -${item.malus} Malus (Netto ${netVote})` : ''}${item.bonus > 0 ? ` +${item.bonus} Bonus` : ''} = Fanta ${item.fantaVoto}`}
                             >
                               {/* 1. SEGMENTO BONUS IN CIMA (CIANO/AZZURRO) */}
                               {bonusHeightPercent > 0 && (
@@ -866,20 +882,20 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
                                 />
                               )}
 
-                              {/* 2. SEGMENTO MALUS (ROSSO VIVO) */}
+                              {/* 2. SEGMENTO MALUS (ROSSO VIVO - ERODE IL VOTO ORIGINARIO DALLA CIMA) */}
                               {malusHeightPercent > 0 && (
                                 <div 
                                   style={{ height: `${malusHeightPercent}%` }}
                                   className={`w-full bg-rose-500 border-x border-t border-rose-400 shadow-sm ${bonusHeightPercent <= 0 ? 'rounded-t-sm' : ''}`}
-                                  title={`Malus: -${item.malus}`}
+                                  title={`Malus: -${item.malus} (Voto Base ${item.voto} -> Netto ${netVote})`}
                                 />
                               )}
 
-                              {/* 3. SEGMENTO VOTO BASE (ALLA BASE - COLORE STATO) */}
+                              {/* 3. SEGMENTO VOTO NETTO (ALLA BASE - COLORE STATO) */}
                               <div
-                                style={{ height: `${voteHeightPercent}%`, ...style }}
+                                style={{ height: `${netVoteHeightPercent}%`, ...style }}
                                 className={`w-full shadow-md ${className} ${bonusHeightPercent <= 0 && malusHeightPercent <= 0 ? 'rounded-t-sm' : ''}`}
-                                title={`Voto Base: ${item.voto}`}
+                                title={`Voto Netto: ${netVote} (Voto Base: ${item.voto})`}
                               />
                             </div>
                           ) : (
@@ -1004,7 +1020,7 @@ export const PlayerPerformanceChart: React.FC<Props> = ({ player }) => {
                 {/* MALUS ROSSO */}
                 <div className="flex items-center gap-1.5">
                   <span className="w-3 h-3 rounded-sm bg-rose-500 border border-rose-400 shadow-sm flex-shrink-0" />
-                  <span className="text-rose-300 font-semibold">Malus (-Amm, -Esp)</span>
+                  <span className="text-rose-300 font-semibold">Malus (erode voto base)</span>
                 </div>
 
                 <div className="flex items-center gap-1.5">
